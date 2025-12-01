@@ -75,4 +75,20 @@
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Navigation Drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- Menu Items -->
+    <string name="menu_dashboard">Dashboard</string>
+    <string name="menu_exercises">Quản lí Bài tập</string>
+    <string name="menu_foods">Quản lí Món ăn</string>
+    <string name="menu_food_categories">Danh mục Món ăn</string>
+    <string name="menu_exercise_categories">Danh mục Bài tập</string>
+    <string name="menu_statistics">Thống kê</string>
+    <string name="menu_users">Quản lí Người dùng</string>
+    <string name="menu_notifications">Thông báo</string>
+    <string name="menu_settings">Cài đặt</string>
+    <string name="menu_logout">Đăng xuất</string>
 </resources>

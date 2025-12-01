@@ -203,6 +203,13 @@
                                 android:layout_height="wrap_content"
                                 android:hint="Đường (g)"
                                 android:inputType="numberDecimal"/>
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etCookTime"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Nấu (min)"
+                                android:inputType="number" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
@@ -268,12 +275,7 @@
                             android:layout_height="wrap_content"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_marginStart="8dp">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/etCookTime"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="Nấu (min)"
-                                android:inputType="number"/>
+
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
