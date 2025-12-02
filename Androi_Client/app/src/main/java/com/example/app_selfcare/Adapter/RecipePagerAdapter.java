@@ -1,4 +1,4 @@
-package com.example.app_selfcare;
+package com.example.app_selfcare.Adapter;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;

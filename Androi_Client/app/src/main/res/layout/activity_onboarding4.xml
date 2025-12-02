@@ -5,7 +5,7 @@
     android:id="@+id/trang4"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/img_trang4"
+    android:background="@drawable/onboarding1"
     tools:context=".Ui.Onboarding.Onboarding4Activity">
 
     <!-- Logo -->
@@ -61,7 +61,7 @@
         android:layout_height="56dp"
         android:layout_marginHorizontal="40dp"
         android:layout_marginTop="150dp"
-        android:backgroundTint="#FF7A00"
+        android:backgroundTint="#FF5722"
         android:text="Bắt đầu"
         android:textAllCaps="false"
         android:textColor="@android:color/white"

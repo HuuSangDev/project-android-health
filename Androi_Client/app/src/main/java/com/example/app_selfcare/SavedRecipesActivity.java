@@ -1,14 +1,15 @@
+// File: app/src/main/java/com/example/app_selfcare/SavedRecipesActivity.java
 package com.example.app_selfcare;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.app_selfcare.Adapter.SavedRecipeAdapter;
+import com.example.app_selfcare.Data.Model.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,69 +37,87 @@ public class SavedRecipesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_saved_recipes);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Khởi tạo danh sách và adapter
         recipeList = new ArrayList<>();
         adapter = new SavedRecipeAdapter(recipeList, this);
         recyclerView.setAdapter(adapter);
 
-        // Lấy danh sách món đã lưu từ SharedPreferences
+        // Tải dữ liệu đã lưu
         loadSavedRecipes();
 
-        // Xử lý navigation
+        // Nút Home dưới cùng (nếu có)
         findViewById(R.id.homeIcon).setOnClickListener(v -> finish());
     }
 
     private void loadSavedRecipes() {
         SharedPreferences prefs = getSharedPreferences("SavedRecipes", MODE_PRIVATE);
-        String savedRecipes = prefs.getString("recipes", "");
+        String savedData = prefs.getString("recipes", "");
 
-        if (!savedRecipes.isEmpty()) {
-            String[] recipes = savedRecipes.split(";");
-            for (String recipe : recipes) {
-                if (!recipe.isEmpty()) {
-                    String[] parts = recipe.split("\\|");
-                    if (parts.length == 2) {
-                        recipeList.add(new Recipe(parts[0], parts[1], R.drawable.ic_launcher_background));
+        if (savedData == null || savedData.isEmpty()) {
+            // Nếu chưa có dữ liệu → thêm mẫu
+            saveSampleData();
+            savedData = prefs.getString("recipes", "");
+        }
+
+        recipeList.clear();
+
+        if (!savedData.isEmpty()) {
+            String[] items = savedData.split(";");
+            for (String item : items) {
+                if (!item.trim().isEmpty()) {
+                    String[] parts = item.split("\\|");
+                    if (parts.length >= 2) {
+                        String name = parts[0].trim();
+                        String timeInfo = parts[1].trim();
+
+                        // Tạo Recipe dùng đúng model chung
+                        Recipe recipe = new Recipe(
+                                0, // id tạm (có thể bỏ qua nếu không dùng)
+                                name,
+                                "Món ngon được lưu từ ứng dụng", // description
+                                R.drawable.ic_platter_background, // ảnh mẫu
+                                extractMinutes(timeInfo),         // thời gian
+                                250, // calo tạm
+                                "Trung bình",
+                                "DINNER"
+                        );
+                        recipeList.add(recipe);
                     }
                 }
             }
-            adapter.notifyDataSetChanged();
-        } else {
-            // Thêm dữ liệu mẫu nếu danh sách rỗng
-            saveSampleData();
-            loadSavedRecipes(); // Tải lại sau khi thêm dữ liệu mẫu
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
+    // Trích xuất số phút từ chuỗi như "20 min"
+    private int extractMinutes(String timeText) {
+        try {
+            return Integer.parseInt(timeText.replaceAll("\\D+", ""));
+        } catch (Exception e) {
+            return 30; // mặc định
         }
     }
 
     private void saveSampleData() {
         SharedPreferences prefs = getSharedPreferences("SavedRecipes", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        String savedRecipes = prefs.getString("recipes", "");
-        if (savedRecipes.isEmpty()) {
-            savedRecipes += "Sườn nướng truyện thông|⏰ 20 min;";
-            savedRecipes += "Cơm hầm vị với gà nướng|⏰ 20 min;";
-            editor.putString("recipes", savedRecipes);
+
+        // Chỉ lưu 1 lần
+        if (prefs.getString("recipes", "").isEmpty()) {
+            String sample =
+                    "Sườn nướng truyền thống|20 phút;" +
+                            "Cơm gà nướng mật ong|35 phút;" +
+                            "Salad rau củ quả tươi|15 phút;" +
+                            "Bánh mì kẹp thịt nướng|25 phút;";
+
+            editor.putString("recipes", sample);
             editor.apply();
         }
     }
 
-    // Xử lý nút back trên toolbar
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
-
-    // Model class cho món ăn
-    public static class Recipe {
-        String name;
-        String time;
-        int imageRes;
-
-        public Recipe(String name, String time, int imageRes) {
-            this.name = name;
-            this.time = time;
-            this.imageRes = imageRes;
-        }
     }
 }

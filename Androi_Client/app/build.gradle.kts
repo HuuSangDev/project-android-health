@@ -71,4 +71,15 @@ dependencies {
 
 // Thư viện Logging Interceptor (để fix lỗi HttpLoggingInterceptor)
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // AndroidX Core
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+// Navigation Drawer
+    implementation("androidx.drawerlayout:drawerlayout:1.2.0")
+// Fragment
+    implementation("androidx.fragment:fragment:1.6.2")
+// Coordinator Layout
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
 }

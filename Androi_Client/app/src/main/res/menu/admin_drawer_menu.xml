@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+
+        <item
+            android:id="@+id/nav_exercises"
+            android:icon="@drawable/ic_workout"
+            android:title="Quản lí Bài tập" />
+
+        <item
+            android:id="@+id/nav_foods"
+            android:icon="@drawable/ic_food"
+            android:title="Quản lí Món ăn" />
+
+        <item
+            android:id="@+id/nav_food_categories"
+            android:icon="@drawable/ic_category_food"
+            android:title="Danh mục Món ăn" />
+
+        <item
+            android:id="@+id/nav_exercise_categories"
+            android:icon="@drawable/ic_category_exercise"
+            android:title="Danh mục Bài tập" />
+
+        <item
+            android:id="@+id/nav_statistics"
+            android:icon="@drawable/ic_statistic"
+            android:title="Thống kê" />
+
+        <item
+            android:id="@+id/nav_users"
+            android:icon="@drawable/ic_proflie"
+            android:title="Quản lí Người dùng" />
+        <item
+            android:id="@+id/nav_notifications"
+            android:icon="@drawable/ic_dashboard"
+            android:title="Thông báo" />
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Đăng xuất" />
+    </group>
+</menu>
