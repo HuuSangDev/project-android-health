@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import com.example.app_selfcare.R;
 
 public class DashboardFragment extends Fragment {
@@ -21,8 +23,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        // Setup dashboard cards with statistics
         setupDashboardCards(view);
     }
 
@@ -31,22 +31,27 @@ public class DashboardFragment extends Fragment {
         CardView cardTotalExercises = view.findViewById(R.id.cardTotalExercises);
         CardView cardTotalFoods = view.findViewById(R.id.cardTotalFoods);
         CardView cardActiveUsers = view.findViewById(R.id.cardActiveUsers);
+        CardView btnQuickAddExercise = view.findViewById(R.id.btnQuickAddExercise);
+        CardView btnQuickAddFood = view.findViewById(R.id.btnQuickAddFood);
+        CardView btnQuickNotification = view.findViewById(R.id.btnQuickNotification);
 
-        // Add click listeners if needed
-        cardTotalUsers.setOnClickListener(v -> {
-            // Navigate to users management
-        });
+        cardTotalUsers.setOnClickListener(v -> navigateToFragment(new UsersFragment(), "Quản lí Người dùng"));
+        cardActiveUsers.setOnClickListener(v -> navigateToFragment(new UsersFragment(), "Quản lí Người dùng"));
+        cardTotalExercises.setOnClickListener(v -> navigateToFragment(new ExercisesFragment(), "Quản lí Bài tập"));
+        btnQuickAddExercise.setOnClickListener(v -> navigateToFragment(new ExercisesFragment(), "Quản lí Bài tập"));
+        cardTotalFoods.setOnClickListener(v -> navigateToFragment(new FoodsFragment(), "Quản lí Món ăn"));
+        btnQuickAddFood.setOnClickListener(v -> navigateToFragment(new FoodsFragment(), "Quản lí Món ăn"));
+        btnQuickNotification.setOnClickListener(v -> navigateToFragment(new NotificationsFragment(), "Thông báo"));
+    }
 
-        cardTotalExercises.setOnClickListener(v -> {
-            // Navigate to exercises management
-        });
-
-        cardTotalFoods.setOnClickListener(v -> {
-            // Navigate to foods management
-        });
-
-        cardActiveUsers.setOnClickListener(v -> {
-            // Show active users details
-        });
+    private void navigateToFragment(Fragment fragment, String title) {
+        if (getActivity() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+            transaction.replace(R.id.fragmentContainer, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 }
