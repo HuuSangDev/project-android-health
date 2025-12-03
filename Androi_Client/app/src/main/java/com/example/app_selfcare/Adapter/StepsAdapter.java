@@ -24,15 +24,21 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Dùng layout có sẵn của Android → KHÔNG CẦN TẠO FILE XML
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_step, parent, false); // Dùng layout riêng đẹp hơn
+                .inflate(android.R.layout.simple_list_item_2, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Step step = steps.get(position);
-        holder.tvStep.setText(step.getNumber() + ". " + step.getDescription());
+
+        // Dòng 1: Số thứ tự + tiêu đề ngắn (nếu có)
+        holder.tvTitle.setText(step.getNumber() + ". Bước " + step.getNumber());
+
+        // Dòng 2: Mô tả chi tiết
+        holder.tvDescription.setText(step.getDescription());
     }
 
     @Override
@@ -40,12 +46,15 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
         return steps != null ? steps.size() : 0;
     }
 
+    // ViewHolder dùng 2 TextView có sẵn
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvStep;
+        TextView tvTitle;       // android.R.id.text1
+        TextView tvDescription; // android.R.id.text2
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvStep = itemView.findViewById(R.id.tv_step_description);
+            tvTitle = itemView.findViewById(android.R.id.text1);
+            tvDescription = itemView.findViewById(android.R.id.text2);
         }
     }
 }

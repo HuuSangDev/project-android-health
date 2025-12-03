@@ -14,16 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App_selfCare"
         android:usesCleartextTraffic="true">
-<!--        <activity-->
-<!--            android:name=".AddCategoryActivity"-->
-<!--            android:exported="false" />-->
-        <activity
-            android:name=".Ui.Admin.AddRecipeActivity"
-            android:exported="false"/>
-
-        <activity
-            android:name=".Ui.Admin.AddExerciseActivity"
-            android:exported="false" />
         <activity
             android:name=".HelpActivity"
             android:exported="false" />
@@ -40,23 +30,15 @@
             android:name=".WorkoutActivity"
             android:exported="false" />
         <activity
-            android:name=".Ui.Admin.ManageRecipeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Ui.Admin.ManageExerciseActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Ui.Admin.ManageNotificationActivity"
-            android:exported="false" />
-        <activity
             android:name=".Ui.Admin.AdminHomeActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                        <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
         </activity>
+
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
@@ -102,6 +84,7 @@
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
+
         <activity
             android:name=".RecipeHomeActivity"
             android:exported="false" />
@@ -113,13 +96,8 @@
             android:exported="false" />
         <activity
             android:name=".Ui.Onboarding.Onboarding1Activity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".AccountSettingsActivity"
             android:exported="false" />

@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background" /> <!-- Thay bằng ảnh thực tế -->
+            android:src="@drawable/ic_salad" /> <!-- Thay bằng ảnh thực tế -->
 
         <!-- Tên món -->
         <TextView
