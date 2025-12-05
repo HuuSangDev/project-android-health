@@ -19,14 +19,14 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <ImageButton
-                android:id="@+id/btnBack"
-                android:layout_width="60dp"
-                android:layout_height="53dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/bg_back_button_white"
-                android:contentDescription="Back"
-                android:src="@drawable/ic_backk" />
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_button_black"
+                android:padding="10dp"
+                app:srcCompat="@drawable/ic_backk"
+                app:tint="@color/orange_primary" />
 
             <TextView
                 android:layout_width="wrap_content"
