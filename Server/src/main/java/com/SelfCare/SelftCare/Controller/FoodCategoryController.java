@@ -18,11 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FoodCategoryController {
 
-
-
     FoodCategoryService foodCategoryService;
-
-
 
     @PostMapping("/create")
     public ApiResponse<FoodCategoryResponse> createCategory(@RequestBody FoodCategoryCreateRequest request) {

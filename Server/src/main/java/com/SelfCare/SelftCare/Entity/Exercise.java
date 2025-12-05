@@ -35,7 +35,7 @@ public class Exercise {
     ExerciseCategory exerciseCategory;
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
-    List<ExerciseLog> exerciseLogs;
+
 
     @PrePersist
     protected void onCreate() {

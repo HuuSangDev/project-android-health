@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
@@ -12,19 +13,17 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CreateExerciseRequest {
 
-    @NotBlank(message = "exerciseName is required")
-    String exerciseName;
+     String exerciseName;
+     Double caloriesPerMinute;
+     String description;
+     String instructions;
+     String difficultyLevel;
+     String equipmentNeeded;
+     String muscleGroups;
 
-    @NotNull(message = "caloriesPerMinute is required")
-    Double caloriesPerMinute;
+     Long categoryId;
 
-    String description;
-    String instructions;
-    String difficultyLevel;
-    String equipmentNeeded;
-    String muscleGroups;
-    String imageUrl;
-    String videoUrl;
-    Long categoryId;
+     MultipartFile image;
+     MultipartFile video;
 }
 

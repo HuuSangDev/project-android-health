@@ -29,17 +29,14 @@ import java.time.Duration;
 @EnableCaching
 public class RedisConfig {
 
-    // 1. Tạo Bean ObjectMapper riêng để dùng chung, tránh lặp code
-    @Bean
-    public ObjectMapper redisObjectMapper() {
+    // CHÚ Ý: KHÔNG ĐỂ @Bean Ở ĐÂY để tránh ảnh hưởng Controller
+    // private ObjectMapper redisObjectMapper() -> chuyển thành private method thường
+    private ObjectMapper createRedisObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        // Cấu hình để không bị lỗi khi thiếu field
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        // Kích hoạt Default Typing (quan trọng để fix lỗi ClassCastException khi get cache)
         mapper.activateDefaultTyping(
                 LaissezFaireSubTypeValidator.instance,
                 ObjectMapper.DefaultTyping.NON_FINAL,
@@ -49,12 +46,12 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory, ObjectMapper redisObjectMapper) {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
 
-        // Sử dụng ObjectMapper đã cấu hình
-        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(redisObjectMapper);
+        ObjectMapper mapper = createRedisObjectMapper();
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(mapper);
 
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(serializer);
@@ -66,20 +63,20 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory, ObjectMapper redisObjectMapper) {
-        // Sử dụng ObjectMapper đã cấu hình
-        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(redisObjectMapper);
+    public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+
+        ObjectMapper mapper = createRedisObjectMapper();
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(mapper);
 
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer))
                 .entryTtl(Duration.ofMinutes(30))
-                .disableCachingNullValues(); // Không cache giá trị null
+                .disableCachingNullValues();
 
         return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(config)
                 .build();
     }
-
 
 }

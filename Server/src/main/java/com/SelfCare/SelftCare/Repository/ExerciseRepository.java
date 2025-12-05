@@ -9,14 +9,6 @@ import java.util.List;
 
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
 
-    Page<Exercise> findByExerciseCategoryCategoryId(Long categoryId, Pageable pageable);
-
-    Page<Exercise> findByDifficultyLevelIgnoreCase(String difficultyLevel, Pageable pageable);
-
-    Page<Exercise> findByExerciseCategoryCategoryIdAndDifficultyLevelIgnoreCase(Long categoryId,
-                                                                               String difficultyLevel,
-                                                                               Pageable pageable);
-
-    List<Exercise> findByExerciseNameContainingIgnoreCase(String keyword);
+    List<Exercise> findByExerciseCategory_CategoryId(Long categoryId);
 }
 

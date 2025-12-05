@@ -31,7 +31,7 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests(request->
                     request.requestMatchers("/auth/**","/Users/Register").permitAll()
-                            .anyRequest().authenticated()
+                            .anyRequest().authenticated()//
                         );
 
 
@@ -60,26 +60,20 @@ public class SecurityConfig {
         JwtAuthenticationConverter jwtAuthenticationConverter= new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
-
     }
 
     @Bean
     JwtDecoder jwtDecoder()
     {
-        //giải mã jwt
         SecretKeySpec secretKeySpec= new SecretKeySpec(signerkey.getBytes(),"HS512");
         return NimbusJwtDecoder
                 .withSecretKey(secretKeySpec)
                 .macAlgorithm(MacAlgorithm.HS512)
                 .build();
     }
-
     @Bean
     PasswordEncoder passwordEncoder()
     {
         return new BCryptPasswordEncoder(10);
     }
-
-
-
 }

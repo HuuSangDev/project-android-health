@@ -3,6 +3,7 @@ server:
   port: 8080
   servlet:
     context-path: /app
+
 spring:
   datasource:
     url: jdbc:postgresql://dpg-d4ikios9c44c73aubcdg-a.singapore-postgres.render.com:5432/selfcare_db?sslmode=require
@@ -13,6 +14,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
 
   mail:
     host: smtp.gmail.com
