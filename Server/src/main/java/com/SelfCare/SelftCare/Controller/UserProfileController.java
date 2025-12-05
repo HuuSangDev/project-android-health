@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,9 +29,22 @@ public class UserProfileController {
 
     @PutMapping(value = "update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ApiResponse<UserResponse> UserProfileUpdate(@ModelAttribute UpdateUserProfileRequest request) throws IOException {
+        var Auth= SecurityContextHolder.getContext().getAuthentication();
+        String name=Auth.getName();
         return ApiResponse.<UserResponse>builder()
                 .message("update profile success")
-                .result(userProfileService.updateProfile(request))
+                .result(userProfileService.updateProfile(name,request))
+                .build();
+    }
+
+    @GetMapping("/get-my-profile")
+    ApiResponse<UserResponse> getMyProfile()
+    {
+        var Auth= SecurityContextHolder.getContext().getAuthentication();
+        String name=Auth.getName();
+        return ApiResponse.<UserResponse>builder()
+                .message("get my profile success ")
+                .result(userProfileService.getMyProfile(name))
                 .build();
     }
 }

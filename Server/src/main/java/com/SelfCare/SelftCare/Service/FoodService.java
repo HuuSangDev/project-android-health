@@ -15,6 +15,9 @@ import com.SelfCare.SelftCare.Repository.FoodRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class FoodService {
 
     FoodRepository foodRepository;
@@ -33,8 +37,9 @@ public class FoodService {
 
 
 
-
+    @Cacheable(value = "foodDetail", key = "#foodId")
     public FoodCreateResponse getFoodDetail(Long foodId) {
+        log.info(">>> QUERY DB: getFoodDetail(" + foodId + ")");
         Food food = foodRepository.findById(foodId)
                 .orElseThrow(() -> new AppException(ErrorCode.FOOD_NOT_FOUND));
         return foodMapper.toFoodResponse(food);
@@ -42,6 +47,10 @@ public class FoodService {
 
 
 
+    @CacheEvict(
+            value = { "allFoods", "foodsByMeal", "foodDetail" },
+            allEntries = true
+    )
     public FoodCreateResponse createFood(CreateFoodRequest request) throws IOException {
 
         // 1. Lấy category nếu có
@@ -123,7 +132,8 @@ public class FoodService {
     }
 
 
-    // --- HÀM 1: LẤY TẤT CẢ ---
+
+    @Cacheable(value = "allFoods")
     public List<FoodCreateResponse> getAllFoods() {
         List<Food> foods = foodRepository.findAll();
         return foods.stream()
@@ -131,7 +141,7 @@ public class FoodService {
                 .collect(Collectors.toList());
     }
 
-    // --- HÀM 2: LẤY THEO LOẠI BỮA ĂN ---
+    @Cacheable(value = "foodsByMeal", key = "#mealType")
     public List<FoodCreateResponse> getFoodsByMealType(MealType mealType) {
         List<Food> foods = foodRepository.findByMealType(mealType);
         return foods.stream()
