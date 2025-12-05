@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,32 +26,33 @@ public class ExerciseController {
 
     ExerciseService exerciseService;
 
-    @PostMapping
-    ApiResponse<ExerciseResponse> createExercise(@RequestBody @Valid CreateExerciseRequest request) {
+    @PostMapping("/create")
+    ApiResponse<ExerciseResponse> createExercise( @ModelAttribute  @Valid CreateExerciseRequest request,
+                                                  @RequestPart(value = "image", required = false) MultipartFile image,
+                                                  @RequestPart(value = "video", required = false) MultipartFile video
+                                                 ) throws IOException {
+
+
+        request.setImage(image);
+        request.setVideo(video);
         return ApiResponse.<ExerciseResponse>builder()
                 .result(exerciseService.createExercise(request))
-                .message("Tạo bài tập thành công")
+                .message("Create exercise success")
                 .build();
     }
-
-    @GetMapping
-    ApiResponse<List<ExerciseResponse>> listExercises(@RequestParam(value = "page", required = false) Integer page,
-                                                      @RequestParam(value = "size", required = false) Integer size,
-                                                      @RequestParam(value = "categoryId", required = false) Long categoryId,
-                                                      @RequestParam(value = "difficulty", required = false) String difficulty) {
+    @GetMapping("/all")
+    public ApiResponse<List<ExerciseResponse>> getAllExercises() {
         return ApiResponse.<List<ExerciseResponse>>builder()
-                .result(exerciseService.listExercises(page, size, categoryId, difficulty))
+                .result(exerciseService.getAllExercises())
                 .message("Danh sách bài tập")
                 .build();
     }
 
-    @GetMapping("/suggestions")
-    ApiResponse<List<ExerciseResponse>> suggestExercises(@RequestParam(value = "limit", defaultValue = "5")
-                                                         @Min(1) @Max(20) int limit) {
-        return ApiResponse.<List<ExerciseResponse>>builder()
-                .result(exerciseService.suggestExercises(limit))
-                .message("Gợi ý bài tập")
-                .build();
-    }
+
+
+
+
+
+
 }
 

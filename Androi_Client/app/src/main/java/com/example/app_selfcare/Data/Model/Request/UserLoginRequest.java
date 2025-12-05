@@ -9,5 +9,5 @@ public class UserLoginRequest {
         this.password = password;
     }
 
-    // getter + setter nếu cần
+
 }
