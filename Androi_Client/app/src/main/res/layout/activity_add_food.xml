@@ -19,19 +19,19 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <ImageView
-                android:id="@+id/backButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/bg_button_black"
-                android:padding="10dp"
-                app:srcCompat="@drawable/ic_backk"
-                app:tint="@color/orange_primary" />
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="60dp"
+                android:layout_height="53dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_back_button_white"
+                android:contentDescription="Back"
+                android:src="@drawable/ic_backk" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Thêm bài tập"
+                android:text="Thêm món ăn"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
@@ -56,10 +56,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tên bài tập">
+                android:hint="Tên món ăn">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etExerciseName"
+                    android:id="@+id/etFoodName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -68,10 +68,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:hint="Mô tả / Thông tin chính">
+                android:hint="Mô tả / Thông tin món ăn">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etExerciseInfo"
+                    android:id="@+id/etFoodDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minLines="2"
@@ -82,10 +82,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:hint="Thời lượng (phút)">
+                android:hint="Thời gian nấu (phút)">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etExerciseDuration"
+                    android:id="@+id/etFoodTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Calories (kcal)">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFoodCalories"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -98,7 +111,19 @@
                 android:hint="Độ khó (Dễ / Trung bình / Khó)">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etExerciseLevel"
+                    android:id="@+id/etFoodDifficulty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Loại bữa ăn (Sáng / Trưa / Tối)">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFoodMealType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -108,12 +133,12 @@
 
     <!-- Button lưu -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSaveExercise"
+        android:id="@+id/btnSaveFood"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Lưu bài tập"
+        android:text="Lưu món ăn"
         android:textAllCaps="false"
         android:textSize="16sp"
         android:backgroundTint="#FF6B35"

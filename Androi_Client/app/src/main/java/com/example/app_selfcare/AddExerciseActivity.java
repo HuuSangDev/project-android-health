@@ -2,7 +2,7 @@ package com.example.app_selfcare;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
@@ -10,7 +10,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class AddExerciseActivity extends AppCompatActivity {
 
-    private ImageButton btnBack;
+    private ImageView btnBack;
     private MaterialButton btnSaveExercise;
     private TextInputEditText etExerciseName;
     private TextInputEditText etExerciseInfo;
@@ -27,7 +27,7 @@ public class AddExerciseActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        btnBack = findViewById(R.id.btnBack);
+        btnBack = findViewById(R.id.backButton);
         btnSaveExercise = findViewById(R.id.btnSaveExercise);
         etExerciseName = findViewById(R.id.etExerciseName);
         etExerciseInfo = findViewById(R.id.etExerciseInfo);
@@ -97,4 +97,5 @@ public class AddExerciseActivity extends AppCompatActivity {
         finish();
     }
 }
+
 
