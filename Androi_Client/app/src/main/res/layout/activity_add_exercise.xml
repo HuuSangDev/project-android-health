@@ -1,51 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
     android:orientation="vertical">
 
-    <!-- Header -->
-    <androidx.cardview.widget.CardView
+    <!-- Header (custom, giống mẫu) -->
+    <LinearLayout
+        android:background="@drawable/header_nav_bg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="4dp"
-        app:cardCornerRadius="0dp"
-        android:backgroundTint="#FF6B35">
+        android:layout_height="100dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="30dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/back_button_style"
+            android:padding="10dp"
+            app:srcCompat="@drawable/ic_backk"
+            app:tint="@android:color/white" />
+
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:text="Thêm bài tập"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/btnBack"
-                android:layout_width="60dp"
-                android:layout_height="53dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/bg_back_button_white"
-                android:contentDescription="Back"
-                android:src="@drawable/ic_backk" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thêm bài tập"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_centerInParent="true" />
-
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
     <!-- Nội dung -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:clipToPadding="false"
         android:padding="16dp">
 
         <LinearLayout
@@ -53,7 +51,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Tên bài tập -->
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutExerciseName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Tên bài tập">
@@ -64,24 +65,30 @@
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Mô tả -->
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutExerciseInfo"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:hint="Mô tả / Thông tin chính">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etExerciseInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minLines="2"
-                    android:gravity="top" />
+                    android:gravity="top"
+                    android:minLines="3" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Thời lượng -->
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutExerciseDuration"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:hint="Thời lượng (phút)">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -91,16 +98,21 @@
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Độ khó (Đã sửa) -->
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutExerciseLevel"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="Độ khó (Dễ / Trung bình / Khó)">
+                android:layout_marginTop="16dp"
+                android:hint="Độ khó">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etExerciseLevel"
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/actvExerciseLevel"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    tools:ignore="LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -109,15 +121,16 @@
     <!-- Button lưu -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSaveExercise"
-        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_margin="16dp"
+        android:backgroundTint="#FF6B35"
+        android:paddingVertical="12dp"
         android:text="Lưu bài tập"
         android:textAllCaps="false"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
-        android:backgroundTint="#FF6B35"
-        android:textColor="@android:color/white" />
+        app:cornerRadius="24dp" />
 
 </LinearLayout>
-

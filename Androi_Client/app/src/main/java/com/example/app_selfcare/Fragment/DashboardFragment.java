@@ -1,5 +1,6 @@
 package com.example.app_selfcare.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import com.example.app_selfcare.AddExerciseActivity;
 import com.example.app_selfcare.R;
 
 public class DashboardFragment extends Fragment {
@@ -38,7 +40,10 @@ public class DashboardFragment extends Fragment {
         cardTotalUsers.setOnClickListener(v -> navigateToFragment(new UsersFragment(), "Quản lí Người dùng"));
         cardActiveUsers.setOnClickListener(v -> navigateToFragment(new UsersFragment(), "Quản lí Người dùng"));
         cardTotalExercises.setOnClickListener(v -> navigateToFragment(new ExercisesFragment(), "Quản lí Bài tập"));
-        btnQuickAddExercise.setOnClickListener(v -> navigateToFragment(new ExercisesFragment(), "Quản lí Bài tập"));
+        btnQuickAddExercise.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), AddExerciseActivity.class);
+            startActivity(intent);
+        });
         cardTotalFoods.setOnClickListener(v -> navigateToFragment(new FoodsFragment(), "Quản lí Món ăn"));
         btnQuickAddFood.setOnClickListener(v -> navigateToFragment(new FoodsFragment(), "Quản lí Món ăn"));
         btnQuickNotification.setOnClickListener(v -> navigateToFragment(new NotificationsFragment(), "Thông báo"));
