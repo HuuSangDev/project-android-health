@@ -3,6 +3,7 @@ package com.example.app_selfcare;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,7 +21,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.app_selfcare.R;
+import com.example.app_selfcare.Data.Model.Response.ApiResponse;
+import com.example.app_selfcare.Data.Model.Response.UserProfileResponse;
+import com.example.app_selfcare.Data.Model.Response.UserResponse;
+import com.example.app_selfcare.Data.remote.ApiClient;
+import com.example.app_selfcare.Data.remote.ApiService;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -28,15 +40,19 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.textfield.TextInputEditText;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private ImageView btnBack, btnSettings;
-    private ImageView homeIcon, workoutIcon, recipeIcon, profileIcon;
+    private ImageView profileImage;
+    private LinearLayout navHome, navWorkout, navPlanner, navProfile;
     private LinearLayout updateInfor;
     private BarChart chartView;
-    private TextView pointsText, weightText, bmiText;
+    private TextView pointsText, weightText, bmiText, fullName, Email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +66,15 @@ public class ProfileActivity extends AppCompatActivity {
             return insets;
         });
 
+        fullName=findViewById(R.id.userName);
+        Email=findViewById(R.id.userEmail);
+        profileImage = findViewById(R.id.profileImage);
+
         initViews();
         setupChart();
         setupStats();
         setupClickListeners();
+        fetchProfile();
     }
 
     @SuppressLint("WrongViewCast")
@@ -63,13 +84,83 @@ public class ProfileActivity extends AppCompatActivity {
         weightText = findViewById(R.id.weightText);
         bmiText = findViewById(R.id.bmiText);
 
-        homeIcon = findViewById(R.id.homeIcon);
-        workoutIcon = findViewById(R.id.workoutIcon);
-        recipeIcon = findViewById(R.id.recipeIcon);
-        profileIcon = findViewById(R.id.profileIcon);
+        navHome = findViewById(R.id.navHome);
+        navWorkout = findViewById(R.id.navWorkout);
+        navPlanner = findViewById(R.id.navPlanner);
+        navProfile = findViewById(R.id.navProfile);
         btnSettings = findViewById(R.id.btnSettings);
         btnBack = findViewById(R.id.btnBack);
         updateInfor = findViewById(R.id.updateInfor);
+    }
+
+    private void fetchProfile() {
+        SharedPreferences prefs = getSharedPreferences("APP_DATA", MODE_PRIVATE);
+        String token = prefs.getString("TOKEN", null);
+
+        if (token == null) {
+            Toast.makeText(this, "Vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        apiService.getUserProfile("Bearer " + token).enqueue(new Callback<ApiResponse<UserResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<UserResponse>> call, Response<ApiResponse<UserResponse>> response) {
+                if (!response.isSuccessful() || response.body() == null || response.body().getResult() == null) {
+                    Toast.makeText(ProfileActivity.this, "Không thể tải thông tin", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                UserResponse user = response.body().getResult();
+                fullName.setText(user.getFullName() != null ? user.getFullName() : "");
+                Email.setText(user.getEmail() != null ? user.getEmail() : "");
+
+                UserProfileResponse profile = user.getUserProfileResponse();
+                if (profile != null) {
+                    if (profile.getAvatarUrl() != null && !profile.getAvatarUrl().isEmpty()) {
+                        Glide.with(ProfileActivity.this)
+                                .load(profile.getAvatarUrl())
+                                .placeholder(R.drawable.ic_proflie)
+                                .error(R.drawable.ic_proflie)
+                                .listener(new RequestListener<android.graphics.drawable.Drawable>() {
+                                    @Override
+                                    public boolean onLoadFailed(GlideException e, Object model, Target<android.graphics.drawable.Drawable> target, boolean isFirstResource) {
+                                        Toast.makeText(ProfileActivity.this, "Không tải được avatar", Toast.LENGTH_SHORT).show();
+                                        if (e != null) {
+                                            e.logRootCauses("GlideAvatar");
+                                        }
+                                        return false; // keep error placeholder
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(android.graphics.drawable.Drawable resource, Object model, Target<android.graphics.drawable.Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        return false;
+                                    }
+                                })
+                                .into(profileImage);
+                    }
+
+                    Double weight = profile.getWeight();
+                    Double height = profile.getHeight();
+                    if (weight != null) {
+                        weightText.setText(String.format("%.0f kg", weight));
+                    }
+                    if (height != null && weight != null) {
+                        String bmi = calculateBMI(String.valueOf(weight), String.valueOf(height));
+                        bmiText.setText(bmi.split(" - ")[0]);
+                    }
+
+                    if (profile.getHealthGoal() != null) {
+                        pointsText.setText(profile.getHealthGoal());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<UserResponse>> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupChart() {
@@ -112,10 +203,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         updateInfor.setOnClickListener(v -> showUpdateProfileDialog());
 
-        homeIcon.setOnClickListener(v -> navigateAndFinish(HomeActivity.class));
-        workoutIcon.setOnClickListener(v -> navigateAndFinish(WorkoutActivity.class));
-        recipeIcon.setOnClickListener(v -> navigateAndFinish(RecipeHomeActivity.class));
-        profileIcon.setOnClickListener(v -> { /* Đang ở Profile */ });
+        navHome.setOnClickListener(v -> navigateAndFinish(HomeActivity.class));
+        navWorkout.setOnClickListener(v -> navigateAndFinish(WorkoutActivity.class));
+        navPlanner.setOnClickListener(v -> navigateAndFinish(RecipeHomeActivity.class));
+        navProfile.setOnClickListener(v -> { /* Đang ở Profile */ });
     }
 
     private void navigateAndFinish(Class<?> cls) {
