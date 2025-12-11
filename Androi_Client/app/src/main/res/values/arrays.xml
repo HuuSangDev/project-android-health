@@ -13,4 +13,11 @@
         <item>Trung bình (Medium)</item>
         <item>Khó (Hard)</item>
     </string-array>
+
+    <!-- Độ khó cho bài tập -->
+    <string-array name="exercise_difficulties">
+        <item>Dễ</item>
+        <item>Trung bình</item>
+        <item>Khó</item>
+    </string-array>
 </resources>
