@@ -1,3 +1,4 @@
+// File: app/src/main/java/com/example/app_selfcare/AddCategoryDialog.java
 package com.example.app_selfcare;
 
 import android.app.Dialog;
@@ -12,7 +13,11 @@ import com.example.app_selfcare.R;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class AddCategoryDialog extends DialogFragment {
+    private String type;
 
+    public void setType(String type) {
+        this.type = type;
+    }
     public interface OnCategoryAddedListener {
         void onCategoryAdded(Category category);
     }
@@ -26,7 +31,6 @@ public class AddCategoryDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View view = getLayoutInflater().inflate(R.layout.dialog_add_category, null);
-
         TextInputEditText etName = view.findViewById(R.id.etCategoryName);
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
@@ -34,6 +38,7 @@ public class AddCategoryDialog extends DialogFragment {
                 .create();
 
         view.findViewById(R.id.btnCancel).setOnClickListener(v -> dismiss());
+
         view.findViewById(R.id.btnSaveCategory).setOnClickListener(v -> {
             String name = etName.getText().toString().trim();
             if (TextUtils.isEmpty(name)) {
@@ -42,11 +47,18 @@ public class AddCategoryDialog extends DialogFragment {
             }
 
             Category newCategory = new Category();
-            newCategory.setName(name);
-            newCategory.setType("food"); // hoặc "exercise" tùy bạn
-            newCategory.setIconResId(R.drawable.ic_category_food);
+            newCategory.name = name;
+            newCategory.type = "food";
+            newCategory.iconResId = R.drawable.ic_category_food; // nếu chưa có thì dùng tạm:
+            // newCategory.iconResId = android.R.drawable.ic_menu_gallery;
 
-            if (listener != null) listener.onCategoryAdded(newCategory);
+            // Sửa lỗi cú pháp: System.currentTimeMillis() không có hashCode()
+            newCategory.id = (int) System.currentTimeMillis(); // hoặc để 0 cũng được
+
+            if (listener != null) {
+                listener.onCategoryAdded(newCategory);
+            }
+
             Toast.makeText(getContext(), "Thêm danh mục thành công!", Toast.LENGTH_SHORT).show();
             dismiss();
         });

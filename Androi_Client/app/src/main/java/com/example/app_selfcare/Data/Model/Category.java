@@ -1,9 +1,10 @@
+// File: app/src/main/java/com/example/app_selfcare/Data/Model/Category.java
 package com.example.app_selfcare.Data.Model;
 
 public class Category {
     public int id;
     public String name;
-    public String type; // "food" hoặc "exercise"
+    public String type;
     public int iconResId;
 
     public Category() {}
@@ -15,5 +16,15 @@ public class Category {
         this.iconResId = iconResId;
     }
 
-    // Getters & Setters...
+    // Getters
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public String getType() { return type; }
+    public int getIconResId() { return iconResId; }
+
+    // Setters – CHỈNH LẠI TÊN ĐÚNG
+    public void setId(int id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
+    public void setType(String type) { this.type = type; }
+    public void setIconResId(int iconResId) { this.iconResId = iconResId; } // ĐÚNG TÊN
 }

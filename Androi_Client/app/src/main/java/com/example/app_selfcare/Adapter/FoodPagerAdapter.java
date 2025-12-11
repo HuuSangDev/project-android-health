@@ -1,18 +1,23 @@
+// File: app/src/main/java/com/example/app_selfcare/Adapter/FoodPagerAdapter.java
 package com.example.app_selfcare.Adapter;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-import java.util.ArrayList;
 
-public class RecipePagerAdapter extends FragmentStateAdapter {
-    private ArrayList<Fragment> fragments;
+import java.util.List;
 
-    public RecipePagerAdapter(FragmentActivity fragmentActivity, ArrayList<Fragment> fragments) {
+public class FoodPagerAdapter extends FragmentStateAdapter {
+
+    private final List<Fragment> fragments;
+
+    public FoodPagerAdapter(@NonNull FragmentActivity fragmentActivity, List<Fragment> fragments) {
         super(fragmentActivity);
         this.fragments = fragments;
     }
 
+    @NonNull
     @Override
     public Fragment createFragment(int position) {
         return fragments.get(position);
