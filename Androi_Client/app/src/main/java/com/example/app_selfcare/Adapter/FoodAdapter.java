@@ -4,11 +4,15 @@ package com.example.app_selfcare.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.app_selfcare.Data.Model.Food;
 import com.example.app_selfcare.R;
+
 import java.util.List;
 
 public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
@@ -31,7 +35,11 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Food food = foodList.get(position);
         holder.tvFoodName.setText(food.getName());
-        holder.tvInfo.setText(food.getCalories() + " kcal • " + food.getTimeMinutes() + " phút • " + food.getDifficulty());
+        holder.tvFoodInfo.setText(
+                food.getCalories() + " kcal • " +
+                        food.getTimeMinutes() + " phút • " +
+                        food.getDifficulty()
+        );
     }
 
     @Override
@@ -39,12 +47,16 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
         return foodList.size();
     }
 
+    // SỬA DÒNG NÀY: RecyclerView.ViewHolder (có dấu chấm)
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvFoodName, tvInfo;
+        TextView tvFoodName, tvFoodInfo;
+        ImageView ivFoodImage;
+
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvFoodName = itemView.findViewById(R.id.tvFoodName);
-            tvInfo = itemView.findViewById(R.id.tvFoodInfo);
+            tvFoodInfo = itemView.findViewById(R.id.tvFoodInfo);
+            ivFoodImage = itemView.findViewById(R.id.ivFoodImage);
         }
     }
 }

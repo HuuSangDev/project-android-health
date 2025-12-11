@@ -1,78 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="6dp"
-    android:backgroundTint="#FFFFFF"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:layout_margin="8dp"
+    tools:ignore="NamespaceTypo">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:orientation="vertical"
+        android:padding="12dp">
 
         <ImageView
-            android:id="@+id/iv_food_image"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:id="@+id/ivFoodImage"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_salad"
-            app:tint="#FF6B35" />
+            android:src="@drawable/ic_platter_background" />
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvFoodName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="16dp">
+            android:layout_marginTop="12dp"
+            android:text="Món Salad Rau Củ"
+            android:textColor="#222222"
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tv_food_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Salad gà nướng"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#222222" />
-
-            <TextView
-                android:id="@+id/tv_food_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="20 phút • 280 kcal • Dễ"
-                android:textColor="#666666"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_food_meal_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Bữa trưa"
-                android:background="@drawable/bg_tag_orange"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/btn_delete_food"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_delete"
-            app:tint="#F44336"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:layout_gravity="center_vertical" />
+        <TextView
+            android:id="@+id/tvFoodInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="150 kcal • 10 phút • Dễ"
+            android:textColor="#666666"
+            android:textSize="14sp" />
 
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>
