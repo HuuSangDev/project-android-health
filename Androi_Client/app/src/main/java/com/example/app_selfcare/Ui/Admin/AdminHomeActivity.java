@@ -56,7 +56,7 @@ public class AdminHomeActivity extends AppCompatActivity implements NavigationVi
         // Load default fragment (Dashboard)
         if (savedInstanceState == null) {
             loadFragment(new DashboardFragment());
-            navigationView.setCheckedItem(R.id.nav_exercises);
+            navigationView.setCheckedItem(R.id.nav_statistics); // ⭐ SỬA ĐÂY
         }
     }
 
@@ -67,7 +67,11 @@ public class AdminHomeActivity extends AppCompatActivity implements NavigationVi
 
         int itemId = item.getItemId();
 
-        if (itemId == R.id.nav_exercises) {
+        // ⭐ THÊM CASE DASHBOARD
+        if (itemId == R.id.nav_statistics) {
+            fragment = new StatisticsFragment();
+            title = "Thống kê";
+        } else if (itemId == R.id.nav_exercises) {
             fragment = new ExercisesFragment();
             title = "Quản lí Bài tập";
         } else if (itemId == R.id.nav_foods) {
@@ -79,9 +83,6 @@ public class AdminHomeActivity extends AppCompatActivity implements NavigationVi
         } else if (itemId == R.id.nav_exercise_categories) {
             fragment = new ExerciseCategoriesFragment();
             title = "Danh mục Bài tập";
-        } else if (itemId == R.id.nav_statistics) {
-            fragment = new StatisticsFragment();
-            title = "Thống kê";
         } else if (itemId == R.id.nav_users) {
             fragment = new UsersFragment();
             title = "Quản lí Người dùng";
@@ -128,5 +129,14 @@ public class AdminHomeActivity extends AppCompatActivity implements NavigationVi
                 })
                 .setNegativeButton("Hủy", null)
                 .show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

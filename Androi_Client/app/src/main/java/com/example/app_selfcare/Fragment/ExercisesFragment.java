@@ -50,8 +50,7 @@ public class ExercisesFragment extends Fragment {
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         // TODO: Create and set actual adapter
-        // ExerciseAdapter adapter = new ExerciseAdapter(exerciseList);
-        // recyclerView.setAdapter(adapter);
+
     }
 
     private void setupFabButton() {

@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.app_selfcare.Adapter.FoodAdapter;
+import com.example.app_selfcare.Data.Model.Food;
+import com.example.app_selfcare.Data.Model.Ingredient;
+import com.example.app_selfcare.Data.Model.Step;
 import com.example.app_selfcare.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
@@ -50,12 +53,22 @@ public class FoodsFragment extends Fragment {
         setupFabButton();
     }
 
+    // Chỉ sửa phần setupRecyclerView()
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        // TODO: Create and set actual adapter
+
+        List<Food> foodList = new ArrayList<>();
+        // Thêm dữ liệu mẫu
+        List<Ingredient> ing = new ArrayList<>();
+        ing.add(new Ingredient("Tomato", "Cà chua", "2 quả"));
+        List<Step> steps = new ArrayList<>();
+        steps.add(new Step("1", "Rửa sạch cà chua..."));
+
+        foodList.add(new Food("Salad rau củ", "Healthy và ngon", 150, 10, "Dễ", "LUNCH", ing, steps));
+        // thêm món khác...
+
         FoodAdapter adapter = new FoodAdapter(foodList);
         recyclerView.setAdapter(adapter);
-
     }
 
     private void setupFabButton() {

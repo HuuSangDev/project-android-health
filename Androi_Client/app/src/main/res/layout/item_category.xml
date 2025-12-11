@@ -1,41 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="3dp">
+    android:layout_margin="12dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="center_vertical">
 
-        <!-- Tên danh mục -->
+        <ImageView
+            android:id="@+id/iv_category_icon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_category_food"
+            app:tint="#FF6B35" />
+
         <TextView
-            android:id="@+id/tvCategoryName"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_category_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Cardio"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
+            android:layout_weight="1"
+            android:layout_marginStart="20dp"
+            android:text="Món ăn Việt Nam"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:maxLines="1"
-            android:ellipsize="end" />
+            android:textColor="#222222" />
 
-        <!-- Thông tin số lượng bài tập -->
         <TextView
-            android:id="@+id/tvCategoryInfo"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_category_count"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="25 bài tập"
+            android:text="24 món"
             android:textColor="#666666"
-            android:textSize="13sp" />
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/btn_delete_category"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_delete"
+            app:tint="#F44336"
+            android:background="?android:attr/selectableItemBackgroundBorderless" />
 
     </LinearLayout>
-
-</androidx.cardview.widget.CardView>
-
+</com.google.android.material.card.MaterialCardView>
