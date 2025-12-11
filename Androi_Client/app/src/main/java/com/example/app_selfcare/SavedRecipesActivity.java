@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.app_selfcare.Adapter.SavedRecipeAdapter;
-import com.example.app_selfcare.Data.Model.Recipe;
+import com.example.app_selfcare.Data.Model.Food;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class SavedRecipesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private SavedRecipeAdapter adapter;
-    private List<Recipe> recipeList;
+    private List<Food> recipeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class SavedRecipesActivity extends AppCompatActivity {
                         String timeInfo = parts[1].trim();
 
                         // Tạo Recipe dùng đúng model chung
-                        Recipe recipe = new Recipe(
+                        Food recipe = new Food(
                                 0, // id tạm (có thể bỏ qua nếu không dùng)
                                 name,
                                 "Món ngon được lưu từ ứng dụng", // description

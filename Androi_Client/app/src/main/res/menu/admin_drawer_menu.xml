@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
 
+        <!-- ⭐ THÊM DASHBOARD Ở ĐẦU -->
+        <item
+            android:id="@+id/nav_statistics"
+            android:icon="@drawable/ic_statistic"
+            android:title="Thống kê" />
 
         <item
             android:id="@+id/nav_exercises"
@@ -24,17 +29,14 @@
             android:title="Danh mục Bài tập" />
 
         <item
-            android:id="@+id/nav_statistics"
-            android:icon="@drawable/ic_statistic"
-            android:title="Thống kê" />
-
-        <item
             android:id="@+id/nav_users"
             android:icon="@drawable/ic_proflie"
             android:title="Quản lí Người dùng" />
+
+        <!-- ⭐ SỬA ICON THÔNG BÁO (đang dùng nhầm ic_dashboard) -->
         <item
             android:id="@+id/nav_notifications"
-            android:icon="@drawable/ic_dashboard"
+            android:icon="@drawable/ic_bell"
             android:title="Thông báo" />
 
         <item

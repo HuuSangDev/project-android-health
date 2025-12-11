@@ -1,101 +1,114 @@
+// app/src/main/java/com/example/app_selfcare/Ui/Admin/AddExerciseActivity.java
 package com.example.app_selfcare;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.app_selfcare.Data.Model.Exercise;
+import com.example.app_selfcare.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class AddExerciseActivity extends AppCompatActivity {
 
-    private ImageView btnBack;
-    private MaterialButton btnSaveExercise;
     private TextInputEditText etExerciseName;
     private TextInputEditText etExerciseInfo;
     private TextInputEditText etExerciseDuration;
     private TextInputEditText etExerciseLevel;
 
+    private MaterialButton btnSaveExercise;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_exercise);
+        setContentView(R.layout.activity_add_exercise); // Layout bạn vừa gửi
 
         initViews();
+        setupToolbar();
         setupClickListeners();
     }
 
     private void initViews() {
-        btnBack = findViewById(R.id.backButton);
-        btnSaveExercise = findViewById(R.id.btnSaveExercise);
         etExerciseName = findViewById(R.id.etExerciseName);
         etExerciseInfo = findViewById(R.id.etExerciseInfo);
         etExerciseDuration = findViewById(R.id.etExerciseDuration);
         etExerciseLevel = findViewById(R.id.etExerciseLevel);
+        btnSaveExercise = findViewById(R.id.btnSaveExercise);
+    }
+
+    private void setupToolbar() {
+        // Back button trong header (bạn đã có ImageView backButton)
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+
+        // Nếu muốn dùng ActionBar (tùy chọn)
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Thêm bài tập");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void setupClickListeners() {
-        // Nút quay lại
-        btnBack.setOnClickListener(v -> finish());
-
-        // Nút lưu bài tập
-        btnSaveExercise.setOnClickListener(v -> saveExercise());
+        btnSaveExercise.setOnClickListener(v -> validateAndSave());
     }
 
-    private void saveExercise() {
-        // Lấy dữ liệu từ các trường nhập
-        String exerciseName = etExerciseName.getText() != null ? etExerciseName.getText().toString().trim() : "";
-        String exerciseInfo = etExerciseInfo.getText() != null ? etExerciseInfo.getText().toString().trim() : "";
-        String durationStr = etExerciseDuration.getText() != null ? etExerciseDuration.getText().toString().trim() : "";
-        String level = etExerciseLevel.getText() != null ? etExerciseLevel.getText().toString().trim() : "";
+    private void validateAndSave() {
+        String name = etExerciseName.getText().toString().trim();
+        String info = etExerciseInfo.getText().toString().trim();
+        String durationStr = etExerciseDuration.getText().toString().trim();
+        String level = etExerciseLevel.getText().toString().trim();
 
-        // Validate dữ liệu
-        if (exerciseName.isEmpty()) {
+        if (TextUtils.isEmpty(name)) {
             etExerciseName.setError("Vui lòng nhập tên bài tập");
             etExerciseName.requestFocus();
             return;
         }
 
-        if (exerciseInfo.isEmpty()) {
-            etExerciseInfo.setError("Vui lòng nhập mô tả bài tập");
-            etExerciseInfo.requestFocus();
-            return;
-        }
-
-        if (durationStr.isEmpty()) {
+        if (TextUtils.isEmpty(durationStr)) {
             etExerciseDuration.setError("Vui lòng nhập thời lượng");
             etExerciseDuration.requestFocus();
             return;
         }
 
-        int duration;
+        int duration = 30; // mặc định
         try {
             duration = Integer.parseInt(durationStr);
-            if (duration <= 0) {
-                etExerciseDuration.setError("Thời lượng phải lớn hơn 0");
-                etExerciseDuration.requestFocus();
-                return;
-            }
         } catch (NumberFormatException e) {
-            etExerciseDuration.setError("Vui lòng nhập số hợp lệ");
+            etExerciseDuration.setError("Thời lượng phải là số");
             etExerciseDuration.requestFocus();
             return;
         }
 
-        if (level.isEmpty()) {
+        if (TextUtils.isEmpty(level)) {
             etExerciseLevel.setError("Vui lòng nhập độ khó");
             etExerciseLevel.requestFocus();
             return;
         }
 
-        // TODO: Gửi dữ liệu lên server/API hoặc lưu vào database
-        // Hiện tại chỉ hiển thị thông báo thành công
-        Toast.makeText(this, "Đã lưu bài tập: " + exerciseName, Toast.LENGTH_SHORT).show();
-        
-        // Đóng activity sau khi lưu thành công
+        // Tạo object Exercise mới
+        Exercise newExercise = new Exercise();
+        newExercise.setName(name);
+        newExercise.setDescription(info.isEmpty() ? "Bài tập tốt cho sức khỏe" : info);
+        newExercise.setDurationMinutes(duration);
+        newExercise.setCaloriesBurned(duration * 10); // ước lượng đơn giản
+        newExercise.setDifficulty(level);
+        newExercise.setCategoryId("default"); // bạn có thể thêm Spinner sau
+        newExercise.setImageResId(R.drawable.ic_active); // ảnh mặc định
+
+        // TODO: Lưu vào database (Firebase, Room, v.v.)
+        // Ví dụ: exerciseRepository.add(newExercise);
+
+        Toast.makeText(this, "Thêm bài tập thành công!", Toast.LENGTH_SHORT).show();
+        finish(); // quay lại danh sách
+    }
+
+    // Xử lý nút back trên toolbar (nếu dùng ActionBar)
+    @Override
+    public boolean onSupportNavigateUp() {
         finish();
+        return true;
     }
 }
-
-

@@ -11,17 +11,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.app_selfcare.Data.Model.Recipe;
+import com.example.app_selfcare.Data.Model.Food;
 import com.example.app_selfcare.R;
 
 import java.util.List;
 
 public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.ViewHolder> {
 
-    private final List<Recipe> recipeList;  // Dùng model chung
+    private final List<Food> recipeList;  // Dùng model chung
     private final Context context;
 
-    public SavedRecipeAdapter(List<Recipe> recipeList, Context context) {
+    public SavedRecipeAdapter(List<Food> recipeList, Context context) {
         this.recipeList = recipeList;
         this.context = context;
     }
@@ -36,7 +36,7 @@ public class SavedRecipeAdapter extends RecyclerView.Adapter<SavedRecipeAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Recipe recipe = recipeList.get(position);
+        Food recipe = recipeList.get(position);
 
         holder.tvRecipeName.setText(recipe.getName());
         holder.tvRecipeTime.setText(recipe.getTimeMinutes() + " phút");

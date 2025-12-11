@@ -7,11 +7,7 @@
     android:layout_margin="12dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="6dp"
-    app:strokeWidth="0dp"
-    app:cardBackgroundColor="#FFFFFF"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:backgroundTint="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,12 +16,12 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/iv_exercise_image"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:id="@+id/iv_user_avatar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@android:drawable/ic_menu_gallery"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_workout"
-            app:tint="#4CAF50" />
+            android:background="@drawable/circle_background" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -35,42 +31,38 @@
             android:layout_marginStart="16dp">
 
             <TextView
-                android:id="@+id/tv_exercise_name"
+                android:id="@+id/tv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Chạy bộ buổi sáng"
+                android:text="Nguyễn Văn A"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="#222222" />
 
             <TextView
-                android:id="@+id/tv_exercise_info"
+                android:id="@+id/tv_user_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="30 phút • 350 kcal • Trung bình"
+                android:text="nguyenvana@gmail.com"
                 android:textColor="#666666"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/tv_exercise_category"
+                android:id="@+id/tv_user_stats"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Cardio"
-                android:background="@drawable/bg_tag_green"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp" />
+                android:layout_marginTop="4dp"
+                android:text="170cm • 65kg • Mục tiêu: 60kg"
+                android:textColor="#888888"
+                android:textSize="13sp" />
 
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/btn_delete_exercise"
+            android:id="@+id/btn_block_user"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_delete"
+            android:src="@drawable/ic_block"
             app:tint="#F44336"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:layout_gravity="center_vertical" />
