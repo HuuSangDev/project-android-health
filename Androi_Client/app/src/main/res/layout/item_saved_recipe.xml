@@ -39,28 +39,6 @@
             android:orientation="horizontal"
             android:layout_marginTop="4dp">
 
-            <TextView
-                android:id="@+id/tv_recipe_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="⏰ 20 min"
-                android:textSize="14sp" />
-
-                        <ImageView
-                            android:id="@+id/iv_clock_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:src="@drawable/ic_search"
-                            /> <!-- Thay bằng icon clock -->
-
-                        <ImageView
-                            android:id="@+id/iv_envelope_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:src="@drawable/ic_search" /> <!-- Thay bằng icon envelope/check -->
-
         </LinearLayout>
 
     </LinearLayout>

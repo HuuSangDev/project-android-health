@@ -15,9 +15,6 @@
         android:theme="@style/Theme.App_selfCare"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".AddCategoryDialog"
-            android:exported="false" />
-        <activity
             android:name=".AddFoodActivity"
             android:exported="false" />
         <activity
@@ -37,13 +34,8 @@
             android:exported="false" />
         <activity
             android:name=".Ui.Admin.AdminHomeActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
@@ -88,7 +80,13 @@
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
-            android:exported="false" />
+            android:exported="true" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
         <activity
             android:name=".RecipeHomeActivity"
             android:exported="false" />
@@ -96,7 +94,7 @@
             android:name=".RecipeDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".SavedRecipesActivity"
+            android:name=".SavedFoodActivity"
             android:exported="false" />
         <activity
             android:name=".Ui.Onboarding.Onboarding1Activity"

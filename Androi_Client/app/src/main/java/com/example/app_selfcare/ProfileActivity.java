@@ -33,7 +33,7 @@ import java.util.ArrayList;
 public class ProfileActivity extends AppCompatActivity {
 
     private ImageView btnBack, btnSettings;
-    private ImageView homeIcon, workoutIcon, recipeIcon, profileIcon;
+    private LinearLayout navHome, navWorkout, navPlanner, navProfile;
     private LinearLayout updateInfor;
     private BarChart chartView;
     private TextView pointsText, weightText, bmiText;
@@ -56,17 +56,17 @@ public class ProfileActivity extends AppCompatActivity {
         setupClickListeners();
     }
 
-    @SuppressLint("WrongViewCast")
     private void initViews() {
         chartView = findViewById(R.id.chartView);
         pointsText = findViewById(R.id.pointsText);
         weightText = findViewById(R.id.weightText);
         bmiText = findViewById(R.id.bmiText);
 
-        homeIcon = findViewById(R.id.homeIcon);
-        workoutIcon = findViewById(R.id.workoutIcon);
-        recipeIcon = findViewById(R.id.recipeIcon);
-        profileIcon = findViewById(R.id.profileIcon);
+        navHome = findViewById(R.id.navHome);
+        navWorkout = findViewById(R.id.navWorkout);
+        navPlanner = findViewById(R.id.navPlanner);
+        navProfile = findViewById(R.id.navProfile);
+
         btnSettings = findViewById(R.id.btnSettings);
         btnBack = findViewById(R.id.btnBack);
         updateInfor = findViewById(R.id.updateInfor);
@@ -74,28 +74,48 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setupChart() {
         ArrayList<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, 75f));
-        entries.add(new BarEntry(1, 85f));
-        entries.add(new BarEntry(2, 90f));
-        entries.add(new BarEntry(3, 80f));
-        entries.add(new BarEntry(4, 95f));
-        entries.add(new BarEntry(5, 78f));
-        entries.add(new BarEntry(6, 88f));
+        entries.add(new BarEntry(0, 67.5f)); // T2
+        entries.add(new BarEntry(1, 67.8f)); // T3
+        entries.add(new BarEntry(2, 68.0f)); // T4
+        entries.add(new BarEntry(3, 68.2f)); // T5
+        entries.add(new BarEntry(4, 68.0f)); // T6
+        entries.add(new BarEntry(5, 68.3f)); // T7
+        entries.add(new BarEntry(6, 68.5f)); // CN
 
-        BarDataSet dataSet = new BarDataSet(entries, "Tiến độ");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        dataSet.setValueTextSize(12f);
+        BarDataSet dataSet = new BarDataSet(entries, "Cân nặng (kg)");
+        dataSet.setColor(getColor(R.color.orange_primary));
+        dataSet.setValueTextSize(11f);
+        dataSet.setValueTextColor(getColor(R.color.gray_light));
 
         BarData barData = new BarData(dataSet);
+        barData.setBarWidth(0.5f);
+
         chartView.setData(barData);
+
+        // Không mô tả
         chartView.getDescription().setEnabled(false);
         chartView.getLegend().setEnabled(false);
+
+        // Trục X
         chartView.getXAxis().setDrawGridLines(false);
-        chartView.getAxisLeft().setDrawGridLines(false);
+        chartView.getXAxis().setDrawAxisLine(false);
+        chartView.getXAxis().setPosition(com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM);
+
+        // Trục Y
+        chartView.getAxisLeft().setTextColor(getColor(R.color.gray_light));
+        chartView.getAxisLeft().setAxisMinimum(65f); // phù hợp cân nặng
+        chartView.getAxisLeft().setDrawGridLines(true);
+
         chartView.getAxisRight().setEnabled(false);
-        chartView.animateY(1000);
+
+        chartView.setScaleEnabled(false);
+        chartView.setTouchEnabled(true);
+        chartView.setDragEnabled(true);
+
+        chartView.animateY(800);
         chartView.invalidate();
     }
+
 
     private void setupStats() {
         pointsText.setText("Tăng cân");
@@ -112,10 +132,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         updateInfor.setOnClickListener(v -> showUpdateProfileDialog());
 
-        homeIcon.setOnClickListener(v -> navigateAndFinish(HomeActivity.class));
-        workoutIcon.setOnClickListener(v -> navigateAndFinish(WorkoutActivity.class));
-        recipeIcon.setOnClickListener(v -> navigateAndFinish(RecipeHomeActivity.class));
-        profileIcon.setOnClickListener(v -> { /* Đang ở Profile */ });
+        navHome.setOnClickListener(v -> navigateAndFinish(HomeActivity.class));
+        navWorkout.setOnClickListener(v -> navigateAndFinish(WorkoutActivity.class));
+        navPlanner.setOnClickListener(v -> navigateAndFinish(RecipeHomeActivity.class));
+        navProfile.setOnClickListener(v -> { /* đang ở profile */ });
+
     }
 
     private void navigateAndFinish(Class<?> cls) {

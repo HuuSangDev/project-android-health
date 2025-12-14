@@ -1,31 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@android:color/white">
 
-    <!-- Status Bar -->
+    <!-- ================= HEADER ================= -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/header_nav_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="30dp">
 
-    <!-- Back Button -->
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/back_button_style"
+            android:padding="10dp"
+            app:srcCompat="@drawable/ic_backk"
+            app:tint="@android:color/white" />
 
-    <!-- Content -->
-    <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="16dp"
-        android:background="@drawable/back_button_background"
-        android:padding="8dp"
-        android:src="@drawable/ic_backk" />
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:text="Không có internet"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
+    <!-- ================= CONTENT ================= -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="706dp"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="bottom|center"
         android:orientation="vertical"
+        android:gravity="center"
         android:padding="32dp">
 
         <ImageView
@@ -37,39 +55,40 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:text="Not Found"
             android:textColor="#333333"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
             android:text="Không có kết nối internet"
             android:textColor="#666666"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:layout_marginBottom="32dp" />
 
         <Button
-            android:id="@+id/retryButton"
+            android:id="@+id/btnRetry"
             android:layout_width="271dp"
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/retry_button_background"
             android:text="🔄 Thử lại và làm mới"
             android:textColor="#FF8C42"
             android:textSize="16sp"
+            android:background="@drawable/retry_button_background"
             app:backgroundTint="@null" />
 
         <Button
-            android:id="@+id/backToHomeButton"
+            android:id="@+id/btnBackHome"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@drawable/orange_button_background"
             android:text="Trở về trang chủ →"
             android:textColor="@android:color/white"
             android:textSize="16sp"
+            android:background="@drawable/orange_button_background"
             app:backgroundTint="@null" />
     </LinearLayout>
+
 </LinearLayout>

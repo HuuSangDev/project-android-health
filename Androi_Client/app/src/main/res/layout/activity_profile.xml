@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity">
+    tools:context=".ProfileActivity"
+    >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -60,7 +61,7 @@
                     android:contentDescription="Settings" />
             </LinearLayout>
 
-            <!-- Profile Section -->
+            <!-- Chart Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,9 +74,9 @@
                     android:id="@+id/profileImage"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:contentDescription="Profile"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_proflie"
-                    android:contentDescription="Profile" />
+                    android:src="@drawable/ic_proflie" />
 
                 <TextView
                     android:id="@+id/userName"
@@ -97,7 +98,34 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <!-- Chart Section -->
+            <LinearLayout
+                android:id="@+id/updateInfor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cập nhật chỉ số tuần này"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    app:tint="#FF8C42"
+                    android:contentDescription="Update" />
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -115,20 +143,21 @@
                     android:layout_marginBottom="12dp">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Tiến độ"
-                        android:textColor="@android:color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Theo dõi thay đổi tuần"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tuần này"
+                        android:text="7 ngày gần nhất"
                         android:textColor="#FF8C42"
-                        android:textSize="14sp" />
+                        android:textSize="13sp" />
+
                 </LinearLayout>
 
                 <com.github.mikephil.charting.charts.BarChart
@@ -154,33 +183,7 @@
             </LinearLayout>
 
             <!-- Update Info Button -->
-            <LinearLayout
-                android:id="@+id/updateInfor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="16dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Cập nhật trạng thái mỗi tuần"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_menu_edit"
-                    app:tint="#FF8C42"
-                    android:contentDescription="Update" />
-            </LinearLayout>
 
             <!-- Stats Cards -->
             <LinearLayout
@@ -202,7 +205,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="⭐"
                         android:textSize="22sp" />
 
                     <TextView
@@ -236,7 +238,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="⚖️"
                         android:textSize="22sp" />
 
                     <TextView
@@ -270,7 +271,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="❤️"
                         android:textSize="22sp" />
 
                     <TextView
