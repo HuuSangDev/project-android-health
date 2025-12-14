@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.app_selfcare.Fragment.RecipePeriodFragment;
+import com.example.app_selfcare.Fragment.FoodPeriodFragment;
 
 public class RecipeHomeActivity extends AppCompatActivity {
 
@@ -115,7 +115,7 @@ public class RecipeHomeActivity extends AppCompatActivity {
         String oldMealType = currentMealType;
         currentMealType = mealType;
 
-        Fragment fragment = RecipePeriodFragment.newInstance(mealType);
+        Fragment fragment = FoodPeriodFragment.newInstance(mealType);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Xác định hướng chuyển tab để chọn animation đúng

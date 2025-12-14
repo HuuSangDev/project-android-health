@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.app_selfcare.Adapter.RecipePagerAdapter;
+import com.example.app_selfcare.Adapter.FoodPagerAdapter;
 import com.example.app_selfcare.Fragment.IngredientsFragment;
 import com.example.app_selfcare.Fragment.StepsFragment;
 import com.google.android.material.tabs.TabLayout;
@@ -69,7 +69,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         fragments.add(new IngredientsFragment());
         fragments.add(new StepsFragment());
 
-        RecipePagerAdapter adapter = new RecipePagerAdapter(this, fragments);
+        FoodPagerAdapter adapter = new FoodPagerAdapter(this, fragments);
         viewPager.setAdapter(adapter);
 
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {

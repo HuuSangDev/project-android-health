@@ -1,17 +1,25 @@
 package com.example.app_selfcare.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.app_selfcare.AddExerciseActivity;
+import com.example.app_selfcare.Adapter.ExerciseAdapter;
+import com.example.app_selfcare.Data.Model.Exercise;
+import com.example.app_selfcare.Data.local.ExerciseStorage;
 import com.example.app_selfcare.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +27,8 @@ public class ExercisesFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private FloatingActionButton fabAdd;
-    private List<String> exerciseList;
+    private ExerciseAdapter adapter;
+    private final List<Exercise> exerciseList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -34,31 +43,46 @@ public class ExercisesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewExercises);
         fabAdd = view.findViewById(R.id.fabAddExercise);
 
-        // Sample data
-        exerciseList = new ArrayList<>();
-        exerciseList.add("Push-ups - 20 reps");
-        exerciseList.add("Squats - 30 reps");
-        exerciseList.add("Plank - 60 seconds");
-        exerciseList.add("Running - 5km");
-        exerciseList.add("Jumping Jacks - 50 reps");
-
         setupRecyclerView();
         setupFabButton();
     }
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // TODO: Create and set actual adapter
-        // ExerciseAdapter adapter = new ExerciseAdapter(exerciseList);
-        // recyclerView.setAdapter(adapter);
+        adapter = new ExerciseAdapter(exerciseList, new ExerciseAdapter.OnExerciseClickListener() {
+            @Override
+            public void onEdit(Exercise exercise) {
+                Toast.makeText(requireContext(), "Nhấn giữ để sửa sau", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDelete(int id) {
+                ExerciseStorage.deleteExercise(requireContext(), id);
+                loadExercises();
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        loadExercises();
     }
 
     private void setupFabButton() {
         fabAdd.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Thêm bài tập mới", Toast.LENGTH_SHORT).show();
-            // TODO: Open add exercise dialog or activity
-            // Intent intent = new Intent(getActivity(), AddExerciseActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(getActivity(), AddExerciseActivity.class);
+            startActivity(intent);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadExercises();
+    }
+
+    private void loadExercises() {
+        exerciseList.clear();
+        exerciseList.addAll(ExerciseStorage.getExercises(requireContext()));
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 }

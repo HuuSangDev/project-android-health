@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="24dp"
+    android:background="#FFFFFF">
 
     <TextView
-        android:id="@+id/tvDialogTitle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gửi thông báo mới"
-        android:textSize="18sp"
+        android:text="Gửi thông báo"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#333333"
-        android:layout_marginBottom="12dp" />
+        android:textColor="#FF6B35"
+        android:layout_gravity="center_horizontal" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:hint="Tiêu đề">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDialogTitle"
+            android:id="@+id/etNotifTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -31,54 +31,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:hint="Nội dung">
+        android:hint="Nội dung thông báo">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDialogMessage"
+            android:id="@+id/etNotifMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minLines="3"
-            android:gravity="top" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:hint="Gửi đến (tất cả / 1 nhóm / 1 user)">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDialogTarget"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:minLines="3" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="end"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="24dp"
+        android:gravity="end">
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/btnCancel"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hủy" />
+            android:text="Hủy"
+            android:backgroundTint="#CCCCCC"
+            android:textColor="#000000" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSend"
-            style="@style/Widget.MaterialComponents.Button"
+            android:id="@+id/btnSendNotif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Gửi"
-            android:textAllCaps="false"
-            android:backgroundTint="#2196F3"
-            android:textColor="@android:color/white" />
+            android:text="Gửi ngay"
+            android:backgroundTint="#FF6B35"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="12dp" />
+
     </LinearLayout>
-
 </LinearLayout>
-
-

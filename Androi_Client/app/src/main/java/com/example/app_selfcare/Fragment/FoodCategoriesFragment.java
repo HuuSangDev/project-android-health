@@ -10,6 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.app_selfcare.Adapter.CategoryAdapter;
+import com.example.app_selfcare.AddCategoryDialog;
+import com.example.app_selfcare.Data.Model.Category;
 import com.example.app_selfcare.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
@@ -19,7 +23,8 @@ public class FoodCategoriesFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private FloatingActionButton fabAdd;
-    private List<String> categoryList;
+    private CategoryAdapter adapter;
+    private List<Category> categoryList;
 
     @Nullable
     @Override
@@ -34,26 +39,47 @@ public class FoodCategoriesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewFoodCategories);
         fabAdd = view.findViewById(R.id.fabAddCategory);
 
-        // Sample data
         categoryList = new ArrayList<>();
-        categoryList.add("Món chính - 45 món");
-        categoryList.add("Món phụ - 32 món");
-        categoryList.add("Đồ uống - 28 món");
-        categoryList.add("Tráng miệng - 20 món");
-        categoryList.add("Món ăn sáng - 35 món");
+        categoryList.add(new Category(10, "Món chính", "food", R.drawable.ic_food));
+        categoryList.add(new Category(11, "Đồ uống", "food", R.drawable.ic_food));
+        categoryList.add(new Category(12, "Tráng miệng", "food", R.drawable.ic_food));
 
         setupRecyclerView();
         setupFabButton();
     }
 
     private void setupRecyclerView() {
+        adapter = new CategoryAdapter(categoryList, new CategoryAdapter.OnCategoryClickListener() {
+            @Override
+            public void onEdit(Category category) {
+                Toast.makeText(getContext(), "Sửa: " + category.name, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDelete(int id) {
+                for (Category c : categoryList) {
+                    if (c.id == id) {
+                        categoryList.remove(c);
+                        adapter.notifyDataSetChanged();
+                        break;
+                    }
+                }
+            }
+        });
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        // TODO: Set adapter
+        recyclerView.setAdapter(adapter);
     }
 
     private void setupFabButton() {
         fabAdd.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Thêm danh mục món ăn mới", Toast.LENGTH_SHORT).show();
+            AddCategoryDialog dialog = new AddCategoryDialog();
+            dialog.setListener(category -> {
+                category.type = "food"; // QUAN TRỌNG
+                categoryList.add(category);
+                adapter.notifyItemInserted(categoryList.size() - 1);
+            });
+            dialog.show(getParentFragmentManager(), "add_food");
         });
     }
 }
