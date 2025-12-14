@@ -2,6 +2,7 @@ package com.example.app_selfcare;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.widget.Toast;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,10 +16,15 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.app_selfcare.Data.Model.Request.UserLoginRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.Model.Response.UserLoginResponse;
+import com.example.app_selfcare.Data.Model.Response.UserProfileResponse;
+import com.example.app_selfcare.Data.Model.Response.UserResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
 
+import com.example.app_selfcare.Ui.Admin.AdminHomeActivity;
 import com.example.app_selfcare.upload.InforSex;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         UserLoginRequest request = new UserLoginRequest(email, password);
-
         ApiService api = ApiClient.getClient().create(ApiService.class);
 
         api.login(request).enqueue(new Callback<ApiResponse<UserLoginResponse>>() {
@@ -90,16 +95,23 @@ public class LoginActivity extends AppCompatActivity {
 
                         // Lấy token
                         String token = apiRes.getResult().getToken();
+                        String role  = apiRes.getResult().getRole();
 
                         // Lưu token vào SharedPreferences
                         saveToken(token);
-
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-
-                        // Chuyển đến trang InforSex
-                        startActivity(new Intent(LoginActivity.this, InforSex.class));
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                        finish();
+                        if (role == null) {
+                            Toast.makeText(LoginActivity.this, "Không tìm thấy role!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if ("ADMIN".equalsIgnoreCase(role))
+                        {
+                            Intent intent= new Intent(LoginActivity.this, AdminHomeActivity.class);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            checkUserProfile(token);
+                        }
 
                     } else {
                         Toast.makeText(LoginActivity.this, "Sai email hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
@@ -123,4 +135,64 @@ public class LoginActivity extends AppCompatActivity {
                 .putString("TOKEN", token)
                 .apply();
     }
+
+    private void checkUserProfile(String token) {
+
+        ApiService api = ApiClient.getClient().create(ApiService.class);
+
+        api.getUserProfile("Bearer " + token).enqueue(new Callback<ApiResponse<UserResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<UserResponse>> call, Response<ApiResponse<UserResponse>> response) {
+
+                if (!response.isSuccessful() || response.body() == null) {
+                    goToInforSex();
+                    return;
+                }
+
+                UserResponse user = response.body().getResult();
+
+                if (user == null || user.getUserProfileResponse() == null) {
+                    goToInforSex();
+                    return;
+                }
+
+                UserProfileResponse profile = user.getUserProfileResponse();
+
+                boolean isProfileEmpty =
+                        profile.getAvatarUrl() == null &&
+                                profile.getDateOfBirth() == null &&
+                                profile.getGender() == null &&
+                                profile.getHeight() == null &&
+                                profile.getWeight() == null &&
+                                profile.getHealthGoal() == null;
+
+                if (isProfileEmpty) {
+                    // Chưa tạo profile
+                    goToInforSex();
+                } else {
+                    // Đã có profile
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<UserResponse>> call, Throwable t) {
+                goToInforSex();
+            }
+        });
+    }
+
+    private void goToInforSex() {
+        Intent intent = new Intent(LoginActivity.this, InforSex.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+
+
+
+
 }
