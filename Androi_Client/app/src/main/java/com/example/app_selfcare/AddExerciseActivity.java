@@ -3,14 +3,16 @@ package com.example.app_selfcare;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.app_selfcare.Data.Model.Exercise;
+import com.example.app_selfcare.Data.local.ExerciseStorage;
 import com.example.app_selfcare.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class AddExerciseActivity extends AppCompatActivity {
@@ -18,7 +20,7 @@ public class AddExerciseActivity extends AppCompatActivity {
     private TextInputEditText etExerciseName;
     private TextInputEditText etExerciseInfo;
     private TextInputEditText etExerciseDuration;
-    private TextInputEditText etExerciseLevel;
+    private MaterialAutoCompleteTextView actvExerciseLevel;
 
     private MaterialButton btnSaveExercise;
 
@@ -28,6 +30,7 @@ public class AddExerciseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_exercise); // Layout bạn vừa gửi
 
         initViews();
+        setupDropdown();
         setupToolbar();
         setupClickListeners();
     }
@@ -36,18 +39,23 @@ public class AddExerciseActivity extends AppCompatActivity {
         etExerciseName = findViewById(R.id.etExerciseName);
         etExerciseInfo = findViewById(R.id.etExerciseInfo);
         etExerciseDuration = findViewById(R.id.etExerciseDuration);
-        etExerciseLevel = findViewById(R.id.etExerciseLevel);
+        actvExerciseLevel = findViewById(R.id.actvExerciseLevel);
         btnSaveExercise = findViewById(R.id.btnSaveExercise);
     }
 
-    private void setupToolbar() {
-        // Back button trong header (bạn đã có ImageView backButton)
-        findViewById(R.id.backButton).setOnClickListener(v -> finish());
+    private void setupDropdown() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.exercise_difficulties)
+        );
+        actvExerciseLevel.setAdapter(adapter);
+        actvExerciseLevel.setOnClickListener(v -> actvExerciseLevel.showDropDown());
+    }
 
-        // Nếu muốn dùng ActionBar (tùy chọn)
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Thêm bài tập");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    private void setupToolbar() {
+        if (findViewById(R.id.backButton) != null) {
+            findViewById(R.id.backButton).setOnClickListener(v -> finish());
         }
     }
 
@@ -59,7 +67,7 @@ public class AddExerciseActivity extends AppCompatActivity {
         String name = etExerciseName.getText().toString().trim();
         String info = etExerciseInfo.getText().toString().trim();
         String durationStr = etExerciseDuration.getText().toString().trim();
-        String level = etExerciseLevel.getText().toString().trim();
+        String level = actvExerciseLevel.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
             etExerciseName.setError("Vui lòng nhập tên bài tập");
@@ -83,8 +91,8 @@ public class AddExerciseActivity extends AppCompatActivity {
         }
 
         if (TextUtils.isEmpty(level)) {
-            etExerciseLevel.setError("Vui lòng nhập độ khó");
-            etExerciseLevel.requestFocus();
+            actvExerciseLevel.setError("Vui lòng chọn độ khó");
+            actvExerciseLevel.requestFocus();
             return;
         }
 
@@ -98,8 +106,7 @@ public class AddExerciseActivity extends AppCompatActivity {
         newExercise.setCategoryId("default"); // bạn có thể thêm Spinner sau
         newExercise.setImageResId(R.drawable.ic_active); // ảnh mặc định
 
-        // TODO: Lưu vào database (Firebase, Room, v.v.)
-        // Ví dụ: exerciseRepository.add(newExercise);
+        ExerciseStorage.addExercise(this, newExercise);
 
         Toast.makeText(this, "Thêm bài tập thành công!", Toast.LENGTH_SHORT).show();
         finish(); // quay lại danh sách

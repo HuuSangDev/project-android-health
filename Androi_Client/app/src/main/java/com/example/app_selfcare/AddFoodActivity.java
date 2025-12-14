@@ -3,7 +3,9 @@ package com.example.app_selfcare;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +16,7 @@ import com.example.app_selfcare.Data.Model.Food;
 import com.example.app_selfcare.Data.Model.Ingredient;
 import com.example.app_selfcare.Data.Model.Step;
 import com.example.app_selfcare.R;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -21,7 +24,8 @@ import java.util.List;
 
 public class AddFoodActivity extends AppCompatActivity {
 
-    private TextInputEditText etFoodName, etDescription, etCalories, etTime, etDifficulty;
+    private TextInputEditText etFoodName, etDescription, etCalories, etTime;
+    private MaterialAutoCompleteTextView actvDifficulty;
     private RecyclerView rvIngredients, rvSteps;
     private TextInputEditText etAddIngredient, etAddStep;
 
@@ -36,6 +40,7 @@ public class AddFoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_food);
 
         initViews();
+        setupDropdown();
         setupRecyclerViews();
         setupClickListeners();
     }
@@ -45,13 +50,23 @@ public class AddFoodActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.etDescription);
         etCalories = findViewById(R.id.etCalories);
         etTime = findViewById(R.id.etTime);
-        etDifficulty = findViewById(R.id.etDifficulty);
+        actvDifficulty = findViewById(R.id.actvDifficulty);
 
         rvIngredients = findViewById(R.id.rvIngredients);
         rvSteps = findViewById(R.id.rvSteps);
 
         etAddIngredient = findViewById(R.id.etAddIngredient);
         etAddStep = findViewById(R.id.etAddStep);
+    }
+
+    private void setupDropdown() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.exercise_difficulties)
+        );
+        actvDifficulty.setAdapter(adapter);
+        actvDifficulty.setOnClickListener(v -> actvDifficulty.showDropDown());
     }
 
     private void setupRecyclerViews() {
@@ -94,7 +109,7 @@ public class AddFoodActivity extends AppCompatActivity {
         String desc = etDescription.getText().toString().trim();
         String calStr = etCalories.getText().toString();
         String timeStr = etTime.getText().toString();
-        String difficulty = etDifficulty.getText().toString().trim();
+        String difficulty = actvDifficulty.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "Nhập tên món ăn", Toast.LENGTH_SHORT).show();
@@ -114,7 +129,9 @@ public class AddFoodActivity extends AppCompatActivity {
                 new ArrayList<>(ingredientList), new ArrayList<>(stepList)
         );
 
-        // TODO: Lưu vào Firebase ở đây (mình sẽ giúp sau nếu bạn cần)
+        // Lưu tạm vào SharedPreferences để hiển thị
+        com.example.app_selfcare.Data.local.FoodStorage.addFood(this, newFood);
+
         Toast.makeText(this, "Thêm món \"" + name + "\" thành công!", Toast.LENGTH_LONG).show();
         finish();
     }

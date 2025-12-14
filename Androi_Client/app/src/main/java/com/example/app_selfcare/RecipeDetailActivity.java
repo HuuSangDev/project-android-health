@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,12 +26,17 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
     private TabLayout tabLayout;
 
+    // Bottom nav (LinearLayout)
+    private LinearLayout navHome, navWorkout, navPlanner, navProfile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        // Khởi tạo views
+        //=========================
+        // 1. INIT VIEW
+        //=========================
         backButton = findViewById(R.id.backButton);
         ivRecipeImage = findViewById(R.id.iv_recipe_image);
         tvRecipeTitle = findViewById(R.id.tv_recipe_title);
@@ -39,20 +45,26 @@ public class RecipeDetailActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tab_layout);
         saveButton = findViewById(R.id.saveButton);
 
-        ImageView homeIcon = findViewById(R.id.homeIcon);
-        ImageView workoutIcon = findViewById(R.id.workoutIcon);
-        ImageView recipeIcon = findViewById(R.id.recipeIcon);
-        ImageView profileIcon = findViewById(R.id.profileIcon);
+        // Bottom navigation layout IDs
+        navHome = findViewById(R.id.navHome);
+        navWorkout = findViewById(R.id.navWorkout);
+        navPlanner = findViewById(R.id.navPlanner);
+        navProfile = findViewById(R.id.navProfile);
 
-        // Nhận dữ liệu từ Intent
+
+        //=========================
+        // 2. LẤY DỮ LIỆU TỪ INTENT
+        //=========================
         String recipeName = getIntent().getStringExtra("recipeName");
         String recipeTime = getIntent().getStringExtra("recipeTime");
 
-        // Cập nhật giao diện với dữ liệu
         if (recipeName != null) tvRecipeTitle.setText(recipeName);
         if (recipeTime != null) tvRecipeTime.setText("⏰ " + recipeTime);
 
-        // Setup ViewPager với Fragments
+
+        //=========================
+        // 3. SETUP VIEWPAGER + TAB
+        //=========================
         ArrayList<androidx.fragment.app.Fragment> fragments = new ArrayList<>();
         fragments.add(new IngredientsFragment());
         fragments.add(new StepsFragment());
@@ -60,22 +72,21 @@ public class RecipeDetailActivity extends AppCompatActivity {
         FoodPagerAdapter adapter = new FoodPagerAdapter(this, fragments);
         viewPager.setAdapter(adapter);
 
-        // Setup TabLayout
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            switch (position) {
-                case 0:
-                    tab.setText("Thành phần");
-                    break;
-                case 1:
-                    tab.setText("Quy trình");
-                    break;
-            }
+            if (position == 0) tab.setText("Thành phần");
+            else tab.setText("Quy trình");
         }).attach();
 
-        // Xử lý click back button
+
+        //=========================
+        // 4. BACK BUTTON
+        //=========================
         backButton.setOnClickListener(v -> onBackPressed());
 
-        // Xử lý click save button
+
+        //=========================
+        // 5. SAVE BUTTON
+        //=========================
         saveButton.setOnClickListener(v -> {
             String recipeNameToSave = tvRecipeTitle.getText().toString();
             String recipeTimeToSave = tvRecipeTime.getText().toString().replace("⏰ ", "");
@@ -83,37 +94,41 @@ public class RecipeDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Đã lưu món: " + recipeNameToSave, Toast.LENGTH_SHORT).show();
         });
 
-        // Bottom navigation
-        homeIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(RecipeDetailActivity.this, HomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
+
+        //=========================
+        // 6. BOTTOM NAVIGATION (LinearLayout)
+        //=========================
+        navHome.setOnClickListener(v -> {
+            startActivity(new Intent(this, HomeActivity.class));
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
 
-        workoutIcon.setOnClickListener(v -> {
-            startActivity(new Intent(RecipeDetailActivity.this, WorkoutActivity.class));
+        navWorkout.setOnClickListener(v -> {
+            startActivity(new Intent(this, WorkoutActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
-        recipeIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(RecipeDetailActivity.this, RecipeHomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
+        navPlanner.setOnClickListener(v -> {
+            startActivity(new Intent(this, RecipeHomeActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
-        profileIcon.setOnClickListener(v -> {
-            startActivity(new Intent(RecipeDetailActivity.this, ProfileActivity.class));
+        navProfile.setOnClickListener(v -> {
+            startActivity(new Intent(this, ProfileActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
     }
 
-    // Hàm lưu món ăn (sử dụng SharedPreferences)
+
+    //=========================
+    // 7. HÀM LƯU MÓN ĂN
+    //=========================
     private void saveRecipe(String name, String time) {
         SharedPreferences prefs = getSharedPreferences("SavedRecipes", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+
         String savedRecipes = prefs.getString("recipes", "");
+
         if (!savedRecipes.contains(name)) {
             savedRecipes += name + "|" + time + ";";
             editor.putString("recipes", savedRecipes);
