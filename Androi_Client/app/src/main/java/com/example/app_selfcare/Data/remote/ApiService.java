@@ -13,6 +13,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -30,8 +31,10 @@ public interface ApiService {
     @POST("app/Users/Register")
     Call<ApiResponse<UserResponse>> register(@Body UserRegisterRequest request);
 
-    @retrofit2.http.GET("app/userProfile/get")
-    Call<ApiResponse<UserResponse>> getUserProfile();
+    @GET("app/userProfile/get-my-profile")
+    Call<ApiResponse<UserResponse>> getUserProfile(
+            @Header("Authorization") String token
+    );
 
     @Multipart
     @PUT("app/userProfile/update")

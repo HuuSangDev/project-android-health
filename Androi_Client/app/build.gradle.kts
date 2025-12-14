@@ -78,8 +78,12 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 // Navigation Drawer
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
 // Fragment
     implementation("androidx.fragment:fragment:1.6.2")
 // Coordinator Layout
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
+    // GLIDE – load ảnh Cloudinary
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 }
