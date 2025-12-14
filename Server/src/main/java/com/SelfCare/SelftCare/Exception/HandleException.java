@@ -18,7 +18,11 @@ public class HandleException {
     {
         ErrorCode erorrCode=appException.getErrorCode();
         ApiResponse apiResponse=new ApiResponse();
-        apiResponse.setMessage(erorrCode.getMessage());
+        // Sử dụng message từ exception nếu có, nếu không thì dùng message mặc định từ ErrorCode
+        String message = appException.getMessage() != null && !appException.getMessage().equals(erorrCode.getMessage()) 
+            ? appException.getMessage() 
+            : erorrCode.getMessage();
+        apiResponse.setMessage(message);
         apiResponse.setCode(erorrCode.getCode());
 
         return ResponseEntity.badRequest().body(apiResponse);

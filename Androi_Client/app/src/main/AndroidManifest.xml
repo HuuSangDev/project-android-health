@@ -15,9 +15,6 @@
         android:theme="@style/Theme.App_selfCare"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".AddCategoryDialog"
-            android:exported="false" />
-        <activity
             android:name=".AddFoodActivity"
             android:exported="false" />
         <activity
@@ -95,9 +92,7 @@
         <activity
             android:name=".RecipeDetailActivity"
             android:exported="false" />
-        <activity
-            android:name=".SavedRecipesActivity"
-            android:exported="false" />
+
         <activity
             android:name=".Ui.Onboarding.Onboarding1Activity"
             android:exported="false" />
@@ -112,6 +107,9 @@
             android:exported="false" />
         <activity
             android:name=".AddExerciseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
             android:exported="false" />
     </application>
 

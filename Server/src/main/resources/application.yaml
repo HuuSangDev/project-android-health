@@ -54,3 +54,9 @@ cloudinary:
   cloud-name: "dg9ke49vm"
   api-key: "958314775373525"
   api-secret: "eZpxIv1RZm4k5QzEiSgz1iUmQIQ"
+
+# Gemini AI Configuration
+gemini:
+  api-key: "${GEMINI_API_KEY:AIzaSyB228bTvPoSiY1rvIIbMxIO2Fp74CMPj9U}"
+  # Sử dụng gemini-1.5-flash (nhanh hơn) hoặc gemini-1.5-pro (chính xác hơn)
+  api-url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
