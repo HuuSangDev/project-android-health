@@ -13,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.app_selfcare.R;
-import com.example.app_selfcare.RecipeDetailActivity; // Nếu bạn vẫn dùng activity này thì giữ, hoặc đổi tên sau
+import com.example.app_selfcare.RecipeDetailActivity;
 import com.example.app_selfcare.Data.Model.Food;
 
 import java.util.ArrayList;
@@ -55,8 +58,19 @@ public class FoodPeriodAdapter extends RecyclerView.Adapter<FoodPeriodAdapter.Fo
         holder.tvCalories.setText(food.getCalories() + " kcal");
         holder.tvDifficulty.setText(food.getDifficulty());
 
-        // Nếu bạn có ảnh thật từ Firebase thì dùng Glide sau, tạm thời để placeholder
-        holder.ivRecipeImage.setImageResource(R.drawable.placeholder_food); // tạo file này nếu chưa có
+        // Load ảnh từ imageUrl bằng Glide
+        String imageUrl = food.getImageUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Glide.with(context)
+                    .load(imageUrl)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(16)))
+                    .placeholder(R.drawable.ic_salad) // Placeholder nếu chưa load xong
+                    .error(R.drawable.ic_salad) // Ảnh lỗi nếu không load được
+                    .into(holder.ivRecipeImage);
+        } else {
+            // Nếu không có imageUrl, dùng placeholder mặc định
+            holder.ivRecipeImage.setImageResource(R.drawable.ic_salad);
+        }
 
         // Hiển thị badge bữa ăn (S
         String mealType = food.getMealType();
@@ -94,7 +108,7 @@ public class FoodPeriodAdapter extends RecyclerView.Adapter<FoodPeriodAdapter.Fo
             intent.putExtra("foodTime", food.getTimeMinutes());
             intent.putExtra("foodDifficulty", food.getDifficulty());
             intent.putExtra("foodDescription", food.getDescription());
-            // Nếu bạn có ảnh, truyền thêm: intent.putExtra("foodImageUrl", food.getImageUrl());
+            intent.putExtra("foodImageUrl", food.getImageUrl());
             context.startActivity(intent);
         });
     }
