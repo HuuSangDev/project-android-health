@@ -1,0 +1,28 @@
+package com.SelfCare.SelftCare.DTO.Request;
+
+import com.SelfCare.SelftCare.Enum.DifficultyLevel;
+import com.SelfCare.SelftCare.Enum.MealType;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
+public class FoodSearchRequest {
+    String keyword;                 // tên món ăn
+    MealType mealType;              // BREAKFAST / LUNCH / DINNER
+    DifficultyLevel difficultyLevel;// EASY / MEDIUM / HARD
+
+    Double minCalories;
+    Double maxCalories;
+    String categoryName;
+    Long categoryId;
+
+    // 🔥 nâng cao – phân trang & sắp xếp
+    Integer page = 0;
+    Integer size = 10;
+    String sortBy = "createdAt";
+    String sortDir = "desc";
+}

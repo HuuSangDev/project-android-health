@@ -2,6 +2,7 @@ package com.SelfCare.SelftCare.Service;
 
 import com.SelfCare.SelftCare.DTO.Request.CreateFoodRequest;
 import com.SelfCare.SelftCare.DTO.Request.FoodCategoryCreateRequest;
+import com.SelfCare.SelftCare.DTO.Request.FoodSearchRequest;
 import com.SelfCare.SelftCare.DTO.Response.FoodCategoryResponse;
 import com.SelfCare.SelftCare.DTO.Response.FoodCreateResponse;
 import com.SelfCare.SelftCare.Entity.Food;
@@ -12,12 +13,18 @@ import com.SelfCare.SelftCare.Exception.ErrorCode;
 import com.SelfCare.SelftCare.Mapper.FoodMapper;
 import com.SelfCare.SelftCare.Repository.FoodCategoryRepository;
 import com.SelfCare.SelftCare.Repository.FoodRepository;
+import com.SelfCare.SelftCare.Specification.FoodSpecification;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -117,6 +124,59 @@ public class FoodService {
                 .createdAt(saved.getCreatedAt())
                 .categoryResponse(buildCategoryResponse(category))
                 .build();
+    }
+
+
+    public Page<FoodCreateResponse> searchFood(FoodSearchRequest req) {
+
+        log.info("[SEARCH_FOOD] request={}", req);
+
+        try {
+            Specification<Food> spec = Specification
+                    .where(FoodSpecification.nameContains(req.getKeyword()))
+                    .and(FoodSpecification.hasMealType(req.getMealType()))
+                    .and(FoodSpecification.hasDifficulty(req.getDifficultyLevel()))
+                    .and(FoodSpecification.caloriesBetween(
+                            req.getMinCalories(),
+                            req.getMaxCalories()
+                    ))
+                    .and(FoodSpecification.hasCategory(req.getCategoryId()))
+                    .and(FoodSpecification.hasCategoryName(req.getCategoryName()));
+
+            Sort sort = Sort.by(
+                    Sort.Direction.fromString(req.getSortDir()),
+                    req.getSortBy()
+            );
+
+            Pageable pageable = PageRequest.of(
+                    req.getPage(),
+                    req.getSize(),
+                    sort
+            );
+
+            Page<Food> pageResult = foodRepository.findAll(spec, pageable);
+
+            if (pageResult.isEmpty()) {
+                log.warn("[SEARCH_FOOD] No food found, request={}", req);
+                throw new AppException(ErrorCode.FOOD_NOT_FOUND);
+            }
+
+            log.info("[SEARCH_FOOD] totalElements={}, totalPages={}",
+                    pageResult.getTotalElements(),
+                    pageResult.getTotalPages()
+            );
+
+            return pageResult.map(foodMapper::toFoodResponse);
+
+        } catch (AppException ex) {
+            // đã là lỗi nghiệp vụ → throw lại
+            throw ex;
+
+        } catch (Exception ex) {
+            // lỗi không xác định
+            log.error("[SEARCH_FOOD_ERROR] request={}", req, ex);
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
+        }
     }
 
 

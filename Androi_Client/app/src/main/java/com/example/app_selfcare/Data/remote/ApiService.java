@@ -8,6 +8,7 @@ import com.example.app_selfcare.Data.Model.Request.UserRegisterRequest;
 import com.example.app_selfcare.Data.Model.Request.VerifyOtpRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.Model.Response.ChatResponse;
+import com.example.app_selfcare.Data.Model.Response.FoodResponse;
 import com.example.app_selfcare.Data.Model.Response.UserLoginResponse;
 import com.example.app_selfcare.Data.Model.Response.UserResponse;
 
@@ -22,7 +23,9 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ApiService {
@@ -60,5 +63,12 @@ public interface ApiService {
 
     @POST("app/api/chat")
     Call<ApiResponse<ChatResponse>> chat(@Body ChatRequest request);
+
+    // Food APIs
+    @GET("app/foods/all")
+    Call<ApiResponse<List<FoodResponse>>> getAllFoods();
+
+    @GET("app/foods/meal/{mealType}")
+    Call<ApiResponse<List<FoodResponse>>> getFoodsByMealType(@Path("mealType") String mealType);
 
 }
