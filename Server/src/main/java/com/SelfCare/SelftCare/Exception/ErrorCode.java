@@ -13,6 +13,8 @@ public enum ErrorCode {
     EXERCISE_NOT_FOUND(203,"exercise not found"),
     EXERCISE_CATEGORY_NOT_FOUND(204,"exercise category not found"),
     FORBIDDEN(205,"permission denied"),
+    GEMINI_API_ERROR(300,"gemini api error"),
+    UNCATEGORIZED_EXCEPTION(500,"uncategorized exception"),
     ;
     private int code;
     private String message;

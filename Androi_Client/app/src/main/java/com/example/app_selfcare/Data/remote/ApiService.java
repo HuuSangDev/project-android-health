@@ -1,11 +1,13 @@
 package com.example.app_selfcare.Data.remote;
 
+import com.example.app_selfcare.Data.Model.Request.ChatRequest;
 import com.example.app_selfcare.Data.Model.Request.ForgotPasswordRequest;
 import com.example.app_selfcare.Data.Model.Request.ResetPasswordRequest;
 import com.example.app_selfcare.Data.Model.Request.UserLoginRequest;
 import com.example.app_selfcare.Data.Model.Request.UserRegisterRequest;
 import com.example.app_selfcare.Data.Model.Request.VerifyOtpRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
+import com.example.app_selfcare.Data.Model.Response.ChatResponse;
 import com.example.app_selfcare.Data.Model.Response.UserLoginResponse;
 import com.example.app_selfcare.Data.Model.Response.UserResponse;
 
@@ -55,5 +57,8 @@ public interface ApiService {
 
     @POST("app/auth/reset-password")
     Call<ApiResponse<String>> resetPassword(@Body ResetPasswordRequest request);
+
+    @POST("app/api/chat")
+    Call<ApiResponse<ChatResponse>> chat(@Body ChatRequest request);
 
 }

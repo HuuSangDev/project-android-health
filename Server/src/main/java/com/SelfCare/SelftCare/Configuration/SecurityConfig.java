@@ -30,7 +30,7 @@ public class SecurityConfig {
     {
         httpSecurity
                 .authorizeHttpRequests(request->
-                    request.requestMatchers("/auth/**","/Users/Register").permitAll()
+                    request.requestMatchers("/auth/**","/Users/Register","/api/chat/**").permitAll()
                             .anyRequest().authenticated()//
                         );
 

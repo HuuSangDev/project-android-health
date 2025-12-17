@@ -55,6 +55,12 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
+
+        // Chat FAB button
+        findViewById(R.id.fabChat).setOnClickListener(v -> {
+            startActivity(new Intent(HomeActivity.this, ChatActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        });
     }
 
     @Override
