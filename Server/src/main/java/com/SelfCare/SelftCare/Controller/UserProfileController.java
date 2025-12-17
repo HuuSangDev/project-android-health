@@ -1,6 +1,7 @@
 package com.SelfCare.SelftCare.Controller;
 
 import com.SelfCare.SelftCare.DTO.ApiResponse;
+import com.SelfCare.SelftCare.DTO.Request.UpdateAvatarRequest;
 import com.SelfCare.SelftCare.DTO.Request.UpdateUserProfileRequest;
 import com.SelfCare.SelftCare.DTO.Request.UserProfileRequest;
 import com.SelfCare.SelftCare.DTO.Response.UserResponse;
@@ -13,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -46,5 +48,20 @@ public class UserProfileController {
                 .message("get my profile success ")
                 .result(userProfileService.getMyProfile(name))
                 .build();
+    }
+
+    @PutMapping("/avatar")
+    public UserResponse updateAvatar(
+            @RequestParam("avatar") MultipartFile avatar
+    ) throws IOException {
+
+        String email = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+
+        return userProfileService.updateAvatar(
+                email,
+                new UpdateAvatarRequest(avatar)
+        );
     }
 }

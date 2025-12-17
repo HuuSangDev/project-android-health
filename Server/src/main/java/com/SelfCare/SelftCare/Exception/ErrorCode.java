@@ -15,6 +15,8 @@ public enum ErrorCode {
     FORBIDDEN(205,"permission denied"),
     GEMINI_API_ERROR(300,"gemini api error"),
     UNCATEGORIZED_EXCEPTION(500,"uncategorized exception"),
+    INVALID_PASSWORD(106, "invalid password"),
+    PASSWORD_NOT_MATCH(107, "password not match"),
     ;
     private int code;
     private String message;

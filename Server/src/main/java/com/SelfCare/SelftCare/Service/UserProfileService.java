@@ -1,5 +1,6 @@
 package com.SelfCare.SelftCare.Service;
 
+import com.SelfCare.SelftCare.DTO.Request.UpdateAvatarRequest;
 import com.SelfCare.SelftCare.DTO.Request.UpdateUserProfileRequest;
 import com.SelfCare.SelftCare.DTO.Request.UserProfileRequest;
 import com.SelfCare.SelftCare.DTO.Response.UserProfileResponse;
@@ -119,6 +120,40 @@ public class UserProfileService {
                 .userProfileResponse(profileResponse)
                 .build();
 
+    }
+
+    @Transactional
+    @CachePut(value = "myProfile", key = "#email")
+    public UserResponse updateAvatar(String email, UpdateAvatarRequest request) throws IOException {
+
+        // 1. Check user
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        UserProfile profile = user.getUserProfile();
+        if (profile == null) {
+            throw new AppException(ErrorCode.PROFILE_NOT_FOUND);
+        }
+
+        // 2. Validate avatar
+        if (request.getAvatar() == null || request.getAvatar().isEmpty()) {
+            throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION, "Avatar không được để trống");
+        }
+
+        try {
+            // 3. Upload Cloudinary
+            String avatarUrl = fileUploadsService.uploadImage(request.getAvatar());
+
+            // 4. Update avatar
+            profile.setAvatarUrl(avatarUrl);
+            userProfileRepository.save(profile);
+
+            // 5. Return response
+            return toUseResponse(user);
+
+        } catch (IOException e) {
+            throw new IOException("Lỗi khi upload avatar: " + e.getMessage());
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package com.SelfCare.SelftCare.Controller;
 
 import com.SelfCare.SelftCare.DTO.ApiResponse;
+import com.SelfCare.SelftCare.DTO.Request.ChangePasswordRequest;
 import com.SelfCare.SelftCare.DTO.Request.UserProfileRequest;
 import com.SelfCare.SelftCare.DTO.Request.UserRegisterRequest;
 import com.SelfCare.SelftCare.DTO.Response.UserResponse;
@@ -10,10 +11,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +30,15 @@ public class UserController {
                 .result(userService.userRegister(request))
                 .build();
     }
+
+    @PutMapping("/change-password")
+    public UserResponse changePassword(
+            @RequestBody ChangePasswordRequest request
+    ) {
+        return userService.changePassword(request);
+    }
+
+
 
 
 }
