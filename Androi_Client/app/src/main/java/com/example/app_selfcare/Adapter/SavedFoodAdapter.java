@@ -50,7 +50,12 @@ public class SavedFoodAdapter extends RecyclerView.Adapter<SavedFoodAdapter.View
         // Click vào món → mở chi tiết
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, RecipeDetailActivity.class);
-            intent.putExtra("foodId", food.getId());
+            try {
+                int id = Integer.parseInt(food.getId());
+                intent.putExtra("foodId", id);
+            } catch (NumberFormatException e) {
+                intent.putExtra("foodId", -1);
+            }
             intent.putExtra("foodName", food.getName());
             intent.putExtra("foodCalories", food.getCalories());
             intent.putExtra("foodTime", food.getTimeMinutes());

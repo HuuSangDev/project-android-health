@@ -1,6 +1,7 @@
 package com.example.app_selfcare.Data.remote;
 
 import com.example.app_selfcare.Data.Model.Request.ChatRequest;
+import com.example.app_selfcare.Data.Model.Request.ChangePasswordRequest;
 import com.example.app_selfcare.Data.Model.Request.ForgotPasswordRequest;
 import com.example.app_selfcare.Data.Model.Request.ResetPasswordRequest;
 import com.example.app_selfcare.Data.Model.Request.UserLoginRequest;
@@ -64,11 +65,18 @@ public interface ApiService {
     @POST("app/api/chat")
     Call<ApiResponse<ChatResponse>> chat(@Body ChatRequest request);
 
+    // Change password (yêu cầu đã đăng nhập, dùng Bearer token qua ApiClient.getClientWithToken)
+    @PUT("app/Users/change-password")
+    Call<ApiResponse<String>> changePassword(@Body ChangePasswordRequest request);
+
     // Food APIs
     @GET("app/foods/all")
     Call<ApiResponse<List<FoodResponse>>> getAllFoods();
 
     @GET("app/foods/meal/{mealType}")
     Call<ApiResponse<List<FoodResponse>>> getFoodsByMealType(@Path("mealType") String mealType);
+
+    @GET("app/foods/{foodId}")
+    Call<ApiResponse<FoodResponse>> getFoodById(@Path("foodId") int foodId);
 
 }

@@ -4,32 +4,54 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.app_selfcare.Data.Model.Response.FoodResponse;
 import com.example.app_selfcare.R;
-import com.example.app_selfcare.Adapter.IngredientsAdapter;
-import com.example.app_selfcare.Data.Model.Ingredient;
-import java.util.ArrayList;
-import java.util.List;
 
 public class IngredientsFragment extends Fragment {
 
+    private FoodResponse food;
+
+    public static IngredientsFragment newInstance(FoodResponse food) {
+        IngredientsFragment fragment = new IngredientsFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("food_data", food);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            food = (FoodResponse) getArguments().getSerializable("food_data");
+        }
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ingredients, container, false);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_ingredients);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        if (food != null) {
+            TextView tvCalories = view.findViewById(R.id.tv_calories_val);
+            TextView tvProtein = view.findViewById(R.id.tv_protein_val);
+            TextView tvFat = view.findViewById(R.id.tv_fat_val);
+            TextView tvFiber = view.findViewById(R.id.tv_fiber_val);
+            TextView tvSugar = view.findViewById(R.id.tv_sugar_val);
+            TextView tvServings = view.findViewById(R.id.tv_servings_val);
 
-        List<Ingredient> ingredients = new ArrayList<>();
-        ingredients.add(new Ingredient("Tomato", "Củ cà chua", "500g"));
-        ingredients.add(new Ingredient("Cabbage", "Bắp cải", "300g"));
-        ingredients.add(new Ingredient("Taco", "Bánh taco", "300g"));
-        ingredients.add(new Ingredient("Bread", "Bánh mì", "300g"));
-
-        IngredientsAdapter adapter = new IngredientsAdapter(ingredients);
-        recyclerView.setAdapter(adapter);
+            tvCalories.setText(food.getCaloriesPer100g() + " kcal");
+            tvProtein.setText(food.getProteinPer100g() + "g");
+            tvFat.setText(food.getFatPer100g() + "g");
+            tvFiber.setText(food.getFiberPer100g() + "g");
+            tvSugar.setText(food.getSugarPer100g() + "g");
+            tvServings.setText(String.valueOf(food.getServings()));
+        }
 
         return view;
     }

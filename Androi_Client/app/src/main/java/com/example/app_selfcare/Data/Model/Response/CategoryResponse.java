@@ -2,7 +2,9 @@ package com.example.app_selfcare.Data.Model.Response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CategoryResponse {
+import java.io.Serializable;
+
+public class CategoryResponse implements Serializable {
     @SerializedName("categoryId")
     private int categoryId;
 

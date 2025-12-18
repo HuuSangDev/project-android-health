@@ -1,6 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/recycler_ingredients"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp" />
+    android:fillViewport="true"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thông tin dinh dưỡng"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Calories -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Năng lượng (Calories)"
+                android:textColor="#666666"/>
+            <TextView
+                android:id="@+id/tv_calories_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 kcal"
+                android:textStyle="bold"
+                android:textColor="#0F955A"/>
+        </LinearLayout>
+
+        <!-- Protein -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Chất đạm (Protein)"
+                android:textColor="#666666"/>
+            <TextView
+                android:id="@+id/tv_protein_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0g"
+                android:textStyle="bold"
+                android:textColor="#0F955A"/>
+        </LinearLayout>
+
+        <!-- Fat -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Chất béo (Fat)"
+                android:textColor="#666666"/>
+            <TextView
+                android:id="@+id/tv_fat_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0g"
+                android:textStyle="bold"
+                android:textColor="#0F955A"/>
+        </LinearLayout>
+
+        <!-- Fiber -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Chất xơ (Fiber)"
+                android:textColor="#666666"/>
+            <TextView
+                android:id="@+id/tv_fiber_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0g"
+                android:textStyle="bold"
+                android:textColor="#0F955A"/>
+        </LinearLayout>
+
+        <!-- Sugar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Đường (Sugar)"
+                android:textColor="#666666"/>
+            <TextView
+                android:id="@+id/tv_sugar_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0g"
+                android:textStyle="bold"
+                android:textColor="#0F955A"/>
+        </LinearLayout>
+
+        <!-- Servings -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Số người ăn (Servings)"
+                android:textColor="#666666"/>
+            <TextView
+                android:id="@+id/tv_servings_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textStyle="bold"
+                android:textColor="#0F955A"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
