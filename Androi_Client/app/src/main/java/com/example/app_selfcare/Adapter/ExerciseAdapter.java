@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.app_selfcare.Data.Model.Exercise;
 import com.example.app_selfcare.R;
 
@@ -30,6 +32,12 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
         this.listener = listener;
     }
 
+    // Constructor đơn giản dùng cho WorkoutActivity (không cần listener)
+    public ExerciseAdapter(List<Exercise> exerciseList) {
+        this.exerciseList = exerciseList;
+        this.listener = null;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,13 +49,41 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Exercise exercise = exerciseList.get(position);
 
-        holder.tvName.setText(exercise.name);
-        holder.tvInfo.setText(exercise.durationMinutes + " phút • " + exercise.caloriesBurned + " kcal • " + exercise.difficulty);
-        holder.tvCategory.setText(exercise.categoryId); // hoặc tên category nếu có
-        holder.ivImage.setImageResource(exercise.imageResId);
+        holder.tvName.setText(exercise.getName());
 
-        holder.itemView.setOnClickListener(v -> listener.onEdit(exercise));
-        holder.btnDelete.setOnClickListener(v -> listener.onDelete(exercise.id));
+        // Hiển thị caloriesPerMinute nếu có, fallback về caloriesBurned
+        String info;
+        if (exercise.getCaloriesPerMinute() > 0) {
+            info = String.format("%.1f kcal/min", exercise.getCaloriesPerMinute());
+        } else {
+            info = exercise.getDurationMinutes() + " phút • " +
+                    exercise.getCaloriesBurned() + " kcal";
+        }
+        if (exercise.getDifficulty() != null && !exercise.getDifficulty().isEmpty()) {
+            info += " • " + exercise.getDifficulty();
+        }
+        holder.tvInfo.setText(info);
+
+        holder.tvCategory.setText(exercise.getCategoryId()); // hoặc tên category nếu có
+
+        // Load ảnh bằng Glide từ imageUrl, fallback về imageResId/placeholder
+        if (exercise.getImageUrl() != null && !exercise.getImageUrl().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(exercise.getImageUrl())
+                    .apply(new RequestOptions()
+                            .placeholder(R.drawable.ic_workout)
+                            .error(R.drawable.ic_workout))
+                    .into(holder.ivImage);
+        } else if (exercise.imageResId != 0) {
+            holder.ivImage.setImageResource(exercise.imageResId);
+        } else {
+            holder.ivImage.setImageResource(R.drawable.ic_workout);
+        }
+
+        if (listener != null) {
+            holder.itemView.setOnClickListener(v -> listener.onEdit(exercise));
+            holder.btnDelete.setOnClickListener(v -> listener.onDelete(exercise.id));
+        }
     }
 
     @Override
@@ -65,7 +101,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
             tvInfo = itemView.findViewById(R.id.tv_exercise_info);
             tvCategory = itemView.findViewById(R.id.tv_exercise_category);
             ivImage = itemView.findViewById(R.id.iv_exercise_image);
-            btnDelete = itemView.findViewById(R.id.btn_delete_exercise);
+//            btnDelete = itemView.findViewById(R.id.btn_delete_exercise);
         }
     }
 }

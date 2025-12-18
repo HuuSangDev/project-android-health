@@ -10,6 +10,7 @@ import com.example.app_selfcare.Data.Model.Request.VerifyOtpRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.Model.Response.ChatResponse;
 import com.example.app_selfcare.Data.Model.Response.FoodResponse;
+import com.example.app_selfcare.Data.Model.Response.ExerciseResponse;
 import com.example.app_selfcare.Data.Model.Response.UserLoginResponse;
 import com.example.app_selfcare.Data.Model.Response.UserResponse;
 
@@ -78,5 +79,9 @@ public interface ApiService {
 
     @GET("app/foods/{foodId}")
     Call<ApiResponse<FoodResponse>> getFoodById(@Path("foodId") int foodId);
+
+    // Exercises APIs
+    @GET("app/exercises/all")
+    Call<ApiResponse<java.util.List<ExerciseResponse>>> getExercises();
 
 }
