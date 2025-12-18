@@ -52,7 +52,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("DEBUG_CLICK", "Đã nhấn vào Thông tin cá nhân");
-                Intent intent = new Intent(AccountSettingsActivity.this, ProfileActivity.class);
+                // Mở màn chỉ hiển thị thông tin cá nhân từ backend
+                Intent intent = new Intent(AccountSettingsActivity.this, PersonalInfoActivity.class);
                 startActivity(intent);
             }
         });
