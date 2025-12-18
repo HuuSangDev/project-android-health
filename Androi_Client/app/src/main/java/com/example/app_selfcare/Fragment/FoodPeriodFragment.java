@@ -34,7 +34,6 @@ public class FoodPeriodFragment extends Fragment {
 
     private static final String ARG_MEAL_TYPE = "mealType";
     private String mealType;
-
     private RecyclerView recyclerView;
     private FoodPeriodAdapter adapter;
     private LinearLayout layoutEmpty;

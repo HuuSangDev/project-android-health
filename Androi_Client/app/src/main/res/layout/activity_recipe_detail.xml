@@ -1,136 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F4F4F4">
+    android:background="#FFFFFF">
 
-    <!-- ScrollView để cuộn nội dung -->
-    <ScrollView
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottomNav"
-        android:fillViewport="true">
+        android:background="#FFFFFF"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <LinearLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="#FFFFFF">
 
-            <!-- Header -->
-
-            <!-- Ảnh món ăn -->
             <LinearLayout
-                android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="30dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_collapseMode="parallax">
 
-                <ImageView
-                    android:id="@+id/backButton"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/back_button_style"
-                    android:padding="10dp"
-                    app:srcCompat="@drawable/ic_backk"
-                    app:tint="@android:color/white" />
-
-                <TextView
-                    android:id="@+id/titleText"
-                    android:layout_width="0dp"
+                <!-- Header with Back Button -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:text="Thông tin món ăn"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:id="@+id/backButton"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/back_button_style"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_backk"
+                        app:tint="@android:color/white" />
+
+                    <TextView
+                        android:id="@+id/titleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="16dp"
+                        android:layout_toEndOf="@id/backButton"
+                        android:text="Thông tin món ăn"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <!-- Recipe Image -->
+                <ImageView
+                    android:id="@+id/iv_recipe_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_platter_background" />
+
+                <!-- Title and Save Button -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@id/saveButton"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_recipe_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Salad"
+                            android:textColor="#0F955A"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_recipe_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="⏰ 20 phút"
+                            android:textColor="#666666"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/saveButton"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_save" />
+                </RelativeLayout>
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/iv_recipe_image"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                android:padding="16dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_platter_background" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-            <ImageView
-                android:id="@+id/saveButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end"
-                android:padding="8dp"
-                android:src="@drawable/ic_save"
-                android:background="?attr/selectableItemBackground"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="#0F955A"
+            app:tabSelectedTextColor="#0F955A"
+            app:tabTextColor="#7A8D87" />
 
-            <!-- Tiêu đề và thời gian -->
-            <TextView
-                android:id="@+id/tv_recipe_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Spicy Chicken Burger with French Fries"
-                android:textColor="#0F955A"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-            <TextView
-                android:id="@+id/tv_recipe_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="⏰ 20 min"
-                android:textColor="#0F955A"
-                android:textSize="14sp"
-                android:layout_marginTop="4dp" />
+    <!-- ViewPager for Fragments -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-            <!-- Thêm nội dung giả lập để cuộn -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Mô tả chi tiết món ăn: Đây là một món ăn ngon với các thành phần tươi ngon, cách chế biến đơn giản, phù hợp cho bữa trưa hoặc bữa tối.\n\nNguyên liệu chính bao gồm gà, rau củ và gia vị đặc biệt. Hãy thử làm tại nhà!\n\nThêm thông tin: Món này có thể thay đổi nguyên liệu tùy theo sở thích cá nhân."
-                android:textSize="14sp"
-                android:padding="16dp" />
-
-            <!-- TabLayout cho Thành phần và Quy trình -->
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:tabMode="fixed"
-                app:tabTextColor="#7A8D87"
-                app:tabSelectedTextColor="#0F955A"
-                app:tabIndicatorColor="#0F955A" />
-
-            <!-- ViewPager2 để chứa Fragments -->
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="200dp" />
-
-        </LinearLayout>
-    </ScrollView>
-
-    <!-- Bottom Navigation (cố định) -->
+    <!-- Bottom Navigation -->
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="76dp"
+        android:layout_gravity="bottom"
         android:background="@drawable/bottom_nav_bg"
         android:elevation="10dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingHorizontal="24dp"
-        android:paddingVertical="12dp"
-        android:layout_alignParentBottom="true">
+        android:paddingVertical="12dp">
 
         <LinearLayout
             android:id="@+id/navHome"
@@ -139,17 +142,14 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home"
                 app:tint="#BDBDBD" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
                 android:text="Trang chủ"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
@@ -163,18 +163,14 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_workout"
-                app:tint="#BDBDBD"
-                android:scaleType="centerInside" />
-
+                app:tint="#BDBDBD" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
                 android:text="Tập luyện"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
@@ -188,19 +184,15 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
-
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/ic_statistic"
                 android:background="@drawable/bottom_nav_selected_bg"
                 android:padding="6dp"
-                android:scaleType="centerInside" />
-
+                android:src="@drawable/ic_statistic" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
                 android:text="Món Ăn"
                 android:textColor="#FF9F63"
                 android:textSize="11sp" />
@@ -214,20 +206,18 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_proflie"
                 app:tint="#BDBDBD" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
                 android:text="Cá nhân"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
-</RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

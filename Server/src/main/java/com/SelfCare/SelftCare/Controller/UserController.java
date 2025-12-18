@@ -32,10 +32,12 @@ public class UserController {
     }
 
     @PutMapping("/change-password")
-    public UserResponse changePassword(
-            @RequestBody ChangePasswordRequest request
-    ) {
-        return userService.changePassword(request);
+    ApiResponse<String> changePassword(@RequestBody ChangePasswordRequest request) {
+        userService.changePassword(request);
+        return ApiResponse.<String>builder()
+                .result("Đổi mật khẩu thành công")
+                .build();
+
     }
 
 

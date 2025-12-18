@@ -102,7 +102,14 @@ public class FoodPeriodAdapter extends RecyclerView.Adapter<FoodPeriodAdapter.Fo
         // Click vào card → mở chi tiết món ăn
         holder.cardRecipe.setOnClickListener(v -> {
             Intent intent = new Intent(context, RecipeDetailActivity.class);
-            intent.putExtra("foodId", food.getId());           // đổi từ recipeId → foodId
+            try {
+                // Chuyển foodId từ String sang int để khớp với RecipeDetailActivity
+                int id = Integer.parseInt(food.getId());
+                intent.putExtra("foodId", id);
+            } catch (NumberFormatException e) {
+                // Nếu không phải số (trường hợp dữ liệu cũ), truyền -1
+                intent.putExtra("foodId", -1);
+            }
             intent.putExtra("foodName", food.getName());
             intent.putExtra("foodCalories", food.getCalories());
             intent.putExtra("foodTime", food.getTimeMinutes());

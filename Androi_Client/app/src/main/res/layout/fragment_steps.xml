@@ -1,6 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/recycler_steps"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp" />
+    android:fillViewport="true"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quy trình chế biến"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Prep Time -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Thời gian chuẩn bị"
+                android:textColor="#666666"/>
+            <TextView
+                android:id="@+id/tv_prep_time_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 phút"
+                android:textStyle="bold"
+                android:textColor="#0F955A"/>
+        </LinearLayout>
+
+        <!-- Cook Time -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Thời gian nấu"
+                android:textColor="#666666"/>
+            <TextView
+                android:id="@+id/tv_cook_time_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 phút"
+                android:textStyle="bold"
+                android:textColor="#0F955A"/>
+        </LinearLayout>
+
+        <!-- Difficulty -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Độ khó"
+                android:textColor="#666666"/>
+            <TextView
+                android:id="@+id/tv_difficulty_val"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trung bình"
+                android:textStyle="bold"
+                android:textColor="#0F955A"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hướng dẫn chi tiết"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tv_instructions_val"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nội dung hướng dẫn..."
+            android:lineSpacingExtra="4dp"
+            android:textColor="#444444"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
