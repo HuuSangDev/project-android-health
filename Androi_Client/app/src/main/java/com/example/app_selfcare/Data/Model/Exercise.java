@@ -6,9 +6,12 @@ public class Exercise {
     public String description;
     public int durationMinutes;
     public int caloriesBurned;
+    // từ API mới
+    public double caloriesPerMinute;
     public String difficulty;
     public String categoryId;
     public int imageResId;
+    public String imageUrl;
 
     public Exercise() {}
 
@@ -35,10 +38,14 @@ public class Exercise {
     public void setDurationMinutes(int durationMinutes) { this.durationMinutes = durationMinutes; }
     public int getCaloriesBurned() { return caloriesBurned; }
     public void setCaloriesBurned(int caloriesBurned) { this.caloriesBurned = caloriesBurned; }
+    public double getCaloriesPerMinute() { return caloriesPerMinute; }
+    public void setCaloriesPerMinute(double caloriesPerMinute) { this.caloriesPerMinute = caloriesPerMinute; }
     public String getDifficulty() { return difficulty; }
     public void setDifficulty(String difficulty) { this.difficulty = difficulty; }
     public String getCategoryId() { return categoryId; }
     public void setCategoryId(String categoryId) { this.categoryId = categoryId; }
     public int getImageResId() { return imageResId; }
     public void setImageResId(int imageResId) { this.imageResId = imageResId; }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }
