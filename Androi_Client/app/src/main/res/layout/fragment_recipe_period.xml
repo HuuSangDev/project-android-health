@@ -4,64 +4,79 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
+    <!-- ===== Empty State ===== -->
     <LinearLayout
+        android:id="@+id/layoutEmpty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:visibility="gone">
 
-        <!-- Empty State -->
-        <LinearLayout
-            android:id="@+id/layoutEmpty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:padding="32dp">
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_empty"
+            android:alpha="0.6"
+            android:layout_marginBottom="12dp"
+            android:contentDescription="Empty" />
 
-            <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/ic_empty"
-                android:alpha="0.5"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Chưa có món ăn nào"
-                android:textColor="#999999"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/tvEmptyMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Hãy thêm món ăn yêu thích của bạn"
-                android:textColor="#CCCCCC"
-                android:textSize="14sp"
-                android:gravity="center"/>
-
-        </LinearLayout>
-
-        <!-- Loading State -->
-        <ProgressBar
-            android:id="@+id/progressBar"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:text="Chưa có món ăn nào"
+            android:textColor="#6B7280"
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
-        <!-- Recipe List -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewRecipes"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp"
-            android:clipToPadding="false"/>
-
+        <TextView
+            android:id="@+id/tvEmptyMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Hãy thêm món ăn yêu thích của bạn"
+            android:textColor="#9CA3AF"
+            android:textSize="14sp"
+            android:gravity="center" />
     </LinearLayout>
+
+    <!-- ===== Loading State (overlay) ===== -->
+    <LinearLayout
+        android:id="@+id/layoutLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="#80FFFFFF"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:indeterminate="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Đang tải dữ liệu..."
+            android:textColor="#6B7280"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- ===== Recipe List ===== -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewRecipes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="96dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
 
 </FrameLayout>

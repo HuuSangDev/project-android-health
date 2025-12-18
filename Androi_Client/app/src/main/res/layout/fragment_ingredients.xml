@@ -3,4 +3,10 @@
     android:id="@+id/recycler_ingredients"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp" />
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="96dp"
+    android:clipToPadding="false"
+    android:overScrollMode="never"
+    android:scrollbars="none" />

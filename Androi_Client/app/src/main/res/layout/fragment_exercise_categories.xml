@@ -15,9 +15,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="14dp"
             android:background="@android:color/white"
-            android:elevation="2dp">
+            android:elevation="3dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -25,43 +28,56 @@
                 android:text="Danh mục Bài tập"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="#333333" />
+                android:textColor="#111827" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Quản lý các danh mục phân loại bài tập"
-                android:textSize="14sp"
-                android:textColor="#666666"
+                android:textSize="13sp"
+                android:textColor="#6B7280"
                 android:layout_marginTop="4dp" />
 
-            <!-- Search Bar -->
+            <!-- Search Bar (nhỏ gọn hơn) -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="14dp"
                 app:boxStrokeWidth="0dp"
                 app:boxBackgroundMode="filled"
-                app:boxBackgroundColor="#F5F5F5"
+                app:boxBackgroundColor="#F3F4F6"
+                app:boxCornerRadiusTopStart="14dp"
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
                 app:startIconDrawable="@drawable/ic_search"
+                app:startIconTint="#6B7280"
                 app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etSearchExerciseCategory"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:hint="Tìm kiếm danh mục..."
                     android:inputType="text"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:paddingStart="0dp"
+                    android:textColor="#111827"
+                    android:textColorHint="#9CA3AF" />
             </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
         <!-- RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewExerciseCategories"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="90dp"
             android:clipToPadding="false" />
     </LinearLayout>
 
@@ -76,4 +92,5 @@
         app:tint="@android:color/white"
         app:backgroundTint="#4CAF50"
         android:contentDescription="Add Exercise Category" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

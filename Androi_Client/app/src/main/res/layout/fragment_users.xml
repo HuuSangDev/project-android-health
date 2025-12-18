@@ -1,159 +1,222 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F5F5F5">
+    android:background="#F8F9FA">
 
-    <!-- Header -->
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@android:color/white"
-        android:elevation="2dp">
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Quản lí Người dùng"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#333333" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Danh sách người dùng đã đăng ký"
-            android:textSize="14sp"
-            android:textColor="#666666"
-            android:layout_marginTop="4dp" />
-
-        <!-- Search and Filter -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:boxStrokeWidth="0dp"
-                app:boxBackgroundMode="filled"
-                app:boxBackgroundColor="#F5F5F5"
-                app:startIconDrawable="@drawable/ic_search"
-                app:endIconMode="clear_text">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etSearchUser"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Tìm kiếm người dùng..."
-                    android:inputType="text"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageButton
-                android:id="@+id/btnFilter"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_filter"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_marginStart="8dp"
-                android:contentDescription="Filter" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Statistics Row -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:weightSum="3">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:background="@drawable/bg_header_bottom_rounded"
             android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tvTotalUsers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1,234"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="#2196F3" />
+            android:padding="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tổng số"
-                android:textSize="12sp"
-                android:textColor="#666666" />
+                android:fontFamily="sans-serif-black"
+                android:text="Quản lý Người dùng"
+                android:textColor="#1A1A1A"
+                android:textSize="26sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Hệ thống có 1,234 thành viên"
+                android:textColor="#757575"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="#F1F3F4"
+                    app:cardCornerRadius="22dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_search"
+                            app:tint="#757575" />
+
+                        <EditText
+                            android:id="@+id/etSearchUser"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/transparent"
+                            android:hint="Tìm tên, email..."
+                            android:imeOptions="actionSearch"
+                            android:inputType="text"
+                            android:paddingStart="12dp"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFilter"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    app:icon="@drawable/ic_filter"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    app:iconTint="#1A1A1A"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MaterialComponents.Button.Circle" />
+            </LinearLayout>
         </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tvActiveUsers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="987"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="#4CAF50" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hoạt động"
-                android:textSize="12sp"
-                android:textColor="#666666" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tvNewUsers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="45"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="#FF6B35" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mới (7 ngày)"
-                android:textSize="12sp"
-                android:textColor="#666666" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- RecyclerView for users -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewUsers"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
-        android:clipToPadding="false" />
-</LinearLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:weightSum="3">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvTotalUsers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-black"
+                            android:text="1,234"
+                            android:textColor="#2196F3"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TẤT CẢ"
+                            android:textColor="#9E9E9E"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:background="#EEEEEE" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvActiveUsers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-black"
+                            android:text="987"
+                            android:textColor="#4CAF50"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ONLINE"
+                            android:textColor="#9E9E9E"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:background="#EEEEEE" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvNewUsers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-black"
+                            android:text="45"
+                            android:textColor="#FF6B35"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="MỚI"
+                            android:textColor="#9E9E9E"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewUsers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
