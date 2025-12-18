@@ -135,6 +135,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layoutSearch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="18dp"
@@ -158,12 +159,13 @@
                             android:layout_weight="1"
                             android:background="@null"
                             android:hint="Tìm món ăn, công thức..."
-                            android:imeOptions="actionSearch"
-                            android:inputType="text"
+                            android:focusable="false"
+                            android:clickable="false"
                             android:textColor="#FFFFFF"
                             android:textColorHint="#6D6E70"
                             android:textSize="14sp" />
                     </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -576,4 +578,13 @@
         app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <FrameLayout
+    android:id="@+id/fragmentContainer"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:visibility="gone"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
