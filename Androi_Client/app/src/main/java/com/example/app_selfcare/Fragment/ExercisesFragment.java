@@ -18,7 +18,7 @@ import com.example.app_selfcare.Adapter.ExerciseAdapter;
 import com.example.app_selfcare.Data.Model.Exercise;
 import com.example.app_selfcare.Data.local.ExerciseStorage;
 import com.example.app_selfcare.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
 public class ExercisesFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private FloatingActionButton fabAdd;
+    private ExtendedFloatingActionButton fabAdd;
     private ExerciseAdapter adapter;
     private final List<Exercise> exerciseList = new ArrayList<>();
 

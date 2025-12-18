@@ -14,11 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.app_selfcare.AddFoodActivity;
 import com.example.app_selfcare.Adapter.FoodAdapter;
 import com.example.app_selfcare.Data.Model.Food;
-import com.example.app_selfcare.Data.Model.Ingredient;
-import com.example.app_selfcare.Data.Model.Step;
 import com.example.app_selfcare.Data.local.FoodStorage;
 import com.example.app_selfcare.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,7 @@ import java.util.List;
 public class FoodsFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private FloatingActionButton fabAdd;
+    private ExtendedFloatingActionButton fabAdd;
     private final List<Food> foodList = new ArrayList<>();
     private FoodAdapter adapter;
 
