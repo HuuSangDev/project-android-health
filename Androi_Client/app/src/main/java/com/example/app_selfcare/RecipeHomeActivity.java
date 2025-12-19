@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.app_selfcare.Fragment.FoodPeriodFragment;
 
-public class RecipeHomeActivity extends AppCompatActivity {
+public class RecipeHomeActivity extends BaseActivity{
 
     private View navHome, navWorkout, navPlanner, navProfile;
     private TextView tvAll, tvBreakfast, tvLunch, tvDinner;
