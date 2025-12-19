@@ -3,16 +3,21 @@ package com.SelfCare.SelftCare.Service;
 import com.SelfCare.SelftCare.DTO.Request.CreateFoodRequest;
 import com.SelfCare.SelftCare.DTO.Request.FoodCategoryCreateRequest;
 import com.SelfCare.SelftCare.DTO.Request.FoodSearchRequest;
+import com.SelfCare.SelftCare.DTO.Request.UpdateFoodRequest;
 import com.SelfCare.SelftCare.DTO.Response.FoodCategoryResponse;
 import com.SelfCare.SelftCare.DTO.Response.FoodCreateResponse;
 import com.SelfCare.SelftCare.Entity.Food;
 import com.SelfCare.SelftCare.Entity.FoodCategory;
+import com.SelfCare.SelftCare.Entity.User;
+import com.SelfCare.SelftCare.Entity.UserProfile;
+import com.SelfCare.SelftCare.Enum.Goal;
 import com.SelfCare.SelftCare.Enum.MealType;
 import com.SelfCare.SelftCare.Exception.AppException;
 import com.SelfCare.SelftCare.Exception.ErrorCode;
 import com.SelfCare.SelftCare.Mapper.FoodMapper;
 import com.SelfCare.SelftCare.Repository.FoodCategoryRepository;
 import com.SelfCare.SelftCare.Repository.FoodRepository;
+import com.SelfCare.SelftCare.Repository.UserRepository;
 import com.SelfCare.SelftCare.Specification.FoodSpecification;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +25,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +47,7 @@ public class FoodService {
     FoodCategoryRepository foodCategoryRepository;
     FileUploadsService fileUploadsService;
     FoodMapper foodMapper;
+    UserRepository userRepository;
 
 
 
@@ -102,6 +109,7 @@ public class FoodService {
 
                 // category
                 .foodCategory(category)
+                .goal(request.getGoal())
                 .build();
 
 
@@ -123,6 +131,7 @@ public class FoodService {
                 .imageUrl(saved.getImageUrl())
                 .createdAt(saved.getCreatedAt())
                 .categoryResponse(buildCategoryResponse(category))
+                .goal(saved.getGoal())
                 .build();
     }
 
@@ -180,8 +189,6 @@ public class FoodService {
     }
 
 
-
-
     // ==== Tách riêng hàm build CategoryResponse ====
     private FoodCategoryResponse buildCategoryResponse(FoodCategory category) {
         if (category == null) return null;
@@ -193,26 +200,105 @@ public class FoodService {
 
 
 
-    @Cacheable(value = "allFoods")
-    public List<FoodCreateResponse> getAllFoods() {
-        List<Food> foods = foodRepository.findAll();
+
+    @Cacheable(
+            value = "foodsByGoal",
+            key = "#email"
+    )
+    public List<FoodCreateResponse> getAllFoods(String email) {
+        User user=userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        UserProfile profile= user.getUserProfile();
+        if (profile == null || profile.getHealthGoal() == null) {
+            throw new AppException(ErrorCode.USER_PROFILE_NULL);
+        }
+
+        Goal goal = profile.getHealthGoal();
+        List<Food> foods = foodRepository.findByGoal(goal);
         return foods.stream()
                 .map(foodMapper::toFoodResponse)
                 .collect(Collectors.toList());
+
     }
 
-    @Cacheable(value = "foodsByMeal", key = "#mealType")
-    public List<FoodCreateResponse> getFoodsByMealType(MealType mealType) {
-        List<Food> foods = foodRepository.findByMealType(mealType);
+    @Cacheable(value = "foodsByMeal", key = "#email + '_' + #mealType")
+    public List<FoodCreateResponse> getFoodsByMealType(String email,MealType mealType) {
+
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        // 2. Lấy goal từ profile
+        UserProfile profile = user.getUserProfile();
+        if (profile == null || profile.getHealthGoal() == null) {
+            throw new AppException(ErrorCode.USER_PROFILE_NULL);
+        }
+
+        Goal goal = profile.getHealthGoal();
+        List<Food> foods = foodRepository.findByGoalAndMealType(goal, mealType);
+
+
         return foods.stream()
-                .map(foodMapper::toFoodResponse)
+                .map(food -> foodMapper.toFoodResponse(food))
                 .collect(Collectors.toList());
     }
 
 
+    @Caching(evict = {
+            @CacheEvict(value = "foodDetail", key = "#foodId"),
+            @CacheEvict(value = "foodsByGoal", allEntries = true),
+            @CacheEvict(value = "foodsByMeal", allEntries = true)
+    })
+    public void deleteFood(Long foodId) {
 
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new AppException(ErrorCode.FOOD_NOT_FOUND));
 
+        foodRepository.delete(food);
+    }
 
+    @Caching(evict = {
+            @CacheEvict(value = "foodDetail", key = "#foodId"),
+            @CacheEvict(value = "foodsByGoal", allEntries = true),
+            @CacheEvict(value = "foodsByMeal", allEntries = true)
+    })
+    public FoodCreateResponse updateFood(Long foodId, UpdateFoodRequest request) throws IOException {
+
+        Food food = foodRepository.findById(foodId)
+                .orElseThrow(() -> new AppException(ErrorCode.FOOD_NOT_FOUND));
+
+        // Category: DTO đã validate categoryId không null (nếu em bắt buộc)
+        FoodCategory category = foodCategoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.FOOD_CATEGORY_NOT_FOUND));
+        food.setFoodCategory(category);
+
+        // Ảnh: thường sẽ để optional (DTO không bắt buộc)
+        if (request.getImage() != null && !request.getImage().isEmpty()) {
+            String imageUrl = fileUploadsService.uploadImage(request.getImage());
+            food.setImageUrl(imageUrl);
+        }
+        // Nếu không gửi ảnh -> giữ nguyên ảnh cũ (không set null)
+
+        // Map thẳng (DTO đảm bảo dữ liệu hợp lệ)
+        food.setFoodName(request.getFoodName());
+        food.setCaloriesPer100g(request.getCaloriesPer100g());
+
+        food.setProteinPer100g(orZero(request.getProteinPer100g()));
+        food.setFatPer100g(orZero(request.getFatPer100g()));
+        food.setFiberPer100g(orZero(request.getFiberPer100g()));
+        food.setSugarPer100g(orZero(request.getSugarPer100g()));
+
+        food.setInstructions(request.getInstructions());
+        food.setPrepTime(request.getPrepTime());
+        food.setCookTime(request.getCookTime());
+        food.setServings(request.getServings());
+
+        food.setMealType(request.getMealType());
+        food.setDifficultyLevel(request.getDifficultyLevel());
+
+        food.setGoal(request.getGoal());
+
+        Food saved = foodRepository.save(food);
+        return foodMapper.toFoodResponse(saved);
+    }
 
     private Double orZero(Double v) {
         return v != null ? v : 0.0;

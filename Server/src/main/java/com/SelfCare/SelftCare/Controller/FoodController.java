@@ -3,6 +3,8 @@ package com.SelfCare.SelftCare.Controller;
 import com.SelfCare.SelftCare.DTO.ApiResponse;
 import com.SelfCare.SelftCare.DTO.Request.CreateFoodRequest;
 import com.SelfCare.SelftCare.DTO.Request.FoodSearchRequest;
+import com.SelfCare.SelftCare.DTO.Request.UpdateExerciseRequest;
+import com.SelfCare.SelftCare.DTO.Request.UpdateFoodRequest;
 import com.SelfCare.SelftCare.DTO.Response.FoodCreateResponse;
 import com.SelfCare.SelftCare.Enum.MealType;
 import com.SelfCare.SelftCare.Service.FoodService;
@@ -11,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -44,8 +48,10 @@ public class FoodController {
 
     @GetMapping("/meal/{mealType}")
     ApiResponse<List<FoodCreateResponse>> getFoodsByMealType(@PathVariable MealType mealType)  {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
         return ApiResponse.<List<FoodCreateResponse>>builder()
-                .result(foodService.getFoodsByMealType(mealType))
+                .result(foodService.getFoodsByMealType(email,mealType))
                 .message("get meal success")
 
                 .build();
@@ -53,9 +59,11 @@ public class FoodController {
 
     @GetMapping("/all")
     ApiResponse<List<FoodCreateResponse>> getAllFoods()  {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
         return ApiResponse.<List<FoodCreateResponse>>builder()
                 .message("get all foods success")
-                .result(foodService.getAllFoods())
+                .result(foodService.getAllFoods(email))
                 .build();
     }
 
@@ -68,6 +76,31 @@ public class FoodController {
                 .result(foodService.searchFood(request))
                 .build();
     }
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(value = "/{foodId}", consumes = "multipart/form-data")
+    public ApiResponse<FoodCreateResponse> updateFood(
+            @PathVariable Long foodId,
+            @ModelAttribute UpdateFoodRequest request
+    ) throws IOException {
+        return ApiResponse.<FoodCreateResponse>builder()
+                .message("update food success")
+                .result(foodService.updateFood(foodId, request))
+                .build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{foodId}")
+    public ApiResponse<Void> deleteFood(@PathVariable Long foodId) {
+        foodService.deleteFood(foodId);
+        return ApiResponse.<Void>builder()
+                .message("delete food success")
+                .build();
+    }
+
+
+
 
 
 
