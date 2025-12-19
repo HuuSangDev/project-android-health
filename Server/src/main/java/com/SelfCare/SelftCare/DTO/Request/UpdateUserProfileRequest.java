@@ -1,6 +1,7 @@
 package com.SelfCare.SelftCare.DTO.Request;
 
 import com.SelfCare.SelftCare.Enum.Gender;
+import com.SelfCare.SelftCare.Enum.Goal;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -26,7 +27,7 @@ public class UpdateUserProfileRequest {
     @NotNull
     Double weight;
     @NotBlank
-    String healthGoal;
+    Goal healthGoal;
     MultipartFile avatar;
 
 

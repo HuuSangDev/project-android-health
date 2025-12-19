@@ -1,5 +1,8 @@
 package com.SelfCare.SelftCare.DTO.Response;
 
+import com.SelfCare.SelftCare.Enum.Goal;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -23,4 +26,6 @@ public class ExerciseResponse {
      LocalDateTime createdAt;
 
      ExerciseCategoryResponse category;
+
+     Goal goal;
 }

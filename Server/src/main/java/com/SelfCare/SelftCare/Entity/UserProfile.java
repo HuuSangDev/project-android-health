@@ -1,6 +1,7 @@
 package com.SelfCare.SelftCare.Entity;
 
 import com.SelfCare.SelftCare.Enum.Gender;
+import com.SelfCare.SelftCare.Enum.Goal;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,7 +23,10 @@ public class UserProfile {
      Gender gender;
      Double height;
      Double weight;
-     String healthGoal;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    Goal healthGoal;
 
     @OneToOne
     @MapsId

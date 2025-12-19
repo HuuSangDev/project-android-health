@@ -1,6 +1,7 @@
 package com.SelfCare.SelftCare.DTO.Response;
 
 import com.SelfCare.SelftCare.Enum.DifficultyLevel;
+import com.SelfCare.SelftCare.Enum.Goal;
 import com.SelfCare.SelftCare.Enum.MealType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -38,5 +39,6 @@ public class FoodCreateResponse {
 
 
     FoodCategoryResponse categoryResponse;
+    Goal goal;
 }
 
