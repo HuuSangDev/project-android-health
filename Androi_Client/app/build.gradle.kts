@@ -90,4 +90,6 @@ dependencies {
 
     //hinh tron
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    implementation("com.airbnb.android:lottie:6.1.0")
 }

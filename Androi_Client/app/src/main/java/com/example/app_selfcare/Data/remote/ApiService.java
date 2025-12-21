@@ -84,4 +84,5 @@ public interface ApiService {
     @GET("app/exercises/all")
     Call<ApiResponse<java.util.List<ExerciseResponse>>> getExercises();
 
+
 }
