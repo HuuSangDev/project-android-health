@@ -192,7 +192,7 @@
                 android:id="@+id/textIncreaseStrength"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Tôi muốn tăng sức bền"
+                android:text="Tôi muốn giữ dáng"
                 android:textColor="#1F2937"
                 android:textSize="16sp"
                 android:layout_marginStart="12dp"
@@ -214,51 +214,6 @@
 
 
         <!-- Goal 4: Thử ứng dụng -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/goalTryAppLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/goal_default_bg"
-            android:paddingStart="16dp"
-            android:paddingTop="12dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="12dp"
-            android:layout_marginBottom="12dp">
-
-            <ImageView
-                android:id="@+id/iconTryApp"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_try_app_placeholder"
-                app:tint="#4B5563"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:contentDescription="Icon thử ứng dụng"/>
-
-            <TextView
-                android:id="@+id/textTryApp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Chỉ đang thử ứng dụng! 👍"
-                android:textColor="#1F2937"
-                android:textSize="16sp"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="12dp"
-                app:layout_constraintStart_toEndOf="@id/iconTryApp"
-                app:layout_constraintEnd_toStartOf="@id/checkboxTryApp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <CheckBox
-                android:id="@+id/checkboxTryApp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:buttonTint="#A1A1AA"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 
@@ -267,23 +222,25 @@
         android:id="@+id/buttonContinue"
         android:layout_width="0dp"
         android:layout_height="55dp"
-        android:text="Tiếp tục"
-        android:textColor="#FFFFFF"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/rounded_orange_button_bg"
-        app:icon="@drawable/ic_arrow_forward"
-        app:iconTint="#FFFFFF"
-        app:iconGravity="textEnd"
+        android:text="Tiếp tục"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textAllCaps="false"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="32dp"
         app:backgroundTint="@null"
-        app:layout_constraintTop_toBottomOf="@id/goalsContainer"
+        app:icon="@drawable/ic_arrow_forward"
+        app:iconGravity="textEnd"
+        app:iconTint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/goalsContainer"
+        app:layout_constraintVertical_bias="0.888" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

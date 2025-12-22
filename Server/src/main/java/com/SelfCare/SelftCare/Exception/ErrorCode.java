@@ -17,7 +17,8 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(500,"uncategorized exception"),
     INVALID_PASSWORD(106, "invalid password"),
     PASSWORD_NOT_MATCH(107, "password not match"),
-    USER_PROFILE_NULL(188,"userprofile is null ")
+    USER_PROFILE_NULL(188,"userprofile is null "),
+    NOTIFICATION_NOT_FOUND(206,"notification not found")
     ;
     private int code;
     private String message;

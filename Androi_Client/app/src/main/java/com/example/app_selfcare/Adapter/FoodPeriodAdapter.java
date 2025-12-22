@@ -37,7 +37,12 @@ public class FoodPeriodAdapter extends RecyclerView.Adapter<FoodPeriodAdapter.Fo
         this.foodList.clear();
         if (foodList != null) {
             this.foodList.addAll(foodList);
+            // Debug: In ra để kiểm tra
+            for (Food f : foodList) {
+                android.util.Log.d("ADAPTER_DEBUG", "Received food: " + f.getName() + " | imageUrl: " + f.getImageUrl());
+            }
         }
+        android.util.Log.d("ADAPTER_DEBUG", "Total items in adapter: " + this.foodList.size());
         notifyDataSetChanged();
     }
 
@@ -60,15 +65,33 @@ public class FoodPeriodAdapter extends RecyclerView.Adapter<FoodPeriodAdapter.Fo
 
         // Load ảnh từ imageUrl bằng Glide
         String imageUrl = food.getImageUrl();
+        android.util.Log.d("GLIDE_DEBUG", "Loading image for: " + food.getName() + " | URL: " + imageUrl);
+
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(context)
                     .load(imageUrl)
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(16)))
-                    .placeholder(R.drawable.ic_salad) // Placeholder nếu chưa load xong
-                    .error(R.drawable.ic_salad) // Ảnh lỗi nếu không load được
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.NONE)
+                    .placeholder(R.drawable.ic_salad)
+                    .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@androidx.annotation.Nullable com.bumptech.glide.load.engine.GlideException e, Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target, boolean isFirstResource) {
+                            android.util.Log.e("GLIDE_ERROR", "FAILED to load: " + imageUrl);
+                            if (e != null) {
+                                e.logRootCauses("GLIDE_ERROR");
+                            }
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(android.graphics.drawable.Drawable resource, Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target, com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                            android.util.Log.d("GLIDE_SUCCESS", "SUCCESS loaded: " + imageUrl);
+                            return false;
+                        }
+                    })
+                    .error(R.drawable.ic_salad)
                     .into(holder.ivRecipeImage);
         } else {
-            // Nếu không có imageUrl, dùng placeholder mặc định
             holder.ivRecipeImage.setImageResource(R.drawable.ic_salad);
         }
 

@@ -1,24 +1,21 @@
-package com.example.app_selfcare.Fragment;
+package com.example.app_selfcare;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.app_selfcare.AddFoodActivity;
 import com.example.app_selfcare.Adapter.AdminFoodAdapter;
 import com.example.app_selfcare.Data.Model.Request.FoodSearchRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
@@ -27,11 +24,9 @@ import com.example.app_selfcare.Data.Model.Response.FoodResponse;
 import com.example.app_selfcare.Data.Model.Response.PageResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
-import com.example.app_selfcare.FoodDetailActivity;
-import com.example.app_selfcare.R;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,17 +35,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.app.Activity.RESULT_OK;
+public class AdminFoodManagementActivity extends AppCompatActivity 
+        implements AdminFoodAdapter.OnFoodClickListener {
 
-public class FoodsFragment extends Fragment implements AdminFoodAdapter.OnFoodClickListener {
+    private static final String TAG = "AdminFoodManagement";
 
-    private static final String TAG = "FoodsFragment";
-
-    private RecyclerView recyclerView;
-    private ExtendedFloatingActionButton fabAdd;
+    private RecyclerView rvFoods;
+    private ProgressBar progressBar;
+    private TextView tvEmpty;
     private ChipGroup chipGroupCategories;
-    private View layoutLoading;
-    private View layoutEmptyState;
+    private FloatingActionButton fabAdd;
 
     private AdminFoodAdapter adapter;
     private ApiService apiService;
@@ -58,52 +52,50 @@ public class FoodsFragment extends Fragment implements AdminFoodAdapter.OnFoodCl
     private List<FoodCategoryResponse> categoryList = new ArrayList<>();
     private Long selectedCategoryId = null;
 
+    // Launcher để nhận kết quả từ AddFoodActivity
     private final ActivityResultLauncher<Intent> addFoodLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
-                    loadFoods();
+                    loadFoods(); // Refresh danh sách
                 }
             }
     );
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_foods, container, false);
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_admin_food_management);
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        apiService = ApiClient.getClientWithToken(this).create(ApiService.class);
 
-        apiService = ApiClient.getClientWithToken(requireContext()).create(ApiService.class);
-
-        initViews(view);
+        initViews();
         setupRecyclerView();
-        setupFabButton();
+        setupClickListeners();
 
         loadCategories();
         loadFoods();
     }
 
-    private void initViews(View view) {
-        recyclerView = view.findViewById(R.id.recyclerViewFoods);
-        fabAdd = view.findViewById(R.id.fabAddFood);
-        chipGroupCategories = view.findViewById(R.id.chipGroupCategories);
-        layoutLoading = view.findViewById(R.id.layoutLoading);
-        layoutEmptyState = view.findViewById(R.id.layoutEmptyState);
+    private void initViews() {
+        rvFoods = findViewById(R.id.rvFoods);
+        progressBar = findViewById(R.id.progressBar);
+        tvEmpty = findViewById(R.id.tvEmpty);
+        chipGroupCategories = findViewById(R.id.chipGroupCategories);
+        fabAdd = findViewById(R.id.fabAdd);
+
+        findViewById(R.id.backButton).setOnClickListener(v -> finish());
     }
 
     private void setupRecyclerView() {
         adapter = new AdminFoodAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
+        rvFoods.setLayoutManager(new LinearLayoutManager(this));
+        rvFoods.setAdapter(adapter);
     }
 
-    private void setupFabButton() {
+    private void setupClickListeners() {
         fabAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AddFoodActivity.class);
+            Intent intent = new Intent(this, AddFoodActivity.class);
             addFoodLauncher.launch(intent);
         });
     }
@@ -113,30 +105,26 @@ public class FoodsFragment extends Fragment implements AdminFoodAdapter.OnFoodCl
             @Override
             public void onResponse(Call<ApiResponse<List<FoodCategoryResponse>>> call,
                                    Response<ApiResponse<List<FoodCategoryResponse>>> response) {
-                if (response.isSuccessful() && response.body() != null
+                if (response.isSuccessful() && response.body() != null 
                         && response.body().getResult() != null) {
                     categoryList.clear();
                     categoryList.addAll(response.body().getResult());
                     setupCategoryChips();
-                } else {
-                    Log.e(TAG, "Load categories failed: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<List<FoodCategoryResponse>>> call, Throwable t) {
-                Log.e(TAG, "Load categories error", t);
+                Log.e(TAG, "Load categories failed", t);
             }
         });
     }
 
     private void setupCategoryChips() {
-        if (chipGroupCategories == null) return;
-        
         chipGroupCategories.removeAllViews();
 
         // Chip "Tất cả"
-        Chip chipAll = new Chip(requireContext());
+        Chip chipAll = new Chip(this);
         chipAll.setText("Tất cả");
         chipAll.setCheckable(true);
         chipAll.setChecked(true);
@@ -148,7 +136,7 @@ public class FoodsFragment extends Fragment implements AdminFoodAdapter.OnFoodCl
 
         // Chips cho từng category
         for (FoodCategoryResponse category : categoryList) {
-            Chip chip = new Chip(requireContext());
+            Chip chip = new Chip(this);
             chip.setText(category.getCategoryName());
             chip.setCheckable(true);
             chip.setOnClickListener(v -> {
@@ -173,7 +161,7 @@ public class FoodsFragment extends Fragment implements AdminFoodAdapter.OnFoodCl
                                    Response<ApiResponse<PageResponse<FoodResponse>>> response) {
                 showLoading(false);
 
-                if (response.isSuccessful() && response.body() != null
+                if (response.isSuccessful() && response.body() != null 
                         && response.body().getResult() != null) {
                     List<FoodResponse> foods = response.body().getResult().getContent();
                     adapter.setData(foods);
@@ -194,40 +182,27 @@ public class FoodsFragment extends Fragment implements AdminFoodAdapter.OnFoodCl
                 showLoading(false);
                 showEmpty(true);
                 Log.e(TAG, "Load foods error", t);
-                if (getContext() != null) {
-                    Toast.makeText(getContext(), "Lỗi tải danh sách", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(AdminFoodManagementActivity.this, 
+                        "Lỗi tải danh sách", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void showLoading(boolean show) {
-        if (layoutLoading != null) {
-            layoutLoading.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     private void showEmpty(boolean show) {
-        if (layoutEmptyState != null) {
-            layoutEmptyState.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
-        if (recyclerView != null) {
-            recyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+        tvEmpty.setVisibility(show ? View.VISIBLE : View.GONE);
+        rvFoods.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
     // ==================== OnFoodClickListener ====================
 
     @Override
     public void onFoodClick(FoodResponse food) {
-        Intent intent = new Intent(getActivity(), FoodDetailActivity.class);
+        Intent intent = new Intent(this, FoodDetailActivity.class);
         intent.putExtra("foodId", food.getFoodId());
         addFoodLauncher.launch(intent);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        loadFoods();
     }
 }

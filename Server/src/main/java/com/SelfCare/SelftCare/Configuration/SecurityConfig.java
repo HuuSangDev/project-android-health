@@ -30,7 +30,13 @@ public class SecurityConfig {
     {
         httpSecurity
                 .authorizeHttpRequests(request->
-                    request.requestMatchers("/auth/**","/Users/Register","/api/chat/**").permitAll()
+                    request.requestMatchers(
+                            "/auth/**",
+                            "/Users/Register",
+                            "/api/chat/**",
+                            "/ws/**",           // WebSocket endpoint
+                            "/notifications/**" // Notification API
+                    ).permitAll()
                             .anyRequest().authenticated()//
                         );
 

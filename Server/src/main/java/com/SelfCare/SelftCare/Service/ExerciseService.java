@@ -21,6 +21,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -36,7 +37,14 @@ public class ExerciseService {
     FileUploadsService fileUploadsService;
     ExerciseMapper exerciseMapper;
     UserRepository userRepository;
-
+    NotificationService notificationService;
+    @Caching(evict = {
+            // Xóa cache danh sách bài tập theo Goal (của tất cả user)
+            @CacheEvict(value = "exercisesByGoal", allEntries = true),
+            // Xóa cache danh sách bài tập theo Category (của tất cả user)
+            @CacheEvict(value = "exercisesByGoalAndCategory", allEntries = true)
+    })
+    @Transactional // Nên thêm Transactional vì có lưu DB
     public ExerciseResponse createExercise(CreateExerciseRequest request) throws IOException {
 
         // 1. Lấy category
@@ -75,8 +83,21 @@ public class ExerciseService {
 
         Exercise saved = exerciseRepository.save(exercise);
 
+        // Gửi thông báo qua WebSocket
+        notificationService.notifyNewExercise(saved.getExerciseId(), saved.getExerciseName());
+
         // 5. Dùng mapper để trả response
         return exerciseMapper.toResponse(saved);
+    }
+
+    /**
+     * Lấy chi tiết bài tập theo ID với cache
+     */
+    @Cacheable(value = "exercise_detail", key = "#id")
+    public ExerciseResponse getExerciseById(Long id) {
+        Exercise exercise = exerciseRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.EXERCISE_NOT_FOUND));
+        return exerciseMapper.toResponse(exercise);
     }
 
     @Cacheable(
@@ -129,7 +150,8 @@ public class ExerciseService {
 
     @Caching(evict = {
             @CacheEvict(value = "exercisesByGoal", allEntries = true),
-            @CacheEvict(value = "exercisesByGoalAndCategory", allEntries = true)
+            @CacheEvict(value = "exercisesByGoalAndCategory", allEntries = true),
+            @CacheEvict(value = "exercise_detail", key = "#exerciseId")
     })
     public ExerciseResponse updateExercise(Long exerciseId, UpdateExerciseRequest request) throws IOException {
 
@@ -170,7 +192,8 @@ public class ExerciseService {
 
     @Caching(evict = {
             @CacheEvict(value = "exercisesByGoal", allEntries = true),
-            @CacheEvict(value = "exercisesByGoalAndCategory", allEntries = true)
+            @CacheEvict(value = "exercisesByGoalAndCategory", allEntries = true),
+            @CacheEvict(value = "exercise_detail", key = "#exerciseId")
     })
     public void deleteExercise(Long exerciseId) {
 

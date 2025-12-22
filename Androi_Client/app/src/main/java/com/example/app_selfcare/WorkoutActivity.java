@@ -81,6 +81,16 @@ public class WorkoutActivity extends AppCompatActivity {
         rvExercises.setLayoutManager(new LinearLayoutManager(this));
         exerciseList.clear();
         exerciseAdapter = new ExerciseAdapter(exerciseList);
+        
+        // Set click listener để navigate đến WorkoutDetailActivity
+        exerciseAdapter.setOnItemClickListener(exercise -> {
+            Intent intent = new Intent(WorkoutActivity.this, WorkoutDetailActivity.class);
+            intent.putExtra("exerciseId", exercise.getId());
+            intent.putExtra("exerciseName", exercise.getName());
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        });
+        
         rvExercises.setAdapter(exerciseAdapter);
 
         loadExercisesFromApi();

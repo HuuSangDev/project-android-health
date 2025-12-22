@@ -143,24 +143,28 @@ public class FoodPeriodFragment extends Fragment {
 
         call.enqueue(new Callback<ApiResponse<List<FoodResponse>>>() {
             @Override
-            public void onResponse(
-                    Call<ApiResponse<List<FoodResponse>>> call,
-                    Response<ApiResponse<List<FoodResponse>>> response
-            ) {
-                if (loadingHandler != null) {
-                    loadingHandler.hideLoading();
-                }
-
-
+            public void onResponse(Call<com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>>> call,
+                                   Response<com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>>> response) {
+                Log.d("FoodPeriodFragment", "=== API RESPONSE ===");
+                Log.d("FoodPeriodFragment", "Response code: " + response.code());
+                Log.d("FoodPeriodFragment", "Response successful: " + response.isSuccessful());
+                
                 if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<List<FoodResponse>> apiResponse = response.body();
-
+                    com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>> apiResponse = response.body();
+                    Log.d("FoodPeriodFragment", "API code: " + apiResponse.getCode());
+                    Log.d("FoodPeriodFragment", "API message: " + apiResponse.getMessage());
+                    
                     if (apiResponse.getCode() == 200 && apiResponse.getResult() != null) {
-                        List<Food> foods = convertToFoodList(apiResponse.getResult());
+                        List<FoodResponse> foodResponses = apiResponse.getResult();
+                        Log.d("FoodPeriodFragment", "Total foods received: " + foodResponses.size());
+                        
+                        List<Food> foods = convertToFoodList(foodResponses);
 
                         if (foods.isEmpty()) {
+                            Log.d("FoodPeriodFragment", "Food list is empty after conversion");
                             showEmpty();
                         } else {
+                            Log.d("FoodPeriodFragment", "Setting " + foods.size() + " foods to adapter");
                             recyclerView.setVisibility(View.VISIBLE);
                             layoutEmpty.setVisibility(View.GONE);
                             adapter.setFoodList(foods);
@@ -195,8 +199,15 @@ public class FoodPeriodFragment extends Fragment {
     // ================== HELPER ==================
     private List<Food> convertToFoodList(List<FoodResponse> foodResponses) {
         List<Food> foods = new ArrayList<>();
-        for (FoodResponse fr : foodResponses) {
-            foods.add(fr.toFood());
+        for (FoodResponse foodResponse : foodResponses) {
+            Food food = foodResponse.toFood();
+            // Debug log để kiểm tra dữ liệu
+            Log.d("FoodPeriodFragment", "Food: " + food.getName() 
+                + " | ImageUrl: " + food.getImageUrl()
+                + " | Calories: " + food.getCalories()
+                + " | Time: " + food.getTimeMinutes()
+                + " | Difficulty: " + food.getDifficulty());
+            foods.add(food);
         }
         return foods;
     }
