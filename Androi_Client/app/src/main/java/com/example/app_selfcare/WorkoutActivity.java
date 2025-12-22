@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WorkoutActivity extends AppCompatActivity {
+public class WorkoutActivity extends BaseActivity {
 
     private RecyclerView rvExercises;
     private ExerciseAdapter exerciseAdapter;
@@ -36,10 +34,9 @@ public class WorkoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_workout);
 
-        // Fix padding cho status bar + navigation bar (dính đáy đẹp mọi máy)
+        // ===== Fix padding cho status bar + bottom nav =====
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
@@ -47,79 +44,117 @@ public class WorkoutActivity extends AppCompatActivity {
             return insets;
         });
 
-        // ==================== BOTTOM NAVIGATION (dùng ID mới) ====================
-        View navHome     = findViewById(R.id.navHome);
-        View navWorkout  = findViewById(R.id.navWorkout);
-        View navPlanner  = findViewById(R.id.navPlanner);
-        View navProfile  = findViewById(R.id.navProfile);
+        initBottomNavigation();
+        initRecyclerView();
+        initBackButton();
+
+        // 👉 LOAD API THẬT + LOADING CHUNG
+        loadExercisesFromApi();
+    }
+
+    // ================= BOTTOM NAV =================
+    private void initBottomNavigation() {
+        View navHome    = findViewById(R.id.navHome);
+        View navWorkout = findViewById(R.id.navWorkout);
+        View navPlanner = findViewById(R.id.navPlanner);
+        View navProfile = findViewById(R.id.navProfile);
 
         navHome.setOnClickListener(v -> {
-            Intent intent = new Intent(WorkoutActivity.this, HomeActivity.class);
+            Intent intent = new Intent(this, HomeActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
 
         navWorkout.setOnClickListener(v -> {
-            // Đã ở màn Workout
+            // Đang ở trang Workout → không làm gì
         });
 
         navPlanner.setOnClickListener(v -> {
-            startActivity(new Intent(WorkoutActivity.this, RecipeHomeActivity.class));
+            startActivity(new Intent(this, RecipeHomeActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
+
         navProfile.setOnClickListener(v -> {
-            startActivity(new Intent(WorkoutActivity.this, ProfileActivity.class));
+            startActivity(new Intent(this, ProfileActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
+    }
 
-        // ==================== NÚT BACK ====================
+    // ================= BACK BUTTON =================
+    private void initBackButton() {
         findViewById(R.id.backButton).setOnClickListener(v -> finish());
+    }
 
-        // ==================== RecyclerView Bài tập ====================
+    // ================= RECYCLER VIEW =================
+    private void initRecyclerView() {
         rvExercises = findViewById(R.id.rvExercises);
         rvExercises.setLayoutManager(new LinearLayoutManager(this));
-        exerciseList.clear();
+
         exerciseAdapter = new ExerciseAdapter(exerciseList);
-        
-        // Set click listener để navigate đến WorkoutDetailActivity
+
         exerciseAdapter.setOnItemClickListener(exercise -> {
-            Intent intent = new Intent(WorkoutActivity.this, WorkoutDetailActivity.class);
+            Intent intent = new Intent(this, WorkoutDetailActivity.class);
             intent.putExtra("exerciseId", exercise.getId());
             intent.putExtra("exerciseName", exercise.getName());
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
-        
-        rvExercises.setAdapter(exerciseAdapter);
 
-        loadExercisesFromApi();
+        rvExercises.setAdapter(exerciseAdapter);
     }
 
+    // ================= API =================
     private void loadExercisesFromApi() {
-        ApiService apiService = ApiClient.getClientWithToken(this).create(ApiService.class);
+
+        // 👉 HIỆN LOADING CHUNG (Lottie)
+        showLoading();
+
+        ApiService apiService = ApiClient
+                .getClientWithToken(this)
+                .create(ApiService.class);
+
         Call<ApiResponse<List<ExerciseResponse>>> call = apiService.getExercises();
 
         call.enqueue(new Callback<ApiResponse<List<ExerciseResponse>>>() {
             @Override
-            public void onResponse(Call<ApiResponse<List<ExerciseResponse>>> call,
-                                   Response<ApiResponse<List<ExerciseResponse>>> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().getResult() != null) {
+            public void onResponse(
+                    Call<ApiResponse<List<ExerciseResponse>>> call,
+                    Response<ApiResponse<List<ExerciseResponse>>> response
+            ) {
+                hideLoading();
+
+                if (response.isSuccessful()
+                        && response.body() != null
+                        && response.body().getResult() != null) {
+
                     exerciseList.clear();
-                    for (ExerciseResponse exRes : response.body().getResult()) {
-                        exerciseList.add(exRes.toExercise());
+
+                    for (ExerciseResponse res : response.body().getResult()) {
+                        exerciseList.add(res.toExercise());
                     }
+
                     exerciseAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(WorkoutActivity.this,
-                            "Không tải được danh sách bài tập", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            WorkoutActivity.this,
+                            "Không tải được danh sách bài tập",
+                            Toast.LENGTH_SHORT
+                    ).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<List<ExerciseResponse>>> call, Throwable t) {
-                android.util.Log.e("WorkoutActivity", "Load exercises failed", t);
-                Toast.makeText(WorkoutActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+            public void onFailure(
+                    Call<ApiResponse<List<ExerciseResponse>>> call,
+                    Throwable t
+            ) {
+                hideLoading();
+                Toast.makeText(
+                        WorkoutActivity.this,
+                        "Lỗi kết nối server",
+                        Toast.LENGTH_SHORT
+                ).show();
             }
         });
     }

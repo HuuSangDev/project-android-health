@@ -12,16 +12,14 @@
     <!-- Header cố định -->
     <LinearLayout
         android:id="@+id/header"
-        android:layout_width="0dp"
-        android:layout_height="116dp"
         android:background="@drawable/header_nav_bg"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        tools:ignore="MissingConstraints">
 
         <ImageView
             android:id="@+id/backButton"

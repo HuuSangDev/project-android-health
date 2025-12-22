@@ -1,4 +1,3 @@
-// File: app/src/main/java/com/example/app_selfcare/Adapter/SavedFoodAdapter.java
 package com.example.app_selfcare.Adapter;
 
 import android.content.Context;
@@ -12,9 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.app_selfcare.Data.Model.Food;
-import com.example.app_selfcare.RecipeDetailActivity; // hoặc RecipeDetailActivity nếu bạn vẫn dùng tên cũ
 import com.example.app_selfcare.R;
+import com.example.app_selfcare.RecipeDetailActivity;
 
 import java.util.List;
 
@@ -31,7 +31,8 @@ public class SavedFoodAdapter extends RecyclerView.Adapter<SavedFoodAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_saved_recipe, parent, false);
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.item_saved_recipe, parent, false);
         return new ViewHolder(view);
     }
 
@@ -40,28 +41,17 @@ public class SavedFoodAdapter extends RecyclerView.Adapter<SavedFoodAdapter.View
         Food food = foodList.get(position);
 
         holder.tvFoodName.setText(food.getName());
-        holder.tvFoodTime.setText(food.getTimeMinutes() + " phút");
-        holder.tvCalories.setText(food.getCalories() + " kcal");
-        holder.tvDifficulty.setText(food.getDifficulty());
+        holder.tvFoodTime.setText("⏰ " + food.getTimeMinutes() + " phút");
 
-        // Nếu có ảnh thật thì dùng Glide, tạm dùng placeholder
-        holder.ivFoodImage.setImageResource(R.drawable.ic_platter_background);
+        Glide.with(context)
+                .load(food.getImageUrl())
+                .placeholder(R.drawable.ic_platter_background)
+                .error(R.drawable.ic_platter_background)
+                .into(holder.ivFoodImage);
 
-        // Click vào món → mở chi tiết
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, RecipeDetailActivity.class);
-            try {
-                int id = Integer.parseInt(food.getId());
-                intent.putExtra("foodId", id);
-            } catch (NumberFormatException e) {
-                intent.putExtra("foodId", -1);
-            }
-            intent.putExtra("foodName", food.getName());
-            intent.putExtra("foodCalories", food.getCalories());
-            intent.putExtra("foodTime", food.getTimeMinutes());
-            intent.putExtra("foodDifficulty", food.getDifficulty());
-            intent.putExtra("foodDescription", food.getDescription());
-            // Nếu cần truyền nguyên liệu & bước nấu → dùng Parcelable hoặc Firebase ID
+            intent.putExtra("foodId", food.getId());
             context.startActivity(intent);
         });
     }
@@ -73,15 +63,13 @@ public class SavedFoodAdapter extends RecyclerView.Adapter<SavedFoodAdapter.View
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivFoodImage;
-        TextView tvFoodName, tvFoodTime, tvCalories, tvDifficulty;
+        TextView tvFoodName, tvFoodTime;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivFoodImage = itemView.findViewById(R.id.iv_recipe_image);
             tvFoodName = itemView.findViewById(R.id.tv_recipe_name);
             tvFoodTime = itemView.findViewById(R.id.tv_recipe_time);
-//            tvCalories = itemView.findViewById(R.id.tv_calories);
-//            tvDifficulty = itemView.findViewById(R.id.tv_difficulty);
         }
     }
 }
