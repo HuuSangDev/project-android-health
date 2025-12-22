@@ -19,11 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.app_selfcare.Adapter.FoodPeriodAdapter;
 import com.example.app_selfcare.BaseActivity;
 import com.example.app_selfcare.Data.Model.Food;
-import com.example.app_selfcare.Data.Model.Response.FoodResponse;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
+import com.example.app_selfcare.Data.Model.Response.FoodResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
-import com.example.app_selfcare.LoadingHandler;
 import com.example.app_selfcare.R;
 
 import java.util.ArrayList;
@@ -44,9 +43,9 @@ public class FoodPeriodFragment extends Fragment {
     private TextView tvEmptyMessage;
 
     private ApiService apiService;
-    private LoadingHandler loadingHandler;
+    private BaseActivity baseActivity;
 
-    // ================== FACTORY ==================
+    // ===== FACTORY =====
     public static FoodPeriodFragment newInstance(String mealType) {
         FoodPeriodFragment fragment = new FoodPeriodFragment();
         Bundle args = new Bundle();
@@ -58,11 +57,10 @@ public class FoodPeriodFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof LoadingHandler) {
-            loadingHandler = (LoadingHandler) context;
+        if (context instanceof BaseActivity) {
+            baseActivity = (BaseActivity) context;
         }
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +70,6 @@ public class FoodPeriodFragment extends Fragment {
         }
     }
 
-    // ================== VIEW ==================
     @Nullable
     @Override
     public View onCreateView(
@@ -85,7 +82,7 @@ public class FoodPeriodFragment extends Fragment {
         initViews(view);
         setupRecyclerView();
         initApiService();
-        loadFoodsFromApi(); // 👉 API THẬT + LOADING
+        loadFoodsFromApi();
 
         return view;
     }
@@ -95,21 +92,19 @@ public class FoodPeriodFragment extends Fragment {
         layoutEmpty = view.findViewById(R.id.layoutEmpty);
         tvEmptyMessage = view.findViewById(R.id.tvEmptyMessage);
 
-        if (mealType != null) {
-            switch (mealType) {
-                case "BREAKFAST":
-                    tvEmptyMessage.setText("Chưa có món ăn sáng nào");
-                    break;
-                case "LUNCH":
-                    tvEmptyMessage.setText("Chưa có món ăn trưa nào");
-                    break;
-                case "DINNER":
-                    tvEmptyMessage.setText("Chưa có món ăn tối nào");
-                    break;
-                default:
-                    tvEmptyMessage.setText("Chưa có món ăn nào");
-                    break;
-            }
+        switch (mealType) {
+            case "BREAKFAST":
+                tvEmptyMessage.setText("Chưa có món ăn sáng nào");
+                break;
+            case "LUNCH":
+                tvEmptyMessage.setText("Chưa có món ăn trưa nào");
+                break;
+            case "DINNER":
+                tvEmptyMessage.setText("Chưa có món ăn tối nào");
+                break;
+            default:
+                tvEmptyMessage.setText("Chưa có món ăn nào");
+                break;
         }
     }
 
@@ -125,91 +120,64 @@ public class FoodPeriodFragment extends Fragment {
                 .create(ApiService.class);
     }
 
-    // ================== API ==================
     private void loadFoodsFromApi() {
 
-        if (loadingHandler != null) {
-            loadingHandler.showLoading("Đang tải món ăn...");
+        if (baseActivity != null) {
+            baseActivity.showLoading();
         }
 
-
-        Call<ApiResponse<List<FoodResponse>>> call;
-
-        if (mealType == null || "ALL".equals(mealType)) {
-            call = apiService.getAllFoods();
-        } else {
-            call = apiService.getFoodsByMealType(mealType);
-        }
+        Call<ApiResponse<List<FoodResponse>>> call =
+                (mealType == null || "ALL".equals(mealType))
+                        ? apiService.getAllFoods()
+                        : apiService.getFoodsByMealType(mealType);
 
         call.enqueue(new Callback<ApiResponse<List<FoodResponse>>>() {
             @Override
-            public void onResponse(Call<com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>>> call,
-                                   Response<com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>>> response) {
-                Log.d("FoodPeriodFragment", "=== API RESPONSE ===");
-                Log.d("FoodPeriodFragment", "Response code: " + response.code());
-                Log.d("FoodPeriodFragment", "Response successful: " + response.isSuccessful());
-                
-                if (response.isSuccessful() && response.body() != null) {
-                    com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>> apiResponse = response.body();
-                    Log.d("FoodPeriodFragment", "API code: " + apiResponse.getCode());
-                    Log.d("FoodPeriodFragment", "API message: " + apiResponse.getMessage());
-                    
-                    if (apiResponse.getCode() == 200 && apiResponse.getResult() != null) {
-                        List<FoodResponse> foodResponses = apiResponse.getResult();
-                        Log.d("FoodPeriodFragment", "Total foods received: " + foodResponses.size());
-                        
-                        List<Food> foods = convertToFoodList(foodResponses);
+            public void onResponse(Call<ApiResponse<List<FoodResponse>>> call,
+                                   Response<ApiResponse<List<FoodResponse>>> response) {
 
-                        if (foods.isEmpty()) {
-                            Log.d("FoodPeriodFragment", "Food list is empty after conversion");
-                            showEmpty();
-                        } else {
-                            Log.d("FoodPeriodFragment", "Setting " + foods.size() + " foods to adapter");
-                            recyclerView.setVisibility(View.VISIBLE);
-                            layoutEmpty.setVisibility(View.GONE);
-                            adapter.setFoodList(foods);
-                        }
-                    } else {
+                if (baseActivity != null) {
+                    baseActivity.hideLoading();
+                }
+
+                if (response.isSuccessful()
+                        && response.body() != null
+                        && response.body().getCode() == 200
+                        && response.body().getResult() != null) {
+
+                    List<Food> foods = convert(response.body().getResult());
+
+                    if (foods.isEmpty()) {
                         showEmpty();
-                        Log.e("FoodPeriodFragment", apiResponse.getMessage());
+                    } else {
+                        layoutEmpty.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        adapter.setFoodList(foods);
                     }
+
                 } else {
                     showEmpty();
-                    Toast.makeText(getContext(), "Lỗi tải dữ liệu", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(
-                    Call<ApiResponse<List<FoodResponse>>> call,
-                    Throwable t
-            ) {
-                if (loadingHandler != null) {
-                    loadingHandler.hideLoading();
+            public void onFailure(Call<ApiResponse<List<FoodResponse>>> call, Throwable t) {
+                if (baseActivity != null) {
+                    baseActivity.hideLoading();
                 }
-
-
                 showEmpty();
-                Log.e("FoodPeriodFragment", "API error", t);
                 Toast.makeText(getContext(), "Không thể kết nối server", Toast.LENGTH_SHORT).show();
+                Log.e("FoodPeriodFragment", "API error", t);
             }
         });
     }
 
-    // ================== HELPER ==================
-    private List<Food> convertToFoodList(List<FoodResponse> foodResponses) {
-        List<Food> foods = new ArrayList<>();
-        for (FoodResponse foodResponse : foodResponses) {
-            Food food = foodResponse.toFood();
-            // Debug log để kiểm tra dữ liệu
-            Log.d("FoodPeriodFragment", "Food: " + food.getName() 
-                + " | ImageUrl: " + food.getImageUrl()
-                + " | Calories: " + food.getCalories()
-                + " | Time: " + food.getTimeMinutes()
-                + " | Difficulty: " + food.getDifficulty());
-            foods.add(food);
+    private List<Food> convert(List<FoodResponse> responses) {
+        List<Food> list = new ArrayList<>();
+        for (FoodResponse r : responses) {
+            list.add(r.toFood());
         }
-        return foods;
+        return list;
     }
 
     private void showEmpty() {

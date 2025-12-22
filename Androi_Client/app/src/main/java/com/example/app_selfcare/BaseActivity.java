@@ -1,14 +1,10 @@
 package com.example.app_selfcare;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.airbnb.lottie.LottieAnimationView;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -29,18 +25,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         loadingView = loading;
     }
 
-    // CHỈ BẬT LOADING
+    // BẬT LOADING (DÙNG TEXT TRONG XML)
     public void showLoading() {
         if (loadingView != null) {
             loadingView.setVisibility(View.VISIBLE);
         }
     }
 
-    // CHỈ TẮT LOADING
+    // TẮT LOADING
     public void hideLoading() {
         if (loadingView != null) {
             loadingView.setVisibility(View.GONE);
         }
     }
 }
-
