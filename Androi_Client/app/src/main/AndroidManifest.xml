@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true">
 
         <activity
+            android:name=".BaseActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddFoodActivity"
             android:exported="false" />
         <activity
@@ -41,8 +44,7 @@
             android:exported="false" />
         <activity
             android:name=".Ui.Admin.AdminHomeActivity"
-            android:exported="false"/>
-
+            android:exported="false" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
@@ -60,7 +62,7 @@
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -97,14 +99,12 @@
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
-
         <activity
             android:name=".RecipeHomeActivity"
             android:exported="false" />
         <activity
             android:name=".RecipeDetailActivity"
             android:exported="false" />
-
         <activity
             android:name=".Ui.Onboarding.Onboarding1Activity"
             android:exported="false" />
