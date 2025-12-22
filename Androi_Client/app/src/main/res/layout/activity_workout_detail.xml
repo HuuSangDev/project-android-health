@@ -43,6 +43,17 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <!-- Loading indicator -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- Scrollable content -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
@@ -61,6 +72,7 @@
             android:orientation="vertical"
             android:padding="20dp">
 
+            <!-- Exercise Image -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,12 +81,14 @@
                 app:cardElevation="4dp">
 
                 <ImageView
+                    android:id="@+id/ivExerciseImage"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="200dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/img_pushup" />
             </androidx.cardview.widget.CardView>
 
+            <!-- Exercise Info Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,6 +104,7 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
+                    <!-- Name and Difficulty -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -97,33 +112,121 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/tvExerciseName"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Chống đẩy (Push-up)"
+                            android:text="Tên bài tập"
                             android:textColor="@android:color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvDifficulty"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3 Hiệp X 10 lần"
+                            android:text="Dễ"
                             android:textColor="#FF6F00"
                             android:textSize="14sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <TextView
+                    <!-- Stats Row -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="• Tăng cường sức mạnh phần thân trên\n• Kích hoạt cơ ngực, vai và tay sau\n• Cải thiện sự ổn định của core"
+                        android:orientation="horizontal">
+
+                        <!-- Calories -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvCalories"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="#FF6B6B"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="kcal/phút"
+                                android:textColor="#888888"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <!-- Muscle Groups -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvMuscleGroups"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ngực"
+                                android:textColor="#0F955A"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nhóm cơ"
+                                android:textColor="#888888"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <!-- Equipment -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvEquipment"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Không"
+                                android:textColor="#FFA726"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Thiết bị"
+                                android:textColor="#888888"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Description -->
+                    <TextView
+                        android:id="@+id/tvDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Mô tả bài tập..."
                         android:textColor="#555555"
                         android:textSize="14sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Instructions Card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,20 +238,22 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Lợi ích chính"
+                    android:text="Hướng dẫn thực hiện"
                     android:textColor="#008D44"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvInstructions"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Tăng cường sức mạnh cơ ngực, vai và bắp tay sau. Cải thiện sự ổn định của cơ lõi (core)."
+                    android:text="Các bước thực hiện bài tập..."
                     android:textColor="#2F4F4F"
                     android:textSize="14sp" />
             </LinearLayout>
 
+            <!-- Category Card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -160,16 +265,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Lưu ý An toàn"
+                    android:text="Danh mục"
                     android:textColor="#C62828"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Nếu đau cổ tay, hãy thử chống trên nắm đấm hoặc dùng tạ đơn (dumbbells) để giữ cổ tay thẳng."
+                    android:text="Chưa phân loại"
                     android:textColor="#5A0000"
                     android:textSize="14sp" />
             </LinearLayout>

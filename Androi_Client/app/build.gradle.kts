@@ -90,4 +90,9 @@ dependencies {
 
     //hinh tron
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    // WebSocket STOMP Client
+    implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.21")
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
 }

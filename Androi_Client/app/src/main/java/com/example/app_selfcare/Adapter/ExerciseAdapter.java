@@ -21,21 +21,35 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
 
     private final List<Exercise> exerciseList;
     private final OnExerciseClickListener listener;
+    private OnItemClickListener itemClickListener;
 
+    // Interface cho Admin (edit/delete)
     public interface OnExerciseClickListener {
         void onEdit(Exercise exercise);
         void onDelete(int id);
     }
 
+    // Interface đơn giản cho User (click xem chi tiết)
+    public interface OnItemClickListener {
+        void onItemClick(Exercise exercise);
+    }
+
     public ExerciseAdapter(List<Exercise> exerciseList, OnExerciseClickListener listener) {
         this.exerciseList = exerciseList;
         this.listener = listener;
+        this.itemClickListener = null;
     }
 
-    // Constructor đơn giản dùng cho WorkoutActivity (không cần listener)
+    // Constructor đơn giản dùng cho WorkoutActivity
     public ExerciseAdapter(List<Exercise> exerciseList) {
         this.exerciseList = exerciseList;
         this.listener = null;
+        this.itemClickListener = null;
+    }
+
+    // Setter cho item click listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.itemClickListener = listener;
     }
 
     @NonNull
@@ -80,9 +94,16 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHo
             holder.ivImage.setImageResource(R.drawable.ic_workout);
         }
 
+        // Click listener cho Admin (edit/delete)
         if (listener != null) {
             holder.itemView.setOnClickListener(v -> listener.onEdit(exercise));
-            holder.btnDelete.setOnClickListener(v -> listener.onDelete(exercise.id));
+            if (holder.btnDelete != null) {
+                holder.btnDelete.setOnClickListener(v -> listener.onDelete(exercise.id));
+            }
+        } 
+        // Click listener cho User (xem chi tiết)
+        else if (itemClickListener != null) {
+            holder.itemView.setOnClickListener(v -> itemClickListener.onItemClick(exercise));
         }
     }
 

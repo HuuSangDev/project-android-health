@@ -85,14 +85,13 @@ public class ExerciseController {
                 .build();
     }
 
-
-
-
-
-
-
-
+    @GetMapping("/{exerciseId}")
+    public ApiResponse<ExerciseResponse> getExerciseById(@PathVariable Long exerciseId) {
+        return ApiResponse.<ExerciseResponse>builder()
+                .result(exerciseService.getExerciseById(exerciseId))
+                .message("Chi tiết bài tập")
+                .build();
+    }
 
 
 }
-

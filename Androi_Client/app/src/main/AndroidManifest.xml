@@ -14,8 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App_selfCare"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".AddFoodActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminFoodManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FoodDetailActivity"
             android:exported="false" />
         <activity
             android:name=".HelpActivity"

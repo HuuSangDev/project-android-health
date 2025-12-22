@@ -48,10 +48,12 @@ public class FoodService {
     FileUploadsService fileUploadsService;
     FoodMapper foodMapper;
     UserRepository userRepository;
+    NotificationService notificationService;
 
 
 
-    @Cacheable(value = "foodDetail", key = "#foodId")
+    // Tạm bỏ cache để tránh lỗi deserialize từ Redis
+    // @Cacheable(value = "foodDetail", key = "#foodId")
     public FoodCreateResponse getFoodDetail(Long foodId) {
         log.info(">>> QUERY DB: getFoodDetail(" + foodId + ")");
         Food food = foodRepository.findById(foodId)
@@ -114,6 +116,10 @@ public class FoodService {
 
 
         Food saved = foodRepository.save(food);
+        
+        // Gửi thông báo qua WebSocket
+        notificationService.notifyNewFood(saved.getFoodId(), saved.getFoodName());
+        
         // 5. Build Response
         return FoodCreateResponse.builder()
                 .foodId(saved.getFoodId())
