@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Theme Colors - Dark Mode -->
+    <color name="colorBackground">#121212</color>
+    <color name="colorSurface">#1E1E1E</color>
+    <color name="colorOnBackground">#FFFFFF</color>
+    <color name="colorOnSurface">#FFFFFF</color>
+    <color name="colorTextPrimary">#FFFFFF</color>
+    <color name="colorTextSecondary">#B3B3B3</color>
+    <color name="colorTextHint">#6D6E70</color>
+    <color name="colorDivider">#2D2D2D</color>
+    <color name="colorCardBackground">#1E1E1E</color>
+    <color name="colorMenuItemBackground">#2D2D2D</color>
+    <color name="colorBottomNavBackground">#1E1E1E</color>
+    <color name="colorBottomNavInactive">#757575</color>
+    <color name="colorHeaderBackground">#1E1E1E</color>
+    <color name="colorChartBackground">#1E1E1E</color>
+    <color name="colorInputBackground">#2D2D2D</color>
+</resources>

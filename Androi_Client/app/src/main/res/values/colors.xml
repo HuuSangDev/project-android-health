@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Primary Colors -->
     <color name="orange_primary">#FF7F3E</color>
     <color name="blue_primary">#4A90E2</color>
     <color name="green_primary">#7ED321</color>
@@ -11,6 +12,23 @@
     <color name="background_light">#f8f8f8</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="orange_text_icon">#FF7F3E</color> <!-- Dùng cho text, icon, page indicator -->
+    <color name="orange_text_icon">#FF7F3E</color>
     <color name="light_orange_background">#FFF3E0</color>
+
+    <!-- Theme Colors - Light Mode -->
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorSurface">#F5F5F5</color>
+    <color name="colorOnBackground">#1F1F1F</color>
+    <color name="colorOnSurface">#1F1F1F</color>
+    <color name="colorTextPrimary">#000000</color>
+    <color name="colorTextSecondary">#666666</color>
+    <color name="colorTextHint">#9EA0A5</color>
+    <color name="colorDivider">#E0E0E0</color>
+    <color name="colorCardBackground">#FFFFFF</color>
+    <color name="colorMenuItemBackground">#E4E4E4</color>
+    <color name="colorBottomNavBackground">#FFFFFF</color>
+    <color name="colorBottomNavInactive">#BDBDBD</color>
+    <color name="colorHeaderBackground">#000000</color>
+    <color name="colorChartBackground">#F5F5F5</color>
+    <color name="colorInputBackground">#1A1A1A</color>
 </resources>
