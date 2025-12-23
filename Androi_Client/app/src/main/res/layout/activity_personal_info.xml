@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
-                android:text="Thông tin cá nhân"
+                android:text="@string/personal_info_title"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="16dp"
-                    android:text="Tên người dùng"
+                    android:text="@string/user_name"
                     android:textColor="#1A1A1A"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -115,7 +115,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Thông tin chi tiết"
+                    android:text="@string/detail_info"
                     android:textColor="#1A1A1A"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -132,7 +132,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ngày sinh"
+                        android:text="@string/date_of_birth"
                         android:textColor="#9E9E9E"
                         android:textSize="12sp" />
 
@@ -162,7 +162,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Giới tính"
+                        android:text="@string/gender"
                         android:textColor="#9E9E9E"
                         android:textSize="12sp" />
 
@@ -192,7 +192,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chiều cao"
+                        android:text="@string/height"
                         android:textColor="#9E9E9E"
                         android:textSize="12sp" />
 
@@ -222,7 +222,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cân nặng"
+                        android:text="@string/weight"
                         android:textColor="#9E9E9E"
                         android:textSize="12sp" />
 
@@ -252,7 +252,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mục tiêu sức khỏe"
+                        android:text="@string/health_goal"
                         android:textColor="#9E9E9E"
                         android:textSize="12sp" />
 

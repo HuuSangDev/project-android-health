@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="16dp"
-                    android:text="Thông tin tài khoản"
+                    android:text="@string/account_info"
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -120,7 +120,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Tiến độ"
+                        android:text="@string/progress"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -128,7 +128,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tuần này"
+                        android:text="@string/this_week"
                         android:textColor="@color/orange_primary"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -145,13 +145,13 @@
                     android:orientation="horizontal"
                     android:layout_marginTop="8dp">
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="T2" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="T3" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="T4" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="T5" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="T6" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="T7" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="CN" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/mon" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/tue" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/wed" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/thu" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/fri" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/sat" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/sun" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -171,7 +171,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Cập nhật trạng thái mỗi tuần"
+                    android:text="@string/update_weekly_status"
                     android:textColor="@color/colorTextPrimary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -212,7 +212,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Tăng cân"
+                        android:text="@string/gain_weight"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="16sp"
                         android:textStyle="bold"/>
@@ -220,7 +220,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mục tiêu"
+                        android:text="@string/goal"
                         android:textColor="@color/colorTextSecondary"
                         android:textSize="12sp"/>
                 </LinearLayout>
@@ -254,7 +254,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cân nặng"
+                        android:text="@string/weight"
                         android:textColor="@color/colorTextSecondary"
                         android:textSize="12sp"/>
                 </LinearLayout>
@@ -288,7 +288,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chỉ số BMI"
+                        android:text="@string/bmi_index"
                         android:textColor="@color/colorTextSecondary"
                         android:textSize="12sp"/>
                 </LinearLayout>
@@ -328,7 +328,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Trang chủ"
+                android:text="@string/nav_home"
                 android:textColor="@color/colorBottomNavInactive"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -353,7 +353,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Tập luyện"
+                android:text="@string/nav_workout"
                 android:textColor="@color/colorBottomNavInactive"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -379,7 +379,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Món Ăn"
+                android:text="@string/nav_food"
                 android:textColor="@color/colorBottomNavInactive"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -403,7 +403,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Cá nhân"
+                android:text="@string/nav_profile"
                 android:textColor="@color/colorBottomNavActive"
                 android:textSize="11sp" />
         </LinearLayout>

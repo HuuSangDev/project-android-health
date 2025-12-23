@@ -1,5 +1,6 @@
 package com.example.app_selfcare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,6 +38,12 @@ public class SavedFoodActivity extends AppCompatActivity {
     private TextView tvEmptyState;
     private ApiService apiService;
     private final List<SavedFoodResponse> savedFoodList = new ArrayList<>();
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocaleManager localeManager = new LocaleManager(newBase);
+        super.attachBaseContext(localeManager.applyLanguage(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

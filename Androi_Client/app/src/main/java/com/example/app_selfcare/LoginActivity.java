@@ -1,5 +1,6 @@
 package com.example.app_selfcare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
@@ -23,6 +24,7 @@ import com.example.app_selfcare.Data.remote.ApiService;
 
 import com.example.app_selfcare.Ui.Admin.AdminHomeActivity;
 import com.example.app_selfcare.upload.InforSex;
+import com.example.app_selfcare.utils.LocaleManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -34,6 +36,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText edtEmail, edtPassword;
     private Button btnLogin;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocaleManager localeManager = new LocaleManager(newBase);
+        super.attachBaseContext(localeManager.applyLanguage(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
