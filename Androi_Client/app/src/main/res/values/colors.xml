@@ -9,6 +9,7 @@
     <color name="purple_primary">#9013FE</color>
     <color name="gray_light">#999999</color>
     <color name="gray_dark">#666666</color>
+    <color name="gray">#888888</color>
     <color name="background_dark">#2d2d2d</color>
     <color name="background_light">#f8f8f8</color>
     <color name="black">#FF000000</color>

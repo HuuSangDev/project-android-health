@@ -23,6 +23,7 @@ public class Exercise {
     Double caloriesPerMinute; // calo đốt cháy mỗi phút
     String description; // mô tả bài tập
     String instructions; // hướng dẫn
+    @Builder.Default
     String difficultyLevel = "BEGINNER"; // MỨC ĐỘ: BEGINNER, INTERMEDIATE, ADVANCED
     String equipmentNeeded; // thiết bị cần dùng
     String muscleGroups; // nhóm cơ luyện tập

@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.example.app_selfcare.Adapter.FoodPagerAdapter;
 import com.example.app_selfcare.Data.Model.Food;
+import com.example.app_selfcare.Data.Model.Request.SaveFoodRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.Model.Response.FoodResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
@@ -42,13 +43,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     private ApiService apiService;
     private int foodId;
+    private boolean isFoodSaved = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        backButton = findViewById(R.id.backButton);
+        backButton = findViewById(R.id.btnBack);
         ivRecipeImage = findViewById(R.id.iv_recipe_image);
         tvRecipeTitle = findViewById(R.id.tv_recipe_title);
         tvRecipeTime = findViewById(R.id.tv_recipe_time);
@@ -62,13 +64,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
         initApiService();
 
         if (foodId != -1) {
-            updateSaveIcon(isSaved(foodId));
+            checkIfFoodSaved();
             fetchFoodDetail();
         }
 
         backButton.setOnClickListener(v -> onBackPressed());
 
-        saveButton.setOnClickListener(v -> toggleSaveFood(foodId));
+        saveButton.setOnClickListener(v -> toggleSaveFood());
     }
 
     // ================== API ==================
@@ -120,27 +122,60 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     // ================== SAVE LOGIC ==================
-    private boolean isSaved(int foodId) {
-        SharedPreferences prefs = getSharedPreferences("SavedFoods", MODE_PRIVATE);
-        return prefs.getBoolean(String.valueOf(foodId), false);
+    private void checkIfFoodSaved() {
+        apiService.checkIfFoodSaved(Long.valueOf(foodId)).enqueue(new Callback<ApiResponse<Boolean>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Boolean>> call, Response<ApiResponse<Boolean>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    isFoodSaved = response.body().getResult();
+                    updateSaveIcon(isFoodSaved);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Boolean>> call, Throwable t) {
+                Log.e("RecipeDetail", "Error checking save status", t);
+            }
+        });
     }
 
-    private void toggleSaveFood(int foodId) {
-        SharedPreferences prefs = getSharedPreferences("SavedFoods", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+    private void toggleSaveFood() {
+        if (isFoodSaved) {
+            // Unsave food
+            apiService.unsaveFood(Long.valueOf(foodId)).enqueue(new Callback<ApiResponse<String>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        isFoodSaved = false;
+                        updateSaveIcon(false);
+                        Toast.makeText(RecipeDetailActivity.this, response.body().getResult(), Toast.LENGTH_SHORT).show();
+                    }
+                }
 
-        boolean saved = prefs.getBoolean(String.valueOf(foodId), false);
-
-        if (saved) {
-            editor.remove(String.valueOf(foodId));
-            Toast.makeText(this, "Đã bỏ lưu", Toast.LENGTH_SHORT).show();
+                @Override
+                public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
+                    Toast.makeText(RecipeDetailActivity.this, "Lỗi khi bỏ lưu món ăn", Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
-            editor.putBoolean(String.valueOf(foodId), true);
-            Toast.makeText(this, "Đã lưu món ăn", Toast.LENGTH_SHORT).show();
-        }
+            // Save food
+            SaveFoodRequest request = new SaveFoodRequest(Long.valueOf(foodId));
+            apiService.saveFood(request).enqueue(new Callback<ApiResponse<String>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        isFoodSaved = true;
+                        updateSaveIcon(true);
+                        Toast.makeText(RecipeDetailActivity.this, response.body().getResult(), Toast.LENGTH_SHORT).show();
+                    }
+                }
 
-        editor.apply();
-        updateSaveIcon(!saved);
+                @Override
+                public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
+                    Toast.makeText(RecipeDetailActivity.this, "Lỗi khi lưu món ăn", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void updateSaveIcon(boolean saved) {

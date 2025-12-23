@@ -6,35 +6,33 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
-
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserAchievement {
-
+@Table(name = "saved_foods", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"user_id", "food_id"})
+})
+public class SavedFood {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long userAchievementId;
+    Long savedFoodId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-    @ManyToOne
-    @JoinColumn(name = "achievement_id", nullable = false)
-    Achievement achievement;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "food_id", nullable = false)
+    Food food;
 
-    Double achievedValue; // giá trị mà user đạt được
-    LocalDateTime achievedAt; // thời gian đạt được
-    @Builder.Default
-    Boolean isNotified = false; // đã thông báo?
+    LocalDateTime savedAt;
 
     @PrePersist
     protected void onCreate() {
-        achievedAt = LocalDateTime.now();
+        savedAt = LocalDateTime.now();
     }
 }

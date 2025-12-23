@@ -6,6 +6,7 @@ import com.example.app_selfcare.Data.Model.Request.FoodCategoryCreateRequest;
 import com.example.app_selfcare.Data.Model.Request.FoodSearchRequest;
 import com.example.app_selfcare.Data.Model.Request.ForgotPasswordRequest;
 import com.example.app_selfcare.Data.Model.Request.ResetPasswordRequest;
+import com.example.app_selfcare.Data.Model.Request.SaveFoodRequest;
 import com.example.app_selfcare.Data.Model.Request.UserLoginRequest;
 import com.example.app_selfcare.Data.Model.Request.UserRegisterRequest;
 import com.example.app_selfcare.Data.Model.Request.VerifyOtpRequest;
@@ -15,6 +16,7 @@ import com.example.app_selfcare.Data.Model.Response.FoodCategoryResponse;
 import com.example.app_selfcare.Data.Model.Response.FoodResponse;
 import com.example.app_selfcare.Data.Model.Response.PageResponse;
 import com.example.app_selfcare.Data.Model.Response.ExerciseResponse;
+import com.example.app_selfcare.Data.Model.Response.SavedFoodResponse;
 import com.example.app_selfcare.Data.Model.Response.UserLoginResponse;
 import com.example.app_selfcare.Data.Model.Response.UserResponse;
 
@@ -155,5 +157,18 @@ public interface ApiService {
 
     @DELETE("app/foods/{foodId}")
     Call<ApiResponse<Void>> deleteFood(@Path("foodId") long foodId);
+
+    // ==================== Saved Foods APIs ====================
+    @POST("app/saved-foods/save")
+    Call<ApiResponse<String>> saveFood(@Body SaveFoodRequest request);
+
+    @DELETE("app/saved-foods/unsave/{foodId}")
+    Call<ApiResponse<String>> unsaveFood(@Path("foodId") Long foodId);
+
+    @GET("app/saved-foods/my-saved-foods")
+    Call<ApiResponse<List<SavedFoodResponse>>> getMySavedFoods();
+
+    @GET("app/saved-foods/check/{foodId}")
+    Call<ApiResponse<Boolean>> checkIfFoodSaved(@Path("foodId") Long foodId);
 
 }
