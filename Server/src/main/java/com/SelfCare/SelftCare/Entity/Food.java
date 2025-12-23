@@ -24,9 +24,13 @@ public class Food {
 
     String foodName; // tên thực phẩm
     Double caloriesPer100g; // calo trên 100g
+    @Builder.Default
     Double proteinPer100g = 0.0; // protein trên 100g
+    @Builder.Default
     Double fatPer100g = 0.0; // chất béo trên 100g
+    @Builder.Default
     Double fiberPer100g = 0.0; // chất xơ trên 100g
+    @Builder.Default
     Double sugarPer100g = 0.0; // đường trên 100g
 
 
@@ -34,6 +38,7 @@ public class Food {
     String instructions; // hướng dẫn nấu ăn
     Integer prepTime; // phút chuẩn bị
     Integer cookTime; // phút nấu
+    @Builder.Default
     Integer servings = 1; // khẩu phần
 
     @Enumerated(EnumType.STRING)
@@ -42,6 +47,7 @@ public class Food {
     String imageUrl;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     MealType mealType = MealType.ALL; // mặc định ALL
     LocalDateTime createdAt;
 

@@ -4,6 +4,7 @@ public enum ErrorCode {
 
     EMAIL_EXISTED(101,"email existed"),
     USER_NOT_FOUND(104,"user not found "),
+    USER_NOT_EXISTED(105,"user not existed"),
     PROFILE_NOT_FOUND(104,"user profile not found "),
     EMAIL_NOT_FOUND(102,"email not found"),
     UNAUTHENTICATED(999,"unauthenticated"),

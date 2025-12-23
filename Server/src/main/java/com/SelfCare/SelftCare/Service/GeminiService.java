@@ -45,7 +45,7 @@ public class GeminiService {
     @NonFinal
     @Value("${gemini.api-url}")
     String apiUrl;
-    
+
     public GeminiService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.objectMapper = new ObjectMapper();
@@ -99,22 +99,22 @@ public class GeminiService {
             // Xử lý response
             if (response.getBody() == null) {
                 log.error("Response body từ Gemini API là null");
-                throw new AppException(ErrorCode.GEMINI_API_ERROR, 
+                throw new AppException(ErrorCode.GEMINI_API_ERROR,
                     "Không nhận được phản hồi từ Gemini API");
             }
 
-            if (response.getBody().getCandidates() == null || 
+            if (response.getBody().getCandidates() == null ||
                 response.getBody().getCandidates().isEmpty()) {
                 log.error("Response không chứa candidates - Response: {}", response.getBody());
-                throw new AppException(ErrorCode.GEMINI_API_ERROR, 
+                throw new AppException(ErrorCode.GEMINI_API_ERROR,
                     "Không nhận được phản hồi từ Gemini API");
             }
 
             GeminiResponse.Candidate candidate = response.getBody().getCandidates().get(0);
-            
+
             // Kiểm tra finishReason
             if ("SAFETY".equals(candidate.getFinishReason())) {
-                throw new AppException(ErrorCode.GEMINI_API_ERROR, 
+                throw new AppException(ErrorCode.GEMINI_API_ERROR,
                     "Câu hỏi của bạn đã bị chặn bởi bộ lọc an toàn của Gemini. Vui lòng thử lại với câu hỏi khác.");
             }
 
@@ -134,7 +134,7 @@ public class GeminiService {
 
         } catch (HttpClientErrorException e) {
             // Lỗi 4xx (Bad Request, Unauthorized, etc.)
-            log.error("Lỗi HTTP Client khi gọi Gemini API - Status: {}, Body: {}", 
+            log.error("Lỗi HTTP Client khi gọi Gemini API - Status: {}, Body: {}",
                 e.getStatusCode(), e.getResponseBodyAsString(), e);
             String errorMessage = "Lỗi khi gọi Gemini API";
             if (e.getStatusCode().value() == 400) {
@@ -143,32 +143,32 @@ public class GeminiService {
                 errorMessage = "API Key không hợp lệ hoặc không có quyền truy cập.";
             }
             throw new AppException(ErrorCode.GEMINI_API_ERROR, errorMessage);
-            
+
         } catch (HttpServerErrorException e) {
             // Lỗi 5xx (Internal Server Error, etc.)
-            log.error("Lỗi HTTP Server khi gọi Gemini API - Status: {}, Body: {}", 
+            log.error("Lỗi HTTP Server khi gọi Gemini API - Status: {}, Body: {}",
                 e.getStatusCode(), e.getResponseBodyAsString(), e);
-            throw new AppException(ErrorCode.GEMINI_API_ERROR, 
+            throw new AppException(ErrorCode.GEMINI_API_ERROR,
                 "Lỗi từ phía Gemini API server. Vui lòng thử lại sau.");
-            
+
         } catch (ResourceAccessException e) {
             // Lỗi kết nối (timeout, network, etc.)
             log.error("Lỗi kết nối đến Gemini API: {}", e.getMessage(), e);
-            throw new AppException(ErrorCode.GEMINI_API_ERROR, 
+            throw new AppException(ErrorCode.GEMINI_API_ERROR,
                 "Không thể kết nối đến Gemini API. Vui lòng kiểm tra kết nối mạng và thử lại sau.");
-            
+
         } catch (RestClientException e) {
             // Các lỗi RestTemplate khác
             log.error("Lỗi RestClient khi gọi Gemini API: {}", e.getMessage(), e);
-            throw new AppException(ErrorCode.GEMINI_API_ERROR, 
+            throw new AppException(ErrorCode.GEMINI_API_ERROR,
                 "Lỗi khi gọi Gemini API: " + e.getMessage());
-            
+
         } catch (AppException e) {
             throw e;
-            
+
         } catch (Exception e) {
             log.error("Lỗi không xác định khi xử lý Gemini API: {}", e.getMessage(), e);
-            throw new AppException(ErrorCode.GEMINI_API_ERROR, 
+            throw new AppException(ErrorCode.GEMINI_API_ERROR,
                 "Đã xảy ra lỗi khi xử lý yêu cầu. Vui lòng thử lại sau.");
         }
     }
@@ -214,10 +214,10 @@ public class GeminiService {
      * Trích xuất text từ response của Gemini
      */
     private String extractResponseText(GeminiResponse.Candidate candidate) {
-        if (candidate.getContent() == null || 
-            candidate.getContent().getParts() == null || 
+        if (candidate.getContent() == null ||
+            candidate.getContent().getParts() == null ||
             candidate.getContent().getParts().isEmpty()) {
-            throw new AppException(ErrorCode.GEMINI_API_ERROR, 
+            throw new AppException(ErrorCode.GEMINI_API_ERROR,
                 "Không thể trích xuất câu trả lời từ phản hồi của Gemini");
         }
 

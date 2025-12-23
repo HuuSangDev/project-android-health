@@ -21,8 +21,12 @@ public class FoodSearchRequest {
     Long categoryId;
 
     // 🔥 nâng cao – phân trang & sắp xếp
+    @Builder.Default
     Integer page = 0;
+    @Builder.Default
     Integer size = 10;
+    @Builder.Default
     String sortBy = "createdAt";
+    @Builder.Default
     String sortDir = "desc";
 }
