@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:background="@color/colorBackground">
 
     <!-- Header -->
     <LinearLayout
-        android:background="@drawable/header_nav_bg"
+        android:background="@drawable/bg_header_nav"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:gravity="center_vertical"
@@ -54,7 +54,7 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="16dp"
-            android:background="@drawable/menu_item_background"
+            android:background="@drawable/bg_menu_item"
             android:clickable="true"
             android:focusable="true">
 
@@ -62,7 +62,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/ic_proflie"
-                app:tint="@android:color/white" />
+                app:tint="@color/orange_primary" />
 
             <TextView
                 android:layout_width="0dp"
@@ -70,15 +70,15 @@
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:text="Thông tin cá nhân"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorTextPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-
-                app:tint="@android:color/white" />
+                android:src="@drawable/ic_arrow_forward"
+                app:tint="@color/colorTextSecondary" />
 
         </LinearLayout>
 
@@ -90,13 +90,15 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="16dp"
-            android:background="@drawable/menu_item_background">
+            android:background="@drawable/bg_menu_item"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:background="@drawable/ic_bell"
-                app:tint="@android:color/white" />
+                app:tint="@color/orange_primary" />
 
             <TextView
                 android:layout_width="0dp"
@@ -104,15 +106,15 @@
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:text="Thông báo"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorTextPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-
-                app:tint="@android:color/white" />
+                android:src="@drawable/ic_arrow_forward"
+                app:tint="@color/colorTextSecondary" />
 
         </LinearLayout>
 
@@ -124,13 +126,15 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="16dp"
-            android:background="@drawable/menu_item_background">
+            android:background="@drawable/bg_menu_item"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/ic_lockk"
-                app:tint="@android:color/white" />
+                app:tint="@color/orange_primary" />
 
             <TextView
                 android:layout_width="0dp"
@@ -138,15 +142,15 @@
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:text="Đổi mật khẩu"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorTextPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-
-                app:tint="@android:color/white" />
+                android:src="@drawable/ic_arrow_forward"
+                app:tint="@color/colorTextSecondary" />
 
         </LinearLayout>
 
@@ -158,13 +162,13 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="16dp"
-            android:background="@drawable/menu_item_background">
+            android:background="@drawable/bg_menu_item">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="@drawable/ic_moon"
-                app:tint="@android:color/white" />
+                app:tint="@color/orange_primary" />
 
             <TextView
                 android:layout_width="0dp"
@@ -172,14 +176,16 @@
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:text="Chế độ Darkmode"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorTextPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <Switch
-                android:id="@+id/foodNotifSwitch"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/darkModeSwitch"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:trackTint="@color/colorDivider"
+                app:thumbTint="@color/orange_primary" />
         </LinearLayout>
 
         <LinearLayout
@@ -190,13 +196,15 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="16dp"
-            android:background="@drawable/menu_item_background">
+            android:background="@drawable/bg_menu_item"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:background="@drawable/ic_question"
-                app:tint="@android:color/white" />
+                app:tint="@color/orange_primary" />
 
             <TextView
                 android:layout_width="0dp"
@@ -204,15 +212,15 @@
                 android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:text="Trợ giúp"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorTextPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-
-                app:tint="@android:color/white" />
+                android:src="@drawable/ic_arrow_forward"
+                app:tint="@color/colorTextSecondary" />
         </LinearLayout>
 
 
@@ -236,7 +244,7 @@
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="76dp"
-        android:background="@drawable/bottom_nav_bg"
+        android:background="@drawable/bg_bottom_nav"
         android:elevation="10dp"
         android:gravity="center"
         android:orientation="horizontal"
@@ -255,14 +263,14 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home"
-                app:tint="#BDBDBD" />
+                app:tint="@color/colorBottomNavInactive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Trang chủ"
-                android:textColor="#BDBDBD"
+                android:textColor="@color/colorBottomNavInactive"
                 android:textSize="11sp" />
         </LinearLayout>
 
@@ -279,7 +287,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_workout"
-                app:tint="#BDBDBD"
+                app:tint="@color/colorBottomNavInactive"
                 android:scaleType="centerInside" />
 
             <TextView
@@ -287,7 +295,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Tập luyện"
-                android:textColor="#BDBDBD"
+                android:textColor="@color/colorBottomNavInactive"
                 android:textSize="11sp" />
         </LinearLayout>
 
@@ -304,14 +312,14 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_statistic"
-                app:tint="#BDBDBD" />
+                app:tint="@color/colorBottomNavInactive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Món Ăn"
-                android:textColor="#BDBDBD"
+                android:textColor="@color/colorBottomNavInactive"
                 android:textSize="11sp" />
         </LinearLayout>
 
@@ -337,7 +345,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Cá nhân"
-                android:textColor="#FF9F63"
+                android:textColor="@color/orange_primary"
                 android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>

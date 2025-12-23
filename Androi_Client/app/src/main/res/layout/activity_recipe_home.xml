@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/colorBackground">
 
     <!-- ===================== PHẦN HEADER + TABS (GIỮ NGUYÊN) ===================== -->
     <ScrollView
@@ -39,7 +39,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Xin chào, An!"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/colorTextPrimary"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Hôm nay bạn nấu món gì?"
-                        android:textColor="#999999"
+                        android:textColor="@color/colorTextSecondary"
                         android:textSize="14sp" />
 
                 </LinearLayout>

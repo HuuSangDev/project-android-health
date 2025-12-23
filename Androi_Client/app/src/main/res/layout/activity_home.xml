@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F6F3"
+    android:background="@color/colorBackgroundSecondary"
     tools:context=".HomeActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -25,14 +25,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Header chào mừng -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="28dp"
-                app:cardBackgroundColor="#0F1014"
+                app:cardBackgroundColor="@color/colorHeaderBackground"
                 app:cardCornerRadius="36dp"
                 app:cardElevation="8dp">
 
@@ -82,30 +81,6 @@
                                 android:textColor="#FFFFFF"
                                 android:textSize="22sp"
                                 android:textStyle="bold" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="6dp"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/tvCalories"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="251 kcal"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="12dp"
-                                    android:text="Đói bụng rồi"
-                                    android:textColor="#BDBDBD"
-                                    android:textSize="12sp" />
-                            </LinearLayout>
                         </LinearLayout>
 
                         <FrameLayout
@@ -120,17 +95,6 @@
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_bell"
                                 app:tint="#FFFFFF" />
-
-                            <TextView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
-                                android:layout_gravity="end|top"
-                                android:background="@drawable/orange_circle"
-                                android:gravity="center"
-                                android:text="8"
-                                android:textColor="#FFFFFF"
-                                android:textSize="9sp"
-                                android:textStyle="bold" />
                         </FrameLayout>
                     </LinearLayout>
 
@@ -165,12 +129,9 @@
                             android:textColorHint="#6D6E70"
                             android:textSize="14sp" />
                     </LinearLayout>
-
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-
-            <!-- Bài tập -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -189,7 +150,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Bài tập gợi ý"
-                        android:textColor="#1F1F1F"
+                        android:textColor="@color/colorTextPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -198,7 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Xem tất cả"
-                        android:textColor="#FF9F63"
+                        android:textColor="@color/colorBottomNavActive"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -232,38 +193,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
                             android:layout_margin="16dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginBottom="-215dp"
                             android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/bg_chip_selected"
-                                    android:paddingHorizontal="12dp"
-                                    android:paddingVertical="6dp"
-                                    android:text="25 phút"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
-                                    android:background="@drawable/bg_chip_selected"
-                                    android:paddingHorizontal="12dp"
-                                    android:paddingVertical="6dp"
-                                    android:text="412 kcal"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -282,22 +212,10 @@
                                 android:textColor="#EDEDED"
                                 android:textSize="13sp" />
                         </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_margin="18dp"
-                            android:background="@drawable/orange_circle"
-                            android:padding="10dp"
-                            android:src="@drawable/ic_arrow_forward"
-                            app:tint="#FFFFFF" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-            <!-- Dinh dưỡng -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -316,7 +234,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Món ăn gợi ý"
-                        android:textColor="#1F1F1F"
+                        android:textColor="@color/colorTextPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -325,7 +243,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Xem tất cả"
-                        android:textColor="#FF9F63"
+                        android:textColor="@color/colorBottomNavActive"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -360,62 +278,6 @@
                             android:layout_margin="16dp"
                             android:orientation="vertical">
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/bg_chip_selected"
-                                    android:orientation="vertical"
-                                    android:paddingHorizontal="12dp"
-                                    android:paddingVertical="6dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="25g"
-                                        android:textColor="#FFFFFF"
-                                        android:textSize="12sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Protein"
-                                        android:textColor="#F4F4F4"
-                                        android:textSize="11sp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="8dp"
-                                    android:background="@drawable/bg_chip_selected"
-                                    android:orientation="vertical"
-                                    android:paddingHorizontal="12dp"
-                                    android:paddingVertical="6dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="25g"
-                                        android:textColor="#FFFFFF"
-                                        android:textSize="12sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Chất béo"
-                                        android:textColor="#F4F4F4"
-                                        android:textSize="11sp" />
-                                </LinearLayout>
-
-                            </LinearLayout>
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -424,28 +286,6 @@
                                 android:textColor="#FFFFFF"
                                 android:textSize="22sp"
                                 android:textStyle="bold" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="548 kcal"
-                                    android:textColor="#EDEDED"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="12dp"
-                                    android:text="20 phút"
-                                    android:textColor="#EDEDED"
-                                    android:textSize="13sp" />
-                            </LinearLayout>
                         </LinearLayout>
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
@@ -455,12 +295,11 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Thanh điều hướng dưới -->
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="0dp"
         android:layout_height="76dp"
-        android:background="@drawable/bottom_nav_bg"
+        android:background="@drawable/bg_bottom_nav"
         android:elevation="10dp"
         android:gravity="center"
         android:orientation="horizontal"
@@ -482,14 +321,14 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home"
-                app:tint="#FF9F63" />
+                app:tint="@color/colorBottomNavActive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Trang chủ"
-                android:textColor="#FF9F63"
+                android:textColor="@color/colorBottomNavActive"
                 android:textSize="11sp" />
         </LinearLayout>
 
@@ -506,14 +345,14 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_workout"
-                app:tint="#BDBDBD" />
+                app:tint="@color/colorBottomNavInactive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Tập luyện"
-                android:textColor="#BDBDBD"
+                android:textColor="@color/colorBottomNavInactive"
                 android:textSize="11sp" />
         </LinearLayout>
 
@@ -530,14 +369,14 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_statistic"
-                app:tint="#BDBDBD" />
+                app:tint="@color/colorBottomNavInactive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Món ăn"
-                android:textColor="#BDBDBD"
+                android:textColor="@color/colorBottomNavInactive"
                 android:textSize="11sp" />
         </LinearLayout>
 
@@ -554,37 +393,36 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_proflie"
-                app:tint="#BDBDBD" />
+                app:tint="@color/colorBottomNavInactive" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="Cá nhân"
-                android:textColor="#BDBDBD"
+                android:textColor="@color/colorBottomNavInactive"
                 android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Floating Action Button for Chat -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:src="@android:drawable/ic_menu_help"
-        app:backgroundTint="?attr/colorPrimary"
+        app:backgroundTint="@color/orange_primary"
         app:tint="@android:color/white"
         app:layout_constraintBottom_toTopOf="@id/bottomNav"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <FrameLayout
-    android:id="@+id/fragmentContainer"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    android:visibility="gone"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
+        android:id="@+id/fragmentContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

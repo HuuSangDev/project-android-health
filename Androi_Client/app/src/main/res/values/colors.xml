@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Primary Colors -->
     <color name="orange_primary">#FF7F3E</color>
+    <color name="orange_accent">#FF9F63</color>
     <color name="blue_primary">#4A90E2</color>
-    <color name="green_primary">#7ED321</color>
+    <color name="green_primary">#0F955A</color>
     <color name="red_primary">#FF5555</color>
     <color name="purple_primary">#9013FE</color>
     <color name="gray_light">#999999</color>
@@ -11,6 +13,39 @@
     <color name="background_light">#f8f8f8</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="orange_text_icon">#FF7F3E</color> <!-- Dùng cho text, icon, page indicator -->
+    <color name="orange_text_icon">#FF7F3E</color>
     <color name="light_orange_background">#FFF3E0</color>
+
+    <!-- ============ LIGHT MODE COLORS ============ -->
+    <!-- Main backgrounds -->
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorBackgroundSecondary">#F9F6F3</color>
+    <color name="colorSurface">#F5F5F5</color>
+    
+    <!-- Text colors -->
+    <color name="colorTextPrimary">#1F1F1F</color>
+    <color name="colorTextSecondary">#666666</color>
+    <color name="colorTextHint">#9EA0A5</color>
+    <color name="colorTextOnDark">#FFFFFF</color>
+    
+    <!-- Component backgrounds -->
+    <color name="colorCardBackground">#FFFFFF</color>
+    <color name="colorMenuItemBackground">#F0F0F0</color>
+    <color name="colorBottomNavBackground">#FFFFFF</color>
+    <color name="colorHeaderBackground">#0F1014</color>
+    <color name="colorChartBackground">#F5F5F5</color>
+    <color name="colorInputBackground">#1A1A1A</color>
+    <color name="colorSearchBackground">#2A2A2E</color>
+    
+    <!-- Dividers & borders -->
+    <color name="colorDivider">#E0E0E0</color>
+    <color name="colorBorder">#DDDDDD</color>
+    
+    <!-- Navigation -->
+    <color name="colorBottomNavInactive">#BDBDBD</color>
+    <color name="colorBottomNavActive">#FF9F63</color>
+    
+    <!-- Profile section -->
+    <color name="colorProfileBackground">#FFFFFF</color>
+    <color name="colorStatsCardBackground">#FFFFFF</color>
 </resources>
