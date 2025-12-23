@@ -1,86 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">App_selfCare</string>
-    <string name="back_button_description">Quay lại màn hình trước</string>
+    <string name="app_name">SelfCare</string>
+    
+    <!-- Common -->
+    <string name="continue_button_text">Tiếp tục</string>
+    <string name="back_button_description">Quay lại</string>
+    <string name="save">Lưu</string>
+    <string name="cancel">Hủy</string>
+    <string name="ok">OK</string>
+    <string name="error">Lỗi</string>
+    <string name="success">Thành công</string>
+    <string name="loading">Đang tải...</string>
+    
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Trang chủ</string>
+    <string name="nav_workout">Tập luyện</string>
+    <string name="nav_food">Món ăn</string>
+    <string name="nav_profile">Cá nhân</string>
+    
+    <!-- Home Screen -->
+    <string name="hello_user">Xin chào, %s!</string>
+    <string name="suggested_workouts">Bài tập gợi ý</string>
+    <string name="suggested_foods">Món ăn gợi ý</string>
+    <string name="see_all">Xem tất cả</string>
+    <string name="search_hint">Tìm món ăn, công thức...</string>
+    
+    <!-- Profile Screen -->
+    <string name="account_info">Thông tin tài khoản</string>
+    <string name="progress">Tiến độ</string>
+    <string name="this_week">Tuần này</string>
+    <string name="update_weekly_status">Cập nhật trạng thái mỗi tuần</string>
+    <string name="goal">Mục tiêu</string>
+    <string name="weight">Cân nặng</string>
+    <string name="bmi_index">Chỉ số BMI</string>
+    <string name="gain_weight">Tăng cân</string>
+    <string name="maintain_weight">Giữ cân</string>
+    <string name="lose_weight">Giảm cân</string>
+    
+    <!-- Account Settings -->
+    <string name="account_settings">Cài đặt tài khoản</string>
+    <string name="personal_info">Thông tin cá nhân</string>
+    <string name="notifications">Thông báo</string>
+    <string name="change_password">Đổi mật khẩu</string>
+    <string name="dark_mode">Chế độ tối</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="help">Trợ giúp</string>
+    <string name="sign_out">Đăng xuất</string>
+    
+    <!-- Language -->
+    <string name="language_vietnamese">Tiếng Việt</string>
+    <string name="language_english">Tiếng Anh</string>
+    <string name="select_language">Chọn ngôn ngữ</string>
+    
+    <!-- Workout -->
+    <string name="today_workout">Bài tập hôm nay</string>
+    <string name="exercises_for_you">Bài tập cho bạn</string>
+    <string name="strength">Strength</string>
+    <string name="strength_description">Xây dựng cơ bắp to và mạnh hơn với các bài tập này. Tập mỗi ngày để tăng cơ bắp!</string>
+    <string name="exercises_count">%d bài tập</string>
+    <string name="minutes">%d phút</string>
+    <string name="kcal">%d kcal</string>
+    
+    <!-- Recipe -->
+    <string name="what_cook_today">Hôm nay bạn nấu món gì?</string>
+    <string name="saved_foods">Các món ăn đã lưu</string>
+    <string name="search_recipe">Tìm kiếm công thức...</string>
+    <string name="all">Tất cả</string>
+    <string name="breakfast">Sáng</string>
+    <string name="lunch">Trưa</string>
+    <string name="dinner">Tối</string>
+    
+    <!-- Days of week -->
+    <string name="mon">T2</string>
+    <string name="tue">T3</string>
+    <string name="wed">T4</string>
+    <string name="thu">T5</string>
+    <string name="fri">T6</string>
+    <string name="sat">T7</string>
+    <string name="sun">CN</string>
+    
+    <!-- Messages -->
+    <string name="please_login_again">Vui lòng đăng nhập lại</string>
+    <string name="cannot_load_info">Không thể tải thông tin</string>
+    <string name="connection_error">Lỗi kết nối</string>
+    <string name="update_success">Cập nhật thành công!</string>
+    <string name="please_fill_all">Vui lòng nhập đầy đủ</string>
+    <string name="language_changed">Đã đổi ngôn ngữ</string>
+    
+    <!-- Legacy strings -->
     <string name="assessment_title">Assessment</string>
-
-    <!-- Page indicators (phải đúng với XML: "1/6", không phải "1 of 6") -->
     <string name="page_indicator_1_of_6">1/6</string>
     <string name="page_indicator_2_of_6">2/6</string>
     <string name="page_indicator_3_of_6">3/6</string>
     <string name="page_indicator_4_of_6">4/6</string>
-
-    <!-- Weight screen -->
     <string name="current_weight_question">Cân nặng của bạn hiện tại?</string>
     <string name="unit_kg">Kg</string>
     <string name="unit_lbs">Lbs</string>
     <string name="default_weight_display">62 Kg</string>
     <string name="weight_ruler_description">Thước đo cân nặng</string>
-
-    <!-- Height screen -->
     <string name="current_height_question">Chiều cao của bạn hiện tại</string>
     <string name="unit_cm">Cm</string>
     <string name="default_height_display">165 Cm</string>
     <string name="height_ruler_description">Thước đo chiều cao</string>
-
-    <!-- Buttons -->
-    <string name="continue_button_text">Tiếp tục</string>
-
-    <!-- Goal screen -->
     <string name="goal_lose_weight">Tôi muốn giảm cân</string>
     <string name="goal_virtual_assistant">Tôi muốn thử với trợ lý ảo</string>
     <string name="goal_increase_strength">Tôi muốn tăng sức bền</string>
     <string name="goal_try_app">Chỉ đang thử ứng dụng!</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
-        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
-        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
-        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
-        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
-        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
-        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
-        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
-        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
-        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
-        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
-        bibendum, vel congue leo egestas.\n\n
-        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
-        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
-        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
-        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
-        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
-        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
-        est.\n\n
-        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
-        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
-        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
-        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
-        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
-        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
-        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
-        convallis.\n\n
-        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
-        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
-        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
-        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
-        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
-        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
-        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
-    </string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <!-- Navigation Drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <!-- Menu Items -->
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_exercises">Quản lí Bài tập</string>
     <string name="menu_foods">Quản lí Món ăn</string>

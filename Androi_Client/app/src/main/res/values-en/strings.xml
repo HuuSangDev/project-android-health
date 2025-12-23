@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SelfCare</string>
+    
+    <!-- Common -->
+    <string name="continue_button_text">Continue</string>
+    <string name="back_button_description">Go back</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="error">Error</string>
+    <string name="success">Success</string>
+    <string name="loading">Loading...</string>
+    
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_workout">Workout</string>
+    <string name="nav_food">Food</string>
+    <string name="nav_profile">Profile</string>
+    
+    <!-- Home Screen -->
+    <string name="hello_user">Hello, %s!</string>
+    <string name="suggested_workouts">Suggested Workouts</string>
+    <string name="suggested_foods">Suggested Foods</string>
+    <string name="see_all">See all</string>
+    <string name="search_hint">Search food, recipes...</string>
+    
+    <!-- Profile Screen -->
+    <string name="account_info">Account Information</string>
+    <string name="progress">Progress</string>
+    <string name="this_week">This week</string>
+    <string name="update_weekly_status">Update weekly status</string>
+    <string name="goal">Goal</string>
+    <string name="weight">Weight</string>
+    <string name="bmi_index">BMI Index</string>
+    <string name="gain_weight">Gain weight</string>
+    <string name="maintain_weight">Maintain weight</string>
+    <string name="lose_weight">Lose weight</string>
+    
+    <!-- Account Settings -->
+    <string name="account_settings">Account Settings</string>
+    <string name="personal_info">Personal Information</string>
+    <string name="notifications">Notifications</string>
+    <string name="change_password">Change Password</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="language">Language</string>
+    <string name="help">Help</string>
+    <string name="sign_out">Sign Out</string>
+    
+    <!-- Language -->
+    <string name="language_vietnamese">Vietnamese</string>
+    <string name="language_english">English</string>
+    <string name="select_language">Select Language</string>
+    
+    <!-- Workout -->
+    <string name="today_workout">Today\'s Workout</string>
+    <string name="exercises_for_you">Exercises for you</string>
+    <string name="strength">Strength</string>
+    <string name="strength_description">Build bigger and stronger muscles with these exercises. Train daily to increase muscle!</string>
+    <string name="exercises_count">%d exercises</string>
+    <string name="minutes">%d minutes</string>
+    <string name="kcal">%d kcal</string>
+    
+    <!-- Recipe -->
+    <string name="what_cook_today">What are you cooking today?</string>
+    <string name="saved_foods">Saved Foods</string>
+    <string name="search_recipe">Search recipes...</string>
+    <string name="all">All</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="lunch">Lunch</string>
+    <string name="dinner">Dinner</string>
+    
+    <!-- Days of week -->
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
+    
+    <!-- Messages -->
+    <string name="please_login_again">Please login again</string>
+    <string name="cannot_load_info">Cannot load information</string>
+    <string name="connection_error">Connection error</string>
+    <string name="update_success">Update successful!</string>
+    <string name="please_fill_all">Please fill in all fields</string>
+    <string name="language_changed">Language changed</string>
+</resources>
