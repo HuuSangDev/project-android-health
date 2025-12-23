@@ -1,5 +1,6 @@
 package com.example.app_selfcare;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.example.app_selfcare.Data.Model.Response.UserProfileResponse;
 import com.example.app_selfcare.Data.Model.Response.UserResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
+import com.example.app_selfcare.utils.LocaleManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,6 +30,12 @@ public class PersonalInfoActivity extends AppCompatActivity {
 
     private ImageView btnBack, profileImage;
     private TextView tvFullName, tvEmail, tvDateOfBirth, tvGender, tvHeight, tvWeight, tvHealthGoal;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocaleManager localeManager = new LocaleManager(newBase);
+        super.attachBaseContext(localeManager.applyLanguage(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

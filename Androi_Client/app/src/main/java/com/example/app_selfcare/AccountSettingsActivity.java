@@ -137,10 +137,15 @@ public class AccountSettingsActivity extends AppCompatActivity {
     }
 
     private void restartApp() {
-        Intent intent = new Intent(this, AccountSettingsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        // Restart toàn bộ app từ HomeActivity để áp dụng ngôn ngữ mới cho tất cả màn hình
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        finish();
+        
+        // Kết thúc tất cả Activity hiện tại
+        finishAffinity();
+        
+        // Animation chuyển đổi
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 

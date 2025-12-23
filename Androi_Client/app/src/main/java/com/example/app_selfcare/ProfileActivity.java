@@ -2,6 +2,7 @@ package com.example.app_selfcare;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import com.example.app_selfcare.Data.Model.Response.UserProfileResponse;
 import com.example.app_selfcare.Data.Model.Response.UserResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
+import com.example.app_selfcare.utils.LocaleManager;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -53,6 +55,12 @@ public class ProfileActivity extends AppCompatActivity {
     private LinearLayout updateInfor;
     private BarChart chartView;
     private TextView pointsText, weightText, bmiText, fullName, Email;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocaleManager localeManager = new LocaleManager(newBase);
+        super.attachBaseContext(localeManager.applyLanguage(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
