@@ -1,5 +1,6 @@
 package com.example.app_selfcare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.app_selfcare.Adapter.SavedFoodAdapter;
 import com.example.app_selfcare.Data.Model.Food;
+import com.example.app_selfcare.utils.LocaleManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -22,6 +24,12 @@ public class SavedFoodActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SavedFoodAdapter adapter;
     private final List<Food> foodList = new ArrayList<>();
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocaleManager localeManager = new LocaleManager(newBase);
+        super.attachBaseContext(localeManager.applyLanguage(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

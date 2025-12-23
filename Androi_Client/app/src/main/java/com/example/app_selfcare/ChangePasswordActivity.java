@@ -1,6 +1,7 @@
 // ChangePasswordActivity.java
 package com.example.app_selfcare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,6 +18,7 @@ import com.example.app_selfcare.Data.Model.Request.ChangePasswordRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
+import com.example.app_selfcare.utils.LocaleManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,6 +37,12 @@ public class ChangePasswordActivity extends AppCompatActivity {
     private boolean isConfirmPasswordVisible = false;
 
     private ApiService apiService;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocaleManager localeManager = new LocaleManager(newBase);
+        super.attachBaseContext(localeManager.applyLanguage(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +64,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
         confirmPasswordToggle = findViewById(R.id.confirmPasswordToggle);
         changePasswordButton = findViewById(R.id.changePasswordButton);
 
-        titleText.setText("Đổi mật khẩu");
+        titleText.setText(R.string.change_password);
 
         // Khởi tạo ApiService với token (user đã đăng nhập)
         apiService = ApiClient.getClientWithToken(this).create(ApiService.class);

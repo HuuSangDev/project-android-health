@@ -1,5 +1,6 @@
     package com.example.app_selfcare;
 
+    import android.content.Context;
     import android.content.Intent;
     import android.os.Bundle;
     import android.widget.TextView;
@@ -14,6 +15,7 @@
     import com.example.app_selfcare.Data.remote.ApiClient;
     import com.example.app_selfcare.Data.remote.ApiService;
     import com.example.app_selfcare.upload.InforSex;
+    import com.example.app_selfcare.utils.LocaleManager;
     import com.google.android.material.textfield.TextInputEditText;
 
     import retrofit2.Call;
@@ -23,6 +25,12 @@
     public class RegisterActivity extends AppCompatActivity {
 
         private TextInputEditText edtEmail, edtFullName, edtPassword, edtConfirmPassword;
+
+        @Override
+        protected void attachBaseContext(Context newBase) {
+            LocaleManager localeManager = new LocaleManager(newBase);
+            super.attachBaseContext(localeManager.applyLanguage(newBase));
+        }
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
