@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Món ăn đã lưu"
+            android:text="@string/saved_recipes"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -77,7 +77,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Trang chủ"
+                android:text="@string/nav_home"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -100,7 +100,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tập luyện"
+                android:text="@string/nav_workout"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -124,7 +124,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Món ăn"
+                android:text="@string/nav_food"
                 android:textColor="#FF9F63"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -147,7 +147,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cá nhân"
+                android:text="@string/nav_profile"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>

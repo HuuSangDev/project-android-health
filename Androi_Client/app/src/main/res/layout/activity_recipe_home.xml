@@ -36,9 +36,10 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvHelloName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Xin chào, An!"
+                        android:text="@string/hello_name"
                         android:textColor="@color/colorTextPrimary"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -47,7 +48,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Hôm nay bạn nấu món gì?"
+                        android:text="@string/what_cook_today"
                         android:textColor="@color/colorTextSecondary"
                         android:textSize="14sp" />
 
@@ -67,7 +68,7 @@
                 android:id="@+id/tvSaved"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Các món ăn đã lưu"
+                android:text="@string/saved_foods"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="#0F955A"
@@ -95,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="12dp"
-                    android:hint="Tìm kiếm công thức..."
+                    android:hint="@string/search_recipe"
                     android:textColorHint="#CCCCCC"
                     android:background="@null"
                     android:textSize="14sp" />
@@ -123,7 +124,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="All"
+                    android:text="@string/all"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:background="@drawable/bg_chip_selected"
@@ -137,7 +138,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sáng"
+                    android:text="@string/breakfast"
                     android:textColor="#0F955A"
                     android:background="@drawable/bg_chip_unselected"
                     android:padding="12dp"
@@ -150,7 +151,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Trưa"
+                    android:text="@string/lunch"
                     android:textColor="#0F955A"
                     android:background="@drawable/bg_chip_unselected"
                     android:padding="12dp"
@@ -163,7 +164,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Tối"
+                    android:text="@string/dinner"
                     android:textColor="#0F955A"
                     android:background="@drawable/bg_chip_unselected"
                     android:padding="12dp"
@@ -216,7 +217,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Trang chủ"
+                android:text="@string/nav_home"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -241,7 +242,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Tập luyện"
+                android:text="@string/nav_workout"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -267,7 +268,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Món Ăn"
+                android:text="@string/nav_food"
                 android:textColor="#FF9F63"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -291,7 +292,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Cá nhân"
+                android:text="@string/nav_profile"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>

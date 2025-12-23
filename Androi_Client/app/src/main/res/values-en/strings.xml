@@ -62,6 +62,7 @@
     <string name="kcal">%d kcal</string>
     
     <!-- Recipe -->
+    <string name="hello_name">Hello, %s!</string>
     <string name="what_cook_today">What are you cooking today?</string>
     <string name="saved_foods">Saved Foods</string>
     <string name="search_recipe">Search recipes...</string>
@@ -69,6 +70,7 @@
     <string name="breakfast">Breakfast</string>
     <string name="lunch">Lunch</string>
     <string name="dinner">Dinner</string>
+    <string name="exercises_text">%d exercises</string>
     
     <!-- Days of week -->
     <string name="mon">Mon</string>
@@ -86,4 +88,53 @@
     <string name="update_success">Update successful!</string>
     <string name="please_fill_all">Please fill in all fields</string>
     <string name="language_changed">Language changed</string>
+    
+    <!-- Login/Register -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="full_name">Full Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="no_account">Don\'t have an account? Register.</string>
+    <string name="have_account">Already have an account? Login.</string>
+    <string name="forgot_password">Forgot password?</string>
+    
+    <!-- Personal Info -->
+    <string name="personal_info_title">Personal Information</string>
+    <string name="user_name">User Name</string>
+    <string name="detail_info">Detail Information</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="gender">Gender</string>
+    <string name="height">Height</string>
+    <string name="health_goal">Health Goal</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    
+    <!-- Change Password -->
+    <string name="enter_old_password">Enter old password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="confirm_new_password">Confirm new password</string>
+    
+    <!-- Notifications -->
+    <string name="personal_points_update">Personal Points Update</string>
+    <string name="personal_points_desc">Adjust personal settings</string>
+    <string name="water_notification">Water Reminder</string>
+    <string name="water_notification_desc">You need to drink 2000ml water/day</string>
+    <string name="exercise_notification">Exercise Reminder</string>
+    <string name="exercise_notification_desc">Exercise regularly every day</string>
+    <string name="meal_notification">Meal Reminder</string>
+    <string name="meal_notification_desc">Remember to eat in calorie deficit</string>
+    
+    <!-- Help -->
+    <string name="help_support">Help &amp; Support</string>
+    <string name="faq">Frequently Asked Questions (FAQ)</string>
+    <string name="app_guide">App Usage Guide</string>
+    <string name="chat_zalo">Chat with us via Zalo</string>
+    <string name="send_feedback">Send Feedback / Report Bug</string>
+    <string name="privacy_policy">Privacy Policy &amp; Terms</string>
+    <string name="app_version">App Version</string>
+    
+    <!-- Saved Recipes -->
+    <string name="saved_recipes">Saved Recipes</string>
 </resources>

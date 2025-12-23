@@ -62,6 +62,7 @@
     <string name="kcal">%d kcal</string>
     
     <!-- Recipe -->
+    <string name="hello_name">Xin chào, %s!</string>
     <string name="what_cook_today">Hôm nay bạn nấu món gì?</string>
     <string name="saved_foods">Các món ăn đã lưu</string>
     <string name="search_recipe">Tìm kiếm công thức...</string>
@@ -69,6 +70,7 @@
     <string name="breakfast">Sáng</string>
     <string name="lunch">Trưa</string>
     <string name="dinner">Tối</string>
+    <string name="exercises_text">%d bài tập</string>
     
     <!-- Days of week -->
     <string name="mon">T2</string>
@@ -86,6 +88,55 @@
     <string name="update_success">Cập nhật thành công!</string>
     <string name="please_fill_all">Vui lòng nhập đầy đủ</string>
     <string name="language_changed">Đã đổi ngôn ngữ</string>
+    
+    <!-- Login/Register -->
+    <string name="login">Đăng nhập</string>
+    <string name="register">Đăng ký</string>
+    <string name="email">Email</string>
+    <string name="password">Mật khẩu</string>
+    <string name="full_name">Họ tên</string>
+    <string name="confirm_password">Xác nhận mật khẩu</string>
+    <string name="no_account">Chưa có tài khoản? Đăng ký.</string>
+    <string name="have_account">Đã có tài khoản? Đăng nhập.</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    
+    <!-- Personal Info -->
+    <string name="personal_info_title">Thông tin cá nhân</string>
+    <string name="user_name">Tên người dùng</string>
+    <string name="detail_info">Thông tin chi tiết</string>
+    <string name="date_of_birth">Ngày sinh</string>
+    <string name="gender">Giới tính</string>
+    <string name="height">Chiều cao</string>
+    <string name="health_goal">Mục tiêu sức khỏe</string>
+    <string name="male">Nam</string>
+    <string name="female">Nữ</string>
+    
+    <!-- Change Password -->
+    <string name="enter_old_password">Nhập mật khẩu cũ</string>
+    <string name="enter_new_password">Nhập mật khẩu mới</string>
+    <string name="confirm_new_password">Xác nhận mật khẩu mới</string>
+    
+    <!-- Notifications -->
+    <string name="personal_points_update">Cập nhật điểm cá nhân</string>
+    <string name="personal_points_desc">Điều chỉnh tác cá nhân</string>
+    <string name="water_notification">Thông báo uống nước</string>
+    <string name="water_notification_desc">Bạn cần uống 2000ml nước/ngày</string>
+    <string name="exercise_notification">Thông báo luyện tập</string>
+    <string name="exercise_notification_desc">Tập luyện điều độ mỗi ngày</string>
+    <string name="meal_notification">Thông báo bữa ăn</string>
+    <string name="meal_notification_desc">Hãy nhớ ăn trong thâm hụt calo</string>
+    
+    <!-- Help -->
+    <string name="help_support">Trợ giúp &amp; Hỗ trợ</string>
+    <string name="faq">Câu hỏi thường gặp (FAQ)</string>
+    <string name="app_guide">Hướng dẫn sử dụng ứng dụng</string>
+    <string name="chat_zalo">Chat ngay với chúng tôi qua Zalo</string>
+    <string name="send_feedback">Gửi phản hồi / Báo lỗi</string>
+    <string name="privacy_policy">Chính sách bảo mật &amp; Điều khoản</string>
+    <string name="app_version">Phiên bản ứng dụng</string>
+    
+    <!-- Saved Recipes -->
+    <string name="saved_recipes">Món ăn đã lưu</string>
     
     <!-- Legacy strings -->
     <string name="assessment_title">Assessment</string>

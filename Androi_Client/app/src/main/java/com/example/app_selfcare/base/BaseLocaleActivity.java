@@ -15,6 +15,7 @@ import com.example.app_selfcare.utils.ThemeManager;
 
 /**
  * Base Activity hỗ trợ đa ngôn ngữ và Dark Mode
+ * Tất cả Activity trong app nên kế thừa class này
  */
 public abstract class BaseLocaleActivity extends AppCompatActivity {
 
@@ -24,8 +25,8 @@ public abstract class BaseLocaleActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        // Áp dụng ngôn ngữ đã lưu
-        LocaleManager localeManager = new LocaleManager(newBase);
+        // Áp dụng ngôn ngữ đã lưu cho Activity này
+        localeManager = new LocaleManager(newBase);
         Context context = localeManager.applyLanguage(newBase);
         super.attachBaseContext(context);
     }
@@ -33,7 +34,9 @@ public abstract class BaseLocaleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // Khởi tạo managers
-        localeManager = new LocaleManager(this);
+        if (localeManager == null) {
+            localeManager = new LocaleManager(this);
+        }
         themeManager = new ThemeManager(this);
         
         // Áp dụng theme
@@ -45,14 +48,19 @@ public abstract class BaseLocaleActivity extends AppCompatActivity {
     @Override
     public void setContentView(int layoutResID) {
         View contentView = LayoutInflater.from(this).inflate(layoutResID, null);
-        View loading = LayoutInflater.from(this).inflate(R.layout.layout_global_loading, null);
-
-        FrameLayout root = new FrameLayout(this);
-        root.addView(contentView);
-        root.addView(loading);
-
-        super.setContentView(root);
-        loadingView = loading;
+        
+        // Kiểm tra xem layout loading có tồn tại không
+        try {
+            View loading = LayoutInflater.from(this).inflate(R.layout.layout_global_loading, null);
+            FrameLayout root = new FrameLayout(this);
+            root.addView(contentView);
+            root.addView(loading);
+            super.setContentView(root);
+            loadingView = loading;
+        } catch (Exception e) {
+            // Nếu không có layout loading, chỉ set content view bình thường
+            super.setContentView(contentView);
+        }
     }
 
     public void showLoading() {

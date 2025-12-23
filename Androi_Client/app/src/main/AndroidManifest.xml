@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".SelfCareApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,7 +14,8 @@
         android:roundIcon="@drawable/ic_logoapp"
         android:supportsRtl="true"
         android:theme="@style/Theme.App_selfCare"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:localeConfig="@xml/locales_config">
 
         <activity
             android:name=".BaseActivity"
