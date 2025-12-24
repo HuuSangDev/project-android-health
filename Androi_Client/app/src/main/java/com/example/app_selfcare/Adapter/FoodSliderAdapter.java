@@ -42,6 +42,13 @@ public class FoodSliderAdapter extends RecyclerView.Adapter<FoodSliderAdapter.Fo
         
         holder.tvFoodName.setText(food.getFoodName());
         
+        // Hiển thị calories
+        holder.tvCalories.setText((int) food.getCaloriesPer100g() + " cal");
+        
+        // Hiển thị thời gian nấu (prep + cook time)
+        int totalTime = food.getPrepTime() + food.getCookTime();
+        holder.tvCookTime.setText(totalTime + " phút");
+        
         // Load image
         if (food.getImageUrl() != null && !food.getImageUrl().isEmpty()) {
             Glide.with(context)
@@ -69,13 +76,15 @@ public class FoodSliderAdapter extends RecyclerView.Adapter<FoodSliderAdapter.Fo
     public static class FoodViewHolder extends RecyclerView.ViewHolder {
         CardView cardFood;
         ImageView ivFood;
-        TextView tvFoodName;
+        TextView tvFoodName, tvCalories, tvCookTime;
 
         public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
             cardFood = itemView.findViewById(R.id.cardFood);
             ivFood = itemView.findViewById(R.id.ivFood);
             tvFoodName = itemView.findViewById(R.id.tvFoodName);
+            tvCalories = itemView.findViewById(R.id.tvCalories);
+            tvCookTime = itemView.findViewById(R.id.tvCookTime);
         }
     }
 }

@@ -25,8 +25,6 @@ public class Exercise {
     String instructions; // hướng dẫn
     @Builder.Default
     String difficultyLevel = "BEGINNER"; // MỨC ĐỘ: BEGINNER, INTERMEDIATE, ADVANCED
-    String equipmentNeeded; // thiết bị cần dùng
-    String muscleGroups; // nhóm cơ luyện tập
     String imageUrl; // URL ảnh
     String videoUrl; // URL video hướng dẫn
 
@@ -35,12 +33,12 @@ public class Exercise {
     @ManyToOne
     @JoinColumn(name = "category_id")
     ExerciseCategory exerciseCategory;
+    
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
 
     @Enumerated(EnumType.STRING)
-    Goal goal ;
-
+    Goal goal;
 }
