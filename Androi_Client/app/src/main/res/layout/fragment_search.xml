@@ -103,6 +103,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Loading state -->
+            <LinearLayout
+                android:id="@+id/layoutLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:indeterminateTint="#FF9F63" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Đang tải dữ liệu..."
+                    android:textColor="#9EA0A5"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
             <!-- Empty state -->
             <LinearLayout
                 android:id="@+id/layoutEmptyState"
@@ -139,7 +163,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gợi ý cho bạn"
+                    android:text="Kết quả tìm kiếm"
                     android:textColor="#1F1F1F"
                     android:textSize="16sp"
                     android:textStyle="bold" />
