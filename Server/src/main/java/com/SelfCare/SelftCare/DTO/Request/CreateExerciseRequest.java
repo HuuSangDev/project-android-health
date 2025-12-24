@@ -21,8 +21,6 @@ public class CreateExerciseRequest {
      String description;
      String instructions;
      String difficultyLevel;
-     String equipmentNeeded;
-     String muscleGroups;
 
      Long categoryId;
 

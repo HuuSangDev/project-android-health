@@ -100,11 +100,10 @@ public class ExerciseResponse {
         e.setId(exerciseId);
         e.setName(exerciseName);
         e.setDescription(description != null ? description : "");
+        e.setInstructions(instructions != null ? instructions : "");
         e.setCaloriesPerMinute(caloriesPerMinute);
-        // caloriesBurned có thể tính theo 1 phút để hiển thị ở chỗ khác nếu cần
-        e.setCaloriesBurned((int) Math.round(caloriesPerMinute));
-        e.setDifficulty(mapDifficulty(difficultyLevel));
-        e.setCategoryId(category != null ? category.getCategoryName() : "");
+        e.setDifficultyLevel(mapDifficulty(difficultyLevel));
+        e.setCategoryName(category != null ? category.getCategoryName() : "");
         e.setImageUrl(imageUrl);
         return e;
     }
