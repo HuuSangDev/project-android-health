@@ -58,6 +58,9 @@
             android:name=".PersonalInfoActivity"
             android:exported="false" />
         <activity
+            android:name=".EditPersonalInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".Ui.Onboarding.Onboarding2Activity"
             android:exported="false" />
         <activity

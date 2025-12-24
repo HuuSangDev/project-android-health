@@ -57,6 +57,18 @@ public interface ApiService {
     @Multipart
     @PUT("app/userProfile/update")
     Call<ApiResponse<UserResponse>> updateProfile(
+            @Header("Authorization") String token,
+            @Part("gender") RequestBody gender,
+            @Part("dateOfBirth") RequestBody dateOfBirth,
+            @Part("height") RequestBody height,
+            @Part("weight") RequestBody weight,
+            @Part("healthGoal") RequestBody healthGoal,
+            @Part MultipartBody.Part avatar
+    );
+
+    @Multipart
+    @PUT("app/userProfile/update")
+    Call<ApiResponse<UserResponse>> updateProfileWithToken(
             @Part("gender") RequestBody gender,
             @Part("dateOfBirth") RequestBody dateOfBirth,
             @Part("height") RequestBody height,
