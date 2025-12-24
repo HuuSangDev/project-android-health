@@ -111,6 +111,19 @@
     <string name="male">Nam</string>
     <string name="female">Nữ</string>
     
+    <!-- Edit Personal Info -->
+    <string name="edit_personal_info">Chỉnh sửa thông tin</string>
+    <string name="tap_to_change_avatar">Nhấn để thay đổi ảnh đại diện</string>
+    <string name="select_date">Chọn ngày</string>
+    <string name="height_cm">Chiều cao (cm)</string>
+    <string name="weight_kg">Cân nặng (kg)</string>
+    <string name="enter_height">Nhập chiều cao</string>
+    <string name="enter_weight">Nhập cân nặng</string>
+    <string name="save_changes">Lưu thay đổi</string>
+    <string name="update_failed">Cập nhật thất bại</string>
+    <string name="invalid_number">Số không hợp lệ</string>
+    <string name="edit">Chỉnh sửa</string>
+    
     <!-- Change Password -->
     <string name="enter_old_password">Nhập mật khẩu cũ</string>
     <string name="enter_new_password">Nhập mật khẩu mới</string>
