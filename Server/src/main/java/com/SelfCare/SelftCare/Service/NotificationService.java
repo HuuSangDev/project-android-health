@@ -13,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +26,7 @@ public class NotificationService {
 
     NotificationRepository notificationRepository;
     SimpMessagingTemplate messagingTemplate;
+    FcmService fcmService;
 
     /**
      * Tạo và gửi thông báo khi có Food mới
@@ -54,19 +57,81 @@ public class NotificationService {
     }
 
     /**
-     * Lưu notification vào DB và gửi qua WebSocket
+     * Gửi thông báo tùy chỉnh (Admin dùng)
+     * @param title Tiêu đề thông báo
+     * @param message Nội dung thông báo
+     * @param type Loại: FOOD hoặc EXERCISE
+     * @param targetId ID của food/exercise (có thể null nếu thông báo chung)
+     */
+    public void sendCustomNotification(String title, String message, NotificationType type, Long targetId) {
+        Notification notification = Notification.builder()
+                .title(title)
+                .message(message)
+                .type(type)
+                .targetId(targetId)
+                .build();
+
+        saveAndBroadcast(notification);
+        log.info("Custom notification sent: {} - {}", title, message);
+    }
+
+    /**
+     * Gửi thông báo chung (không liên kết food/exercise cụ thể)
+     */
+    public void sendBroadcastNotification(String title, String message) {
+        Notification notification = Notification.builder()
+                .title(title)
+                .message(message)
+                .type(NotificationType.FOOD) // Default type
+                .targetId(null)
+                .build();
+
+        saveAndBroadcast(notification);
+        log.info("Broadcast notification sent: {} - {}", title, message);
+    }
+
+    /**
+     * Lưu notification vào DB, gửi qua WebSocket và FCM Push
      */
     private void saveAndBroadcast(Notification notification) {
-        // Lưu vào database
+        // 1. Lưu vào database
         Notification saved = notificationRepository.save(notification);
         log.info("Saved notification: {}", saved.getId());
 
-        // Convert sang Response
+        // 2. Convert sang Response
         NotificationResponse response = toResponse(saved);
 
-        // Gửi qua WebSocket tới topic /topic/notifications
+        // 3. Gửi qua WebSocket tới topic /topic/notifications
         messagingTemplate.convertAndSend("/topic/notifications", response);
         log.info("Broadcasted notification to /topic/notifications");
+
+        // 4. Gửi FCM Push Notification tới tất cả devices
+        sendFcmPush(saved);
+    }
+
+    /**
+     * Gửi FCM Push Notification
+     */
+    private void sendFcmPush(Notification notification) {
+        try {
+            // Tạo data payload để Android xử lý khi click
+            Map<String, String> data = new HashMap<>();
+            data.put("type", notification.getType().name());
+            data.put("targetId", String.valueOf(notification.getTargetId()));
+            data.put("notificationId", String.valueOf(notification.getId()));
+
+            // Gửi broadcast tới tất cả active tokens
+            fcmService.sendToAll(
+                    notification.getTitle(),
+                    notification.getMessage(),
+                    data
+            );
+
+            log.info("FCM push notification sent for notification: {}", notification.getId());
+        } catch (Exception e) {
+            // Không throw exception để không ảnh hưởng flow chính
+            log.error("Failed to send FCM push notification: {}", e.getMessage());
+        }
     }
 
     /**

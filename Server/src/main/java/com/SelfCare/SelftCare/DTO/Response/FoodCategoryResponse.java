@@ -12,4 +12,5 @@ public class FoodCategoryResponse {
     Long categoryId;
     String categoryName;
     String description;
+    int foodCount;
 }

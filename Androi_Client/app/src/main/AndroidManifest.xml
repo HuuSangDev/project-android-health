@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".SelfCareApplication"
@@ -131,6 +132,36 @@
         <activity
             android:name=".ChatActivity"
             android:exported="false" />
+        <activity
+            android:name=".FoodsByCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExercisesByCategoryActivity"
+            android:exported="false" />
+
+        <!-- Firebase Cloud Messaging Service -->
+        <service
+            android:name=".Service.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- FCM default notification channel -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="selfcare_notifications" />
+
+        <!-- FCM default notification icon -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+
+        <!-- FCM default notification color -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/green_primary" />
     </application>
 
 </manifest>

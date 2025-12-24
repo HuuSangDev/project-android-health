@@ -4,11 +4,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.app_selfcare.Data.Model.Response.FoodCategoryResponse;
 import com.example.app_selfcare.R;
 
@@ -23,6 +25,7 @@ public class FoodCategoryAdapter extends RecyclerView.Adapter<FoodCategoryAdapte
     public interface OnCategoryActionListener {
         void onEditClick(FoodCategoryResponse category);
         void onDeleteClick(FoodCategoryResponse category);
+        void onItemClick(FoodCategoryResponse category);
     }
 
     public FoodCategoryAdapter(OnCategoryActionListener listener) {
@@ -58,12 +61,27 @@ public class FoodCategoryAdapter extends RecyclerView.Adapter<FoodCategoryAdapte
             holder.tvDescription.setVisibility(View.GONE);
         }
 
-        holder.btnEdit.setOnClickListener(v -> {
-            if (listener != null) listener.onEditClick(category);
+        // Hiển thị số lượng món ăn
+        holder.tvItemCount.setText(category.getFoodCount() + " món");
+
+        // Load icon if available
+        if (category.getIconUrl() != null && !category.getIconUrl().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(category.getIconUrl())
+                    .placeholder(R.drawable.ic_food_placeholder)
+                    .error(R.drawable.ic_food_placeholder)
+                    .into(holder.ivCategoryIcon);
+        } else {
+            holder.ivCategoryIcon.setImageResource(R.drawable.ic_food_placeholder);
+        }
+
+        // Click vào item để xem danh sách món ăn
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) listener.onItemClick(category);
         });
 
-        holder.btnDelete.setOnClickListener(v -> {
-            if (listener != null) listener.onDeleteClick(category);
+        holder.btnEdit.setOnClickListener(v -> {
+            if (listener != null) listener.onEditClick(category);
         });
     }
 
@@ -73,15 +91,18 @@ public class FoodCategoryAdapter extends RecyclerView.Adapter<FoodCategoryAdapte
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvCategoryName, tvDescription;
-        ImageButton btnEdit, btnDelete;
+        ImageView ivCategoryIcon;
+        TextView tvCategoryName, tvDescription, tvItemCount, tvTag;
+        ImageButton btnEdit;
 
         ViewHolder(View itemView) {
             super(itemView);
+            ivCategoryIcon = itemView.findViewById(R.id.ivCategoryIcon);
             tvCategoryName = itemView.findViewById(R.id.tvCategoryName);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvItemCount = itemView.findViewById(R.id.tvItemCount);
+            tvTag = itemView.findViewById(R.id.tvTag);
             btnEdit = itemView.findViewById(R.id.btnEdit);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
 }

@@ -19,7 +19,8 @@ public enum ErrorCode {
     INVALID_PASSWORD(106, "invalid password"),
     PASSWORD_NOT_MATCH(107, "password not match"),
     USER_PROFILE_NULL(188,"userprofile is null "),
-    NOTIFICATION_NOT_FOUND(206,"notification not found")
+    NOTIFICATION_NOT_FOUND(206,"notification not found"),
+    INVALID_REQUEST(206,"invalid_request")
     ;
     private int code;
     private String message;

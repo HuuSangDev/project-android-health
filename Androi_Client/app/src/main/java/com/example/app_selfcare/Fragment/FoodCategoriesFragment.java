@@ -1,11 +1,12 @@
 package com.example.app_selfcare.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.Model.Response.FoodCategoryResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
+import com.example.app_selfcare.FoodsByCategoryActivity;
 import com.example.app_selfcare.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -40,6 +42,8 @@ public class FoodCategoriesFragment extends Fragment implements FoodCategoryAdap
     private FloatingActionButton fabAdd;
     private View layoutLoading;
     private View layoutEmpty;
+    private TextView tvTotalCategories;
+    private TextView tvActiveCategories;
 
     private FoodCategoryAdapter adapter;
     private ApiService apiService;
@@ -68,6 +72,8 @@ public class FoodCategoriesFragment extends Fragment implements FoodCategoryAdap
         fabAdd = view.findViewById(R.id.fabAddCategory);
         layoutLoading = view.findViewById(R.id.layoutLoading);
         layoutEmpty = view.findViewById(R.id.layoutEmpty);
+        tvTotalCategories = view.findViewById(R.id.tvTotalCategories);
+        tvActiveCategories = view.findViewById(R.id.tvActiveCategories);
     }
 
     private void setupRecyclerView() {
@@ -95,6 +101,9 @@ public class FoodCategoriesFragment extends Fragment implements FoodCategoryAdap
                     categoryList.addAll(response.body().getResult());
                     adapter.setData(categoryList);
 
+                    // Cập nhật thống kê
+                    updateStats();
+
                     showEmpty(categoryList.isEmpty());
                 } else {
                     Log.e(TAG, "Load categories failed: " + response.code());
@@ -112,6 +121,18 @@ public class FoodCategoriesFragment extends Fragment implements FoodCategoryAdap
                 }
             }
         });
+    }
+
+    private void updateStats() {
+        int total = categoryList.size();
+        int active = 0;
+        for (FoodCategoryResponse cat : categoryList) {
+            if (cat.getFoodCount() > 0) {
+                active++;
+            }
+        }
+        tvTotalCategories.setText(String.valueOf(total));
+        tvActiveCategories.setText(String.valueOf(active));
     }
 
     private void showAddCategoryDialog() {
@@ -168,6 +189,15 @@ public class FoodCategoriesFragment extends Fragment implements FoodCategoryAdap
     }
 
     // ==================== OnCategoryActionListener ====================
+
+    @Override
+    public void onItemClick(FoodCategoryResponse category) {
+        // Mở màn hình danh sách món ăn theo danh mục
+        Intent intent = new Intent(requireContext(), FoodsByCategoryActivity.class);
+        intent.putExtra("categoryId", category.getCategoryId());
+        intent.putExtra("categoryName", category.getCategoryName());
+        startActivity(intent);
+    }
 
     @Override
     public void onEditClick(FoodCategoryResponse category) {

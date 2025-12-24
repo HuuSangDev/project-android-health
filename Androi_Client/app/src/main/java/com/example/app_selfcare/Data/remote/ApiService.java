@@ -2,7 +2,8 @@ package com.example.app_selfcare.Data.remote;
 
 import com.example.app_selfcare.Data.Model.Request.ChatRequest;
 import com.example.app_selfcare.Data.Model.Request.ChangePasswordRequest;
-import com.example.app_selfcare.Data.Model.Request.CreateDailyLogRequest;
+import com.example.app_selfcare.Data.Model.Request.DeviceTokenRequest;
+import com.example.app_selfcare.Data.Model.Request.ExerciseCategoryCreateRequest;
 import com.example.app_selfcare.Data.Model.Request.FoodCategoryCreateRequest;
 import com.example.app_selfcare.Data.Model.Request.FoodSearchRequest;
 import com.example.app_selfcare.Data.Model.Request.ForgotPasswordRequest;
@@ -13,7 +14,8 @@ import com.example.app_selfcare.Data.Model.Request.UserRegisterRequest;
 import com.example.app_selfcare.Data.Model.Request.VerifyOtpRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.Model.Response.ChatResponse;
-import com.example.app_selfcare.Data.Model.Response.DailyLogResponse;
+import com.example.app_selfcare.Data.Model.Response.DeviceTokenResponse;
+import com.example.app_selfcare.Data.Model.Response.ExerciseCategoryResponse;
 import com.example.app_selfcare.Data.Model.Response.FoodCategoryResponse;
 import com.example.app_selfcare.Data.Model.Response.FoodResponse;
 import com.example.app_selfcare.Data.Model.Response.PageResponse;
@@ -172,6 +174,29 @@ public interface ApiService {
     @DELETE("app/foods/{foodId}")
     Call<ApiResponse<Void>> deleteFood(@Path("foodId") long foodId);
 
+    // ==================== Foods by Category ====================
+    @GET("app/foods/category/{categoryId}")
+    Call<ApiResponse<List<FoodResponse>>> getFoodsByCategory(@Path("categoryId") long categoryId);
+
+    // ==================== Exercises by Category ====================
+    @GET("app/exercises/category/{categoryId}")
+    Call<ApiResponse<List<ExerciseResponse>>> getExercisesByCategory(@Path("categoryId") long categoryId);
+
+    // ==================== Exercise Category APIs ====================
+    @GET("app/exercise-categories/all")
+    Call<ApiResponse<List<ExerciseCategoryResponse>>> getAllExerciseCategories();
+
+    @POST("app/exercise-categories/create")
+    Call<ApiResponse<ExerciseCategoryResponse>> createExerciseCategory(@Body ExerciseCategoryCreateRequest request);
+
+    @PUT("app/exercise-categories/{categoryId}")
+    Call<ApiResponse<ExerciseCategoryResponse>> updateExerciseCategory(
+            @Path("categoryId") long categoryId,
+            @Body ExerciseCategoryCreateRequest request);
+
+    @DELETE("app/exercise-categories/{categoryId}")
+    Call<ApiResponse<Void>> deleteExerciseCategory(@Path("categoryId") long categoryId);
+
     // ==================== Saved Foods APIs ====================
     @POST("app/saved-foods/save")
     Call<ApiResponse<String>> saveFood(@Body SaveFoodRequest request);
@@ -185,20 +210,14 @@ public interface ApiService {
     @GET("app/saved-foods/check/{foodId}")
     Call<ApiResponse<Boolean>> checkIfFoodSaved(@Path("foodId") Long foodId);
 
-    // ==================== Daily Logs APIs ====================
-    @GET("app/daily-logs/last-7-days")
-    Call<ApiResponse<List<DailyLogResponse>>> getLast7DaysLogs();
+    // ==================== Device Token APIs (FCM) ====================
+    @POST("app/device-tokens")
+    Call<ApiResponse<DeviceTokenResponse>> registerDeviceToken(@Body DeviceTokenRequest request);
 
-    @GET("app/daily-logs/previous-week")
-    Call<ApiResponse<List<DailyLogResponse>>> getPreviousWeekLogs();
+    @DELETE("app/device-tokens/{token}")
+    Call<ApiResponse<Void>> unregisterDeviceToken(@Path("token") String token);
 
-    @GET("app/daily-logs/today")
-    Call<ApiResponse<DailyLogResponse>> getTodayLog();
-
-    @POST("app/daily-logs/create-or-update")
-    Call<ApiResponse<DailyLogResponse>> createOrUpdateDailyLog(@Body CreateDailyLogRequest request);
-
-    @POST("app/daily-logs/generate-sample-data")
-    Call<ApiResponse<String>> generateSampleData();
+    @DELETE("app/device-tokens/all")
+    Call<ApiResponse<Void>> unregisterAllDeviceTokens();
 
 }

@@ -67,6 +67,16 @@ public class FoodController {
                 .build();
     }
 
+    @GetMapping("/category/{categoryId}")
+    ApiResponse<List<FoodCreateResponse>> getFoodsByCategory(@PathVariable Long categoryId) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return ApiResponse.<List<FoodCreateResponse>>builder()
+                .message("get foods by category success")
+                .result(foodService.getFoodsByCategory(email, categoryId))
+                .build();
+    }
+
 
     @PostMapping("/search")
     public ApiResponse<Page<FoodCreateResponse>> searchFood(

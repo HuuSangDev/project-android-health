@@ -63,17 +63,14 @@ public class SavedFoodActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         tvEmptyState = findViewById(R.id.tvEmptyState);
     }
-
     private void initApiService() {
         apiService = ApiClient.getClientWithToken(this).create(ApiService.class);
     }
-
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         adapter = new SavedFoodAdapter(savedFoodList, this);
         recyclerView.setAdapter(adapter);
     }
-
     private void setupClickListeners() {
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
@@ -85,10 +82,8 @@ public class SavedFoodActivity extends AppCompatActivity {
 
         findViewById(R.id.navWorkout).setOnClickListener(v ->
                 startActivity(new Intent(this, WorkoutActivity.class)));
-
         findViewById(R.id.navPlanner).setOnClickListener(v ->
                 startActivity(new Intent(this, RecipeHomeActivity.class)));
-
         findViewById(R.id.navProfile).setOnClickListener(v ->
                 startActivity(new Intent(this, ProfileActivity.class)));
     }
@@ -101,7 +96,6 @@ public class SavedFoodActivity extends AppCompatActivity {
             public void onResponse(Call<ApiResponse<List<SavedFoodResponse>>> call, 
                                  Response<ApiResponse<List<SavedFoodResponse>>> response) {
                 showLoading(false);
-                
                 if (response.isSuccessful() && response.body() != null) {
                     List<SavedFoodResponse> savedFoods = response.body().getResult();
                     updateSavedFoodsList(savedFoods);
@@ -110,7 +104,6 @@ public class SavedFoodActivity extends AppCompatActivity {
                     showEmptyState(true);
                 }
             }
-
             @Override
             public void onFailure(Call<ApiResponse<List<SavedFoodResponse>>> call, Throwable t) {
                 showLoading(false);
@@ -119,25 +112,20 @@ public class SavedFoodActivity extends AppCompatActivity {
             }
         });
     }
-
     private void updateSavedFoodsList(List<SavedFoodResponse> savedFoods) {
         savedFoodList.clear();
         savedFoodList.addAll(savedFoods);
         adapter.notifyDataSetChanged();
-        
         showEmptyState(savedFoods.isEmpty());
     }
-
     private void showLoading(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
         recyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
-
     private void showEmptyState(boolean show) {
         tvEmptyState.setVisibility(show ? View.VISIBLE : View.GONE);
         recyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
-
     @Override
     protected void onResume() {
         super.onResume();
