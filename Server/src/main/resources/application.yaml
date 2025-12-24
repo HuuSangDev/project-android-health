@@ -60,8 +60,5 @@ gemini:
   # Sử dụng gemini-1.5-flash (nhanh hơn) hoặc gemini-1.5-pro (chính xác hơn)
   api-url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
 
-# Firebase Configuration
-# QUAN TRỌNG: Không commit file serviceAccountKey.json lên git!
-# Thêm vào .gitignore: src/main/resources/firebase/serviceAccountKey.json
 firebase:
   service-account-file: "firebase/serviceAccountKey.json"

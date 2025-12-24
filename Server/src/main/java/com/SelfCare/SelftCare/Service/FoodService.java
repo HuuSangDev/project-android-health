@@ -117,8 +117,10 @@ public class FoodService {
 
         Food saved = foodRepository.save(food);
         
-        // Gửi thông báo qua WebSocket
-        notificationService.notifyNewFood(saved.getFoodId(), saved.getFoodName());
+        // Gửi thông báo qua WebSocket theo goal của food
+        if (saved.getGoal() != null) {
+            notificationService.notifyNewFood(saved.getFoodId(), saved.getFoodName(), saved.getGoal());
+        }
         
         // 5. Build Response
         return FoodCreateResponse.builder()
@@ -222,6 +224,16 @@ public class FoodService {
                 .map(foodMapper::toFoodResponse)
                 .collect(Collectors.toList());
 
+    }
+
+    /**
+     * Lấy tất cả Food không lọc theo goal (dành cho Admin)
+     */
+    public List<FoodCreateResponse> getAllFoodsNoFilter() {
+        List<Food> foods = foodRepository.findAll();
+        return foods.stream()
+                .map(foodMapper::toFoodResponse)
+                .collect(Collectors.toList());
     }
 
     @Cacheable(value = "foodsByMeal", key = "#email + '_' + #mealType")

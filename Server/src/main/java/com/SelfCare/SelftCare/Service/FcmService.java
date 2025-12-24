@@ -1,5 +1,6 @@
 package com.SelfCare.SelftCare.Service;
 
+import com.SelfCare.SelftCare.Enum.Goal;
 import com.SelfCare.SelftCare.Repository.DeviceTokenRepository;
 import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
@@ -103,6 +104,33 @@ public class FcmService {
         int batchSize = 500;
         for (int i = 0; i < allTokens.size(); i += batchSize) {
             List<String> batch = allTokens.subList(i, Math.min(i + batchSize, allTokens.size()));
+            sendToTokens(batch, title, body, data);
+        }
+    }
+
+    /**
+     * Gửi push notification tới users có goal cụ thể
+     */
+    @Transactional
+    public void sendToUsersByGoal(Goal goal, String title, String body, Map<String, String> data) {
+        if (goal == null) {
+            log.warn("Goal is null, skipping FCM push");
+            return;
+        }
+
+        List<String> tokens = deviceTokenRepository.findActiveTokenStringsByGoal(goal);
+        
+        if (tokens.isEmpty()) {
+            log.info("No active tokens found for goal: {}", goal);
+            return;
+        }
+
+        log.info("Sending FCM to {} tokens with goal: {}", tokens.size(), goal);
+
+        // FCM giới hạn 500 tokens mỗi lần gửi multicast
+        int batchSize = 500;
+        for (int i = 0; i < tokens.size(); i += batchSize) {
+            List<String> batch = tokens.subList(i, Math.min(i + batchSize, tokens.size()));
             sendToTokens(batch, title, body, data);
         }
     }

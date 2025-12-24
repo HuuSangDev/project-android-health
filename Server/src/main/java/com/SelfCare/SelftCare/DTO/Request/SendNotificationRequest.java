@@ -1,5 +1,6 @@
 package com.SelfCare.SelftCare.DTO.Request;
 
+import com.SelfCare.SelftCare.Enum.Goal;
 import com.SelfCare.SelftCare.Enum.NotificationType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -14,4 +15,5 @@ public class SendNotificationRequest {
     String message;
     NotificationType type;  // FOOD hoặc EXERCISE
     Long targetId;          // ID của food/exercise (optional)
+    Goal goal;              // Goal để gửi notification (null = broadcast tất cả)
 }

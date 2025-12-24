@@ -1,6 +1,7 @@
 package com.SelfCare.SelftCare.Repository;
 
 import com.SelfCare.SelftCare.Entity.DeviceToken;
+import com.SelfCare.SelftCare.Enum.Goal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -39,6 +40,15 @@ public interface DeviceTokenRepository extends JpaRepository<DeviceToken, Long> 
      */
     @Query("SELECT dt.token FROM DeviceToken dt WHERE dt.user.id = :userId AND dt.isActive = true")
     List<String> findActiveTokenStringsByUserId(@Param("userId") Long userId);
+
+    /**
+     * Lấy token string active của users có goal cụ thể
+     */
+    @Query("SELECT dt.token FROM DeviceToken dt " +
+           "JOIN dt.user u " +
+           "JOIN u.userProfile up " +
+           "WHERE dt.isActive = true AND up.healthGoal = :goal")
+    List<String> findActiveTokenStringsByGoal(@Param("goal") Goal goal);
 
     /**
      * Deactivate token (khi FCM báo token invalid)

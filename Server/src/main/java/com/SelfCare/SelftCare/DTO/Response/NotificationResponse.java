@@ -1,5 +1,6 @@
 package com.SelfCare.SelftCare.DTO.Response;
 
+import com.SelfCare.SelftCare.Enum.Goal;
 import com.SelfCare.SelftCare.Enum.NotificationType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,6 +18,7 @@ public class NotificationResponse {
     String message;
     NotificationType type;
     Long targetId;
+    Goal goal;
     boolean isRead;
     LocalDateTime createdAt;
 }
