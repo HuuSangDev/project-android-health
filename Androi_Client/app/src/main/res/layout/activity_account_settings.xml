@@ -45,6 +45,57 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:padding="16dp">
+        <!-- Backup & Restore + Premium (NEW) -->
+        <LinearLayout
+            android:id="@+id/layoutBackupPremium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="14dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBackupRestore"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:text="Sao lưu và Khôi phục"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:paddingHorizontal="18dp"
+                app:icon="@drawable/ic_cloud"
+                app:iconPadding="10dp"
+                app:iconTint="@android:color/white"
+                app:backgroundTint="#12B886"
+                app:cornerRadius="18dp" />
+
+            <TextView
+                android:id="@+id/tvBackupHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Đăng nhập và đồng bộ dữ liệu của bạn"
+                android:textColor="#666666"
+                android:textSize="13sp"
+                android:gravity="center" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoPremium"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="12dp"
+                android:text="Chuyển sang Premium"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:paddingHorizontal="18dp"
+                app:icon="@drawable/ic_crown"
+                app:iconPadding="10dp"
+                app:iconTint="#111111"
+                app:backgroundTint="#FBBF24"
+                app:cornerRadius="18dp" />
+
+        </LinearLayout>
+
 
 
         <LinearLayout

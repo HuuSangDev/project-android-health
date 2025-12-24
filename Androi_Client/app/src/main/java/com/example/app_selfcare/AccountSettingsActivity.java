@@ -16,7 +16,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     private ImageView backButton;
     private TextView titleText;
-    private LinearLayout notificationLayout, personalInfoLayout, passwordLayout, helpLayout;
+    private LinearLayout notificationLayout, personalInfoLayout, passwordLayout, helpLayout, GoPremium;
     private Button signOutButton;
 
     @Override
@@ -36,6 +36,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         passwordLayout = findViewById(R.id.passwordLayout);
         helpLayout = findViewById(R.id.helpLayout);
         signOutButton = findViewById(R.id.signOutButton);
+        GoPremium = findViewById(R.id.btnGoPremium);
 
         titleText.setText("Cài đặt tài khoản");
     }
@@ -54,6 +55,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 Log.d("DEBUG_CLICK", "Đã nhấn vào Thông tin cá nhân");
                 // Mở màn chỉ hiển thị thông tin cá nhân từ backend
                 Intent intent = new Intent(AccountSettingsActivity.this, PersonalInfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        GoPremium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AccountSettingsActivity.this, PremiumPackageActivity.class);
                 startActivity(intent);
             }
         });
