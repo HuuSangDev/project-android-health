@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.Dialog;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -24,6 +27,7 @@ import com.example.app_selfcare.Data.Model.Response.UserResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
 import com.example.app_selfcare.utils.LocaleManager;
+import com.example.app_selfcare.utils.ImageUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +37,7 @@ public class PersonalInfoActivity extends AppCompatActivity {
 
     private ImageView btnBack, btnEdit, profileImage;
     private TextView tvFullName, tvEmail, tvDateOfBirth, tvGender, tvHeight, tvWeight, tvHealthGoal;
+    private String currentAvatarUrl; // Lưu URL ảnh hiện tại
 
     private ActivityResultLauncher<Intent> editProfileLauncher;
 
@@ -90,6 +95,9 @@ public class PersonalInfoActivity extends AppCompatActivity {
             Intent intent = new Intent(this, EditPersonalInfoActivity.class);
             editProfileLauncher.launch(intent);
         });
+        
+        // Click vào ảnh profile để xem chi tiết
+        profileImage.setOnClickListener(v -> showImageDetail());
     }
 
     private void fetchPersonalInfo() {
@@ -117,11 +125,11 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 UserProfileResponse profile = user.getUserProfileResponse();
                 if (profile != null) {
                     if (profile.getAvatarUrl() != null && !profile.getAvatarUrl().isEmpty()) {
-                        Glide.with(PersonalInfoActivity.this)
-                                .load(profile.getAvatarUrl())
-                                .placeholder(R.drawable.ic_proflie)
-                                .error(R.drawable.ic_proflie)
-                                .into(profileImage);
+                        currentAvatarUrl = profile.getAvatarUrl(); // Lưu URL ảnh
+                        ImageUtils.loadImageSafely(PersonalInfoActivity.this, profile.getAvatarUrl(), profileImage);
+                    } else {
+                        // Nếu không có avatar URL, hiển thị ảnh mặc định
+                        profileImage.setImageResource(R.drawable.ic_proflie);
                     }
 
                     if (profile.getDateOfBirth() != null) {
@@ -147,6 +155,41 @@ public class PersonalInfoActivity extends AppCompatActivity {
                 Toast.makeText(PersonalInfoActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showImageDetail() {
+        if (currentAvatarUrl == null || currentAvatarUrl.isEmpty()) {
+            Toast.makeText(this, "Không có ảnh để hiển thị", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Tạo dialog để hiển thị ảnh phóng to
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_image_detail);
+        
+        // Thiết lập dialog full screen
+        Window window = dialog.getWindow();
+        if (window != null) {
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, 
+                           WindowManager.LayoutParams.MATCH_PARENT);
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                           WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+
+        ImageView imageView = dialog.findViewById(R.id.imageViewDetail);
+        TextView btnClose = dialog.findViewById(R.id.btnCloseDialog);
+
+        // Load ảnh vào dialog
+        ImageUtils.loadImageSafely(this, currentAvatarUrl, imageView, R.drawable.ic_proflie, false);
+
+        // Đóng dialog khi click nút close
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+        
+        // Đóng dialog khi click vào ảnh
+        imageView.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 }
 

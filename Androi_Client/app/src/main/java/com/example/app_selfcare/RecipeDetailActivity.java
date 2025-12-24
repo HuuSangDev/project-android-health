@@ -79,7 +79,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     private void fetchFoodDetail() {
-        apiService.getFoodById(foodId).enqueue(new Callback<ApiResponse<FoodResponse>>() {
+        SharedPreferences prefs = getSharedPreferences("APP_DATA", MODE_PRIVATE);
+        String token = prefs.getString("TOKEN", null);
+
+        if (token == null) {
+            Toast.makeText(this, "Vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        apiService.getFoodById(foodId, "Bearer " + token).enqueue(new Callback<ApiResponse<FoodResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<FoodResponse>> call,
                                    Response<ApiResponse<FoodResponse>> response) {

@@ -1,6 +1,7 @@
 package com.example.app_selfcare;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -140,9 +141,18 @@ public class FoodDetailActivity extends AppCompatActivity {
     }
 
     private void loadFoodDetail(int id) {
+        SharedPreferences prefs = getSharedPreferences("APP_DATA", MODE_PRIVATE);
+        String token = prefs.getString("TOKEN", null);
+
+        if (token == null) {
+            Toast.makeText(this, "Vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         showLoading(true);
 
-        apiService.getFoodById(id).enqueue(new Callback<ApiResponse<FoodResponse>>() {
+        apiService.getFoodById(id, "Bearer " + token).enqueue(new Callback<ApiResponse<FoodResponse>>() {
             @Override
             public void onResponse(Call<ApiResponse<FoodResponse>> call,
                                    Response<ApiResponse<FoodResponse>> response) {
