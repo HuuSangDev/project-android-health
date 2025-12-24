@@ -19,6 +19,7 @@ import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.Model.Response.SavedFoodResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
+import com.example.app_selfcare.utils.LocaleManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

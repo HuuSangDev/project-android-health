@@ -183,32 +183,5 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 saved ? R.drawable.ic_saved : R.drawable.ic_save
         );
     }
-    private void saveFood(Food food) {
-        SharedPreferences prefs = getSharedPreferences("SAVED_FOODS", MODE_PRIVATE);
-        Gson gson = new Gson();
-
-        String json = prefs.getString("foods", "");
-        Type type = new TypeToken<List<Food>>(){}.getType();
-
-        List<Food> savedFoods = json.isEmpty()
-                ? new ArrayList<>()
-                : gson.fromJson(json, type);
-
-        // tránh lưu trùng
-        for (Food f : savedFoods) {
-            if (f.getId().equals(food.getId())) {
-                Toast.makeText(this, "Món ăn đã được lưu trước đó", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
-        savedFoods.add(food);
-
-        prefs.edit()
-                .putString("foods", gson.toJson(savedFoods))
-                .apply();
-
-        Toast.makeText(this, "Đã lưu món ăn", Toast.LENGTH_SHORT).show();
-    }
 
 }
