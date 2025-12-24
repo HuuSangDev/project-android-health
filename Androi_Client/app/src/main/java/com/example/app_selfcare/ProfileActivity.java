@@ -13,8 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
@@ -28,24 +30,23 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.example.app_selfcare.R;
+import com.example.app_selfcare.Data.Model.Request.CreateDailyLogRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
+import com.example.app_selfcare.Data.Model.Response.DailyLogResponse;
 import com.example.app_selfcare.Data.Model.Response.UserProfileResponse;
 import com.example.app_selfcare.Data.Model.Response.UserResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
+import com.example.app_selfcare.utils.ChartManager;
 import com.example.app_selfcare.utils.LocaleManager;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.textfield.TextInputEditText;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -54,7 +55,14 @@ public class ProfileActivity extends AppCompatActivity {
     private LinearLayout navHome, navWorkout, navPlanner, navProfile;
     private LinearLayout updateInfor;
     private BarChart chartView;
+    private ProgressBar chartProgressBar;
     private TextView pointsText, weightText, bmiText, fullName, Email;
+    private TextView tvCurrentWeight, tvWeightChange, tvAverageWeight;
+    private TextView tvWeekLabel, tvWeekDateRange;
+    private ImageView btnPreviousWeek, btnNextWeek;
+    private ChartManager chartManager;
+    private ApiService apiService;
+    private boolean isCurrentWeek = true;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -79,18 +87,26 @@ public class ProfileActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.profileImage);
 
         initViews();
-        setupChart();
-        setupStats();
         setupClickListeners();
         fetchProfile();
+        generateSampleDataIfNeeded();
+        loadChartData();
     }
 
     @SuppressLint("WrongViewCast")
     private void initViews() {
         chartView = findViewById(R.id.chartView);
+        chartProgressBar = findViewById(R.id.chartProgressBar);
         pointsText = findViewById(R.id.pointsText);
         weightText = findViewById(R.id.weightText);
         bmiText = findViewById(R.id.bmiText);
+        tvCurrentWeight = findViewById(R.id.tvCurrentWeight);
+        tvWeightChange = findViewById(R.id.tvWeightChange);
+        tvAverageWeight = findViewById(R.id.tvAverageWeight);
+        tvWeekLabel = findViewById(R.id.tvWeekLabel);
+        tvWeekDateRange = findViewById(R.id.tvWeekDateRange);
+        btnPreviousWeek = findViewById(R.id.btnPreviousWeek);
+        btnNextWeek = findViewById(R.id.btnNextWeek);
 
         navHome = findViewById(R.id.navHome);
         navWorkout = findViewById(R.id.navWorkout);
@@ -99,6 +115,12 @@ public class ProfileActivity extends AppCompatActivity {
         btnSettings = findViewById(R.id.btnSettings);
         btnBack = findViewById(R.id.btnBack);
         updateInfor = findViewById(R.id.updateInfor);
+
+        chartManager = new ChartManager(chartView, this);
+        apiService = ApiClient.getClientWithToken(this).create(ApiService.class);
+        
+        isCurrentWeek = true;
+        updateWeekLabel();
     }
 
     private void fetchProfile() {
@@ -171,38 +193,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void setupChart() {
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, 75f));
-        entries.add(new BarEntry(1, 85f));
-        entries.add(new BarEntry(2, 90f));
-        entries.add(new BarEntry(3, 80f));
-        entries.add(new BarEntry(4, 95f));
-        entries.add(new BarEntry(5, 78f));
-        entries.add(new BarEntry(6, 88f));
-
-        BarDataSet dataSet = new BarDataSet(entries, "Tiến độ");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        dataSet.setValueTextSize(12f);
-
-        BarData barData = new BarData(dataSet);
-        chartView.setData(barData);
-        chartView.getDescription().setEnabled(false);
-        chartView.getLegend().setEnabled(false);
-        chartView.getXAxis().setDrawGridLines(false);
-        chartView.getAxisLeft().setDrawGridLines(false);
-        chartView.getAxisRight().setEnabled(false);
-        chartView.animateY(1000);
-        chartView.invalidate();
-    }
-
-    private void setupStats() {
-        pointsText.setText("Tăng cân");
-        weightText.setText("68 kg");
-        bmiText.setText("25.4");
-    }
-
-    private void setupClickListeners() {
+private void setupClickListeners() {
         btnBack.setOnClickListener(v -> finish());
         btnSettings.setOnClickListener(v -> {
             startActivity(new Intent(this, AccountSettingsActivity.class));
@@ -215,6 +206,50 @@ public class ProfileActivity extends AppCompatActivity {
         navWorkout.setOnClickListener(v -> navigateAndFinish(WorkoutActivity.class));
         navPlanner.setOnClickListener(v -> navigateAndFinish(RecipeHomeActivity.class));
         navProfile.setOnClickListener(v -> { /* Đang ở Profile */ });
+
+        // Week navigation
+        btnPreviousWeek.setOnClickListener(v -> goToPreviousWeek());
+        btnNextWeek.setOnClickListener(v -> goToNextWeek());
+    }
+
+    private void goToPreviousWeek() {
+        if (isCurrentWeek) {
+            isCurrentWeek = false;
+            updateWeekLabel();
+            loadChartData();
+        }
+    }
+
+    private void goToNextWeek() {
+        if (!isCurrentWeek) {
+            isCurrentWeek = true;
+            updateWeekLabel();
+            loadChartData();
+        }
+    }
+
+    private void updateWeekLabel() {
+        LocalDate today = LocalDate.now();
+        int dayOfWeek = today.getDayOfWeek().getValue(); // 1=Monday, 7=Sunday
+        LocalDate currentWeekMonday = today.minusDays(dayOfWeek - 1);
+        LocalDate currentWeekSunday = currentWeekMonday.plusDays(6);
+        
+        LocalDate previousWeekMonday = currentWeekMonday.minusDays(7);
+        LocalDate previousWeekSunday = previousWeekMonday.plusDays(6);
+
+        if (isCurrentWeek) {
+            tvWeekLabel.setText("Tuần này");
+            tvWeekDateRange.setText(formatDateRange(currentWeekMonday, currentWeekSunday));
+        } else {
+            tvWeekLabel.setText("Tuần trước");
+            tvWeekDateRange.setText(formatDateRange(previousWeekMonday, previousWeekSunday));
+        }
+    }
+
+    private String formatDateRange(LocalDate startDate, LocalDate endDate) {
+        return String.format("%02d/%02d - %02d/%02d", 
+                startDate.getDayOfMonth(), startDate.getMonthValue(),
+                endDate.getDayOfMonth(), endDate.getMonthValue());
     }
 
     private void navigateAndFinish(Class<?> cls) {
@@ -233,10 +268,7 @@ public class ProfileActivity extends AppCompatActivity {
         // Find all views
         TextInputEditText etWeight = dialog.findViewById(R.id.etWeight);
         TextInputEditText etHeight = dialog.findViewById(R.id.etHeight);
-        RadioGroup radioGroupGoal = dialog.findViewById(R.id.radioGroupGoal);
-        RadioButton rbGain = dialog.findViewById(R.id.rbGain);
-        RadioButton rbMaintain = dialog.findViewById(R.id.rbMaintain);
-        RadioButton rbLose = dialog.findViewById(R.id.rbLose);
+        TextInputEditText etNotes = dialog.findViewById(R.id.etNotes);
         TextView tvBMIResult = dialog.findViewById(R.id.tvBMIResult);
         Button btnCancel = dialog.findViewById(R.id.btnCancel);
         Button btnSave = dialog.findViewById(R.id.btnSave);
@@ -265,22 +297,22 @@ public class ProfileActivity extends AppCompatActivity {
         btnSave.setOnClickListener(v -> {
             String weight = etWeight.getText().toString().trim();
             String height = etHeight.getText().toString().trim();
+            String notes = etNotes.getText().toString().trim();
 
             if (weight.isEmpty() || height.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập đầy đủ", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            weightText.setText(weight + " kg");
-            String bmi = calculateBMI(weight, height);
-            bmiText.setText(bmi.split(" - ")[0]);
+            // Tạo request
+            CreateDailyLogRequest request = new CreateDailyLogRequest(
+                    Double.parseDouble(weight),
+                    Double.parseDouble(height),
+                    notes
+            );
 
-            String goal = rbGain.isChecked() ? "Tăng cân" :
-                    rbMaintain.isChecked() ? "Giữ cân" : "Giảm cân";
-            pointsText.setText(goal);
-
-            Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
+            // Gửi lên server
+            saveDailyLog(request, dialog, weight, height);
         });
 
         dialog.setCancelable(true);
@@ -315,5 +347,139 @@ public class ProfileActivity extends AppCompatActivity {
         } catch (Exception e) {
             return "0.0 - -";
         }
+    }
+
+    // ==================== CHART DATA ====================
+    private void loadChartData() {
+        showChartLoading(true);
+
+        if (isCurrentWeek) {
+            apiService.getLast7DaysLogs().enqueue(new Callback<ApiResponse<List<DailyLogResponse>>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<List<DailyLogResponse>>> call,
+                                     Response<ApiResponse<List<DailyLogResponse>>> response) {
+                    showChartLoading(false);
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<DailyLogResponse> data = response.body().getResult();
+                        if (data == null || data.isEmpty()) {
+                            showNoDataMessage();
+                        } else {
+                            updateChartWithData(data);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponse<List<DailyLogResponse>>> call, Throwable t) {
+                    showChartLoading(false);
+                    showNoDataMessage();
+                }
+            });
+        } else {
+            apiService.getPreviousWeekLogs().enqueue(new Callback<ApiResponse<List<DailyLogResponse>>>() {
+                @Override
+                public void onResponse(Call<ApiResponse<List<DailyLogResponse>>> call,
+                                     Response<ApiResponse<List<DailyLogResponse>>> response) {
+                    showChartLoading(false);
+                    if (response.isSuccessful() && response.body() != null) {
+                        List<DailyLogResponse> data = response.body().getResult();
+                        if (data == null || data.isEmpty()) {
+                            showNoDataMessage();
+                        } else {
+                            updateChartWithData(data);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ApiResponse<List<DailyLogResponse>>> call, Throwable t) {
+                    showChartLoading(false);
+                    showNoDataMessage();
+                }
+            });
+        }
+    }
+
+    private void showNoDataMessage() {
+        chartView.clear();
+        tvCurrentWeight.setText("--");
+        tvWeightChange.setText("--");
+        tvAverageWeight.setText("--");
+        Toast.makeText(this, "Không có dữ liệu cho tuần này", Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateChartWithData(List<DailyLogResponse> logs) {
+        if (logs == null || logs.isEmpty()) {
+            chartView.clear();
+            tvCurrentWeight.setText("--");
+            tvWeightChange.setText("--");
+            tvAverageWeight.setText("--");
+            return;
+        }
+
+        // Update chart
+        chartManager.updateChart(logs);
+
+        // Update stats
+        Double currentWeight = chartManager.getCurrentWeight(logs);
+        if (currentWeight != null) {
+            tvCurrentWeight.setText(String.format("%.1f kg", currentWeight));
+        }
+
+        double weightChange = chartManager.calculateWeightChange(logs);
+        String changeText = String.format("%+.1f kg", weightChange);
+        tvWeightChange.setText(changeText);
+        tvWeightChange.setTextColor(weightChange < 0 ? 
+                getResources().getColor(R.color.red_primary) : 
+                getResources().getColor(R.color.green_primary));
+
+        double avgWeight = chartManager.calculateAverageWeight(logs);
+        tvAverageWeight.setText(String.format("%.1f kg", avgWeight));
+    }
+
+    private void showChartLoading(boolean show) {
+        chartProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        chartView.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    private void saveDailyLog(CreateDailyLogRequest request, Dialog dialog, String weight, String height) {
+        apiService.createOrUpdateDailyLog(request).enqueue(new Callback<ApiResponse<DailyLogResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<DailyLogResponse>> call, Response<ApiResponse<DailyLogResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Cập nhật UI
+                    weightText.setText(weight + " kg");
+                    String bmi = calculateBMI(weight, height);
+                    bmiText.setText(bmi.split(" - ")[0]);
+
+                    Toast.makeText(ProfileActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+
+                    // Reload chart data
+                    loadChartData();
+                } else {
+                    Toast.makeText(ProfileActivity.this, "Lỗi cập nhật", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<DailyLogResponse>> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void generateSampleDataIfNeeded() {
+        apiService.generateSampleData().enqueue(new Callback<ApiResponse<String>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+                // Dữ liệu mẫu đã được tạo nếu cần
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
+                // Không cần thông báo lỗi, chỉ là tạo dữ liệu mẫu
+            }
+        });
     }
 }
