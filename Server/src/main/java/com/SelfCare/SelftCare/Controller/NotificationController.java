@@ -21,9 +21,9 @@ public class NotificationController {
     NotificationService notificationService;
 
     /**
-     * API để Admin gửi thông báo tùy chỉnh
+     * API để Admin gửi thông báo tùy chỉnh theo goal
      * POST /notifications/send
-     * Body: { "title": "...", "message": "...", "type": "FOOD/EXERCISE", "targetId": 123 }
+     * Body: { "title": "...", "message": "...", "type": "FOOD/EXERCISE", "targetId": 123, "goal": "WEIGHT_LOSS" }
      */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/send")
@@ -32,10 +32,11 @@ public class NotificationController {
                 request.getTitle(),
                 request.getMessage(),
                 request.getType(),
-                request.getTargetId()
+                request.getTargetId(),
+                request.getGoal()
         );
         return ApiResponse.<Void>builder()
-                .message("Đã gửi thông báo thành công")
+                .message("Đã gửi thông báo thành công tới goal: " + request.getGoal())
                 .build();
     }
 

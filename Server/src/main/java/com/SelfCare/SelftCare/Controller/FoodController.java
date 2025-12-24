@@ -67,6 +67,18 @@ public class FoodController {
                 .build();
     }
 
+    /**
+     * API lấy tất cả Food không lọc theo goal (dành cho Admin)
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/all-admin")
+    ApiResponse<List<FoodCreateResponse>> getAllFoodsAdmin()  {
+        return ApiResponse.<List<FoodCreateResponse>>builder()
+                .message("get all foods (admin) success")
+                .result(foodService.getAllFoodsNoFilter())
+                .build();
+    }
+
     @GetMapping("/category/{categoryId}")
     ApiResponse<List<FoodCreateResponse>> getFoodsByCategory(@PathVariable Long categoryId) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();

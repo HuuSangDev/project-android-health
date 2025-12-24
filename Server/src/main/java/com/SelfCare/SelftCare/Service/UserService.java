@@ -5,6 +5,7 @@ import com.SelfCare.SelftCare.DTO.Request.UserRegisterRequest;
 import com.SelfCare.SelftCare.DTO.Response.UserResponse;
 import com.SelfCare.SelftCare.Entity.User;
 import com.SelfCare.SelftCare.Entity.UserProfile;
+import com.SelfCare.SelftCare.Enum.Goal;
 import com.SelfCare.SelftCare.Enum.Role;
 import com.SelfCare.SelftCare.Exception.AppException;
 import com.SelfCare.SelftCare.Exception.ErrorCode;
@@ -93,5 +94,22 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
+    /**
+     * Lấy goal của user hiện tại
+     */
+    public Goal getCurrentUserGoal() {
+        String email = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
 
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        UserProfile profile = user.getUserProfile();
+        if (profile == null || profile.getHealthGoal() == null) {
+            throw new AppException(ErrorCode.USER_PROFILE_NULL);
+        }
+
+        return profile.getHealthGoal();
+    }
 }
