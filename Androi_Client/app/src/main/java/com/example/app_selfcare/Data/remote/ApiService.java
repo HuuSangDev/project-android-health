@@ -2,6 +2,7 @@ package com.example.app_selfcare.Data.remote;
 
 import com.example.app_selfcare.Data.Model.Request.ChatRequest;
 import com.example.app_selfcare.Data.Model.Request.ChangePasswordRequest;
+import com.example.app_selfcare.Data.Model.Request.CreateDailyLogRequest;
 import com.example.app_selfcare.Data.Model.Request.FoodCategoryCreateRequest;
 import com.example.app_selfcare.Data.Model.Request.FoodSearchRequest;
 import com.example.app_selfcare.Data.Model.Request.ForgotPasswordRequest;
@@ -12,6 +13,7 @@ import com.example.app_selfcare.Data.Model.Request.UserRegisterRequest;
 import com.example.app_selfcare.Data.Model.Request.VerifyOtpRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.Model.Response.ChatResponse;
+import com.example.app_selfcare.Data.Model.Response.DailyLogResponse;
 import com.example.app_selfcare.Data.Model.Response.FoodCategoryResponse;
 import com.example.app_selfcare.Data.Model.Response.FoodResponse;
 import com.example.app_selfcare.Data.Model.Response.PageResponse;
@@ -53,6 +55,18 @@ public interface ApiService {
     @Multipart
     @PUT("app/userProfile/update")
     Call<ApiResponse<UserResponse>> updateProfile(
+            @Header("Authorization") String token,
+            @Part("gender") RequestBody gender,
+            @Part("dateOfBirth") RequestBody dateOfBirth,
+            @Part("height") RequestBody height,
+            @Part("weight") RequestBody weight,
+            @Part("healthGoal") RequestBody healthGoal,
+            @Part MultipartBody.Part avatar
+    );
+
+    @Multipart
+    @PUT("app/userProfile/update")
+    Call<ApiResponse<UserResponse>> updateProfileWithToken(
             @Part("gender") RequestBody gender,
             @Part("dateOfBirth") RequestBody dateOfBirth,
             @Part("height") RequestBody height,
@@ -170,5 +184,21 @@ public interface ApiService {
 
     @GET("app/saved-foods/check/{foodId}")
     Call<ApiResponse<Boolean>> checkIfFoodSaved(@Path("foodId") Long foodId);
+
+    // ==================== Daily Logs APIs ====================
+    @GET("app/daily-logs/last-7-days")
+    Call<ApiResponse<List<DailyLogResponse>>> getLast7DaysLogs();
+
+    @GET("app/daily-logs/previous-week")
+    Call<ApiResponse<List<DailyLogResponse>>> getPreviousWeekLogs();
+
+    @GET("app/daily-logs/today")
+    Call<ApiResponse<DailyLogResponse>> getTodayLog();
+
+    @POST("app/daily-logs/create-or-update")
+    Call<ApiResponse<DailyLogResponse>> createOrUpdateDailyLog(@Body CreateDailyLogRequest request);
+
+    @POST("app/daily-logs/generate-sample-data")
+    Call<ApiResponse<String>> generateSampleData();
 
 }
