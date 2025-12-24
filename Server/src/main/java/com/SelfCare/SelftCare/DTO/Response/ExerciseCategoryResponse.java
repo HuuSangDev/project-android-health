@@ -13,5 +13,5 @@ public class ExerciseCategoryResponse {
      String categoryName;
      String description;
      String iconUrl;
-
+     int exerciseCount;
 }

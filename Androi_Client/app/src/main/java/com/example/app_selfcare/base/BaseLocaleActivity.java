@@ -1,4 +1,4 @@
-package com.example.app_selfcare.base;
+package com.example.app_selfcare.Base;
 
 import android.content.Context;
 import android.os.Bundle;

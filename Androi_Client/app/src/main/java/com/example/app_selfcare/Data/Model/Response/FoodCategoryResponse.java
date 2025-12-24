@@ -15,6 +15,12 @@ public class FoodCategoryResponse implements Serializable {
     @SerializedName("description")
     private String description;
 
+    @SerializedName("iconUrl")
+    private String iconUrl;
+
+    @SerializedName("foodCount")
+    private int foodCount;
+
     public FoodCategoryResponse() {}
 
     public FoodCategoryResponse(long categoryId, String categoryName, String description) {
@@ -45,6 +51,22 @@ public class FoodCategoryResponse implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public int getFoodCount() {
+        return foodCount;
+    }
+
+    public void setFoodCount(int foodCount) {
+        this.foodCount = foodCount;
     }
 
     @Override

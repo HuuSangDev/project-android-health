@@ -41,11 +41,10 @@ spring:
       username: red-d4lefsuuk2gs738c1a90
       password: D1tU4cPMtKqaatXv0PJ4XMSk3qsLexXw
       ssl:
-        enabled: true  # Dòng này cực kỳ quan trọng với External Render
-      timeout: 10s     # Tăng thời gian chờ lên
+        enabled: true # Dòng này cực kỳ quan trọng với External Render
+      timeout: 10s # Tăng thời gian chờ lên
 jwt:
   signerKey: "HAGUOt0Qm87yn2SFEfjlVRM3chXO/Wpy1YnsdZQz2O7+S4dPFiTQvpxHVVLE6r+c"
-
 
 file:
   upload-dir: uploads/
@@ -60,3 +59,9 @@ gemini:
   api-key: "${GEMINI_API_KEY:AIzaSyB228bTvPoSiY1rvIIbMxIO2Fp74CMPj9U}"
   # Sử dụng gemini-1.5-flash (nhanh hơn) hoặc gemini-1.5-pro (chính xác hơn)
   api-url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+
+# Firebase Configuration
+# QUAN TRỌNG: Không commit file serviceAccountKey.json lên git!
+# Thêm vào .gitignore: src/main/resources/firebase/serviceAccountKey.json
+firebase:
+  service-account-file: "firebase/serviceAccountKey.json"
