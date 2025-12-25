@@ -89,7 +89,6 @@ public class SearchFragment extends Fragment {
         rvSuggestions = view.findViewById(R.id.rvSuggestions);
         layoutEmptyState = view.findViewById(R.id.layoutEmptyState);
         layoutSuggestions = view.findViewById(R.id.layoutSuggestions);
-        tvSectionTitle = layoutSuggestions.findViewById(R.id.tvSectionTitle);
         
         // Tạo ProgressBar programmatically nếu chưa có trong layout
         progressBar = new ProgressBar(getContext());
@@ -271,8 +270,9 @@ public class SearchFragment extends Fragment {
                         List<ExerciseResponse> exercises = apiResponse.getResult();
                         
                         for (ExerciseResponse exercise : exercises) {
+                            int exerciseId = exercise.getExerciseId() != null ? exercise.getExerciseId().intValue() : 0;
                             SearchItem item = new SearchItem(
-                                exercise.getExerciseId().intValue(),
+                                exerciseId,
                                 exercise.getExerciseName(),
                                 SearchItem.TYPE_WORKOUT,
                                 exercise.getImageUrl()
@@ -280,7 +280,7 @@ public class SearchFragment extends Fragment {
                             allItems.add(item);
                             
                             // Lưu thông tin chi tiết để navigation
-                            exerciseDetailsMap.put(exercise.getExerciseId().intValue(), exercise);
+                            exerciseDetailsMap.put(exerciseId, exercise);
                         }
                         
                         updateUI();
@@ -391,6 +391,49 @@ public class SearchFragment extends Fragment {
         } catch (Exception e) {
             Log.e(TAG, "Error opening exercise detail", e);
             Toast.makeText(getContext(), "Không thể mở chi tiết bài tập", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveToHistory(SearchItem item) {
+        try {
+            String imageUrl = item.getImageUrl();
+            String category = "";
+            
+            // Determine category based on type
+            if (item.getType() == SearchItem.TYPE_FOOD) {
+                category = "Món ăn";
+                FoodCreateResponse food = foodDetailsMap.get(item.getId());
+                if (food != null && imageUrl == null) {
+                    imageUrl = food.getImageUrl();
+                }
+            } else if (item.getType() == SearchItem.TYPE_WORKOUT) {
+                category = "Bài tập";
+                ExerciseResponse exercise = exerciseDetailsMap.get(item.getId());
+                if (exercise != null && imageUrl == null) {
+                    imageUrl = exercise.getImageUrl();
+                }
+            }
+            
+            historyManager.addToHistory(item, imageUrl, category);
+            Log.d(TAG, "Saved to history: " + item.getName());
+        } catch (Exception e) {
+            Log.e(TAG, "Error saving to history", e);
+        }
+    }
+
+    private void showHistory() {
+        try {
+            isShowingHistory = true;
+            filteredItems.clear();
+            
+            List<SearchItem> historyItems = historyManager.getHistoryAsSearchItems();
+            filteredItems.addAll(historyItems);
+            
+            Log.d(TAG, "Showing history with " + historyItems.size() + " items");
+            updateUI();
+        } catch (Exception e) {
+            Log.e(TAG, "Error showing history", e);
+            showAllItems();
         }
     }
 }

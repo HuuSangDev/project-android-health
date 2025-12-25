@@ -15,7 +15,6 @@
     import com.example.app_selfcare.Data.Model.Response.UserResponse;
     import com.example.app_selfcare.Data.remote.ApiClient;
     import com.example.app_selfcare.Data.remote.ApiService;
-    import com.example.app_selfcare.upload.InforSex;
     import com.example.app_selfcare.utils.LocaleManager;
     import com.google.android.material.textfield.TextInputEditText;
 
@@ -102,8 +101,7 @@
                         if (apiRes.getCode() == 200) {
                             Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
 
-                            // Chuyển đến trang InforSex
-                            Intent intent = new Intent(RegisterActivity.this, InforSex.class);
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(intent);
                             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             finish();
