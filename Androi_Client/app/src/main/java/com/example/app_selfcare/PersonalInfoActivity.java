@@ -1,5 +1,7 @@
 package com.example.app_selfcare;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,6 +23,7 @@ import com.example.app_selfcare.Data.Model.Response.UserProfileResponse;
 import com.example.app_selfcare.Data.Model.Response.UserResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
+import com.example.app_selfcare.utils.LocaleManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,8 +31,16 @@ import retrofit2.Response;
 
 public class PersonalInfoActivity extends AppCompatActivity {
 
-    private ImageView btnBack, profileImage;
+    private ImageView btnBack, btnEdit, profileImage;
     private TextView tvFullName, tvEmail, tvDateOfBirth, tvGender, tvHeight, tvWeight, tvHealthGoal;
+
+    private ActivityResultLauncher<Intent> editProfileLauncher;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocaleManager localeManager = new LocaleManager(newBase);
+        super.attachBaseContext(localeManager.applyLanguage(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +55,25 @@ public class PersonalInfoActivity extends AppCompatActivity {
         });
 
         initViews();
+        setupEditLauncher();
         setupEvents();
         fetchPersonalInfo();
     }
 
+    private void setupEditLauncher() {
+        editProfileLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        fetchPersonalInfo();
+                    }
+                }
+        );
+    }
+
     private void initViews() {
         btnBack = findViewById(R.id.btnBack);
+        btnEdit = findViewById(R.id.btnEdit);
         profileImage = findViewById(R.id.profileImage);
         tvFullName = findViewById(R.id.tvFullName);
         tvEmail = findViewById(R.id.tvEmail);
@@ -60,6 +86,10 @@ public class PersonalInfoActivity extends AppCompatActivity {
 
     private void setupEvents() {
         btnBack.setOnClickListener(v -> finish());
+        btnEdit.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EditPersonalInfoActivity.class);
+            editProfileLauncher.launch(intent);
+        });
     }
 
     private void fetchPersonalInfo() {

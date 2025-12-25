@@ -1,5 +1,8 @@
 package com.SelfCare.SelftCare.DTO.Request;
 
+import com.SelfCare.SelftCare.Enum.Goal;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -18,12 +21,13 @@ public class CreateExerciseRequest {
      String description;
      String instructions;
      String difficultyLevel;
-     String equipmentNeeded;
-     String muscleGroups;
 
      Long categoryId;
 
      MultipartFile image;
      MultipartFile video;
+
+     @NotNull(message = "goal required")
+     Goal goal;
 }
 

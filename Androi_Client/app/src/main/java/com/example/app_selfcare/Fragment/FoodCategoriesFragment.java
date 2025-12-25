@@ -1,30 +1,53 @@
 package com.example.app_selfcare.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.app_selfcare.Adapter.CategoryAdapter;
-import com.example.app_selfcare.AddCategoryDialog;
-import com.example.app_selfcare.Data.Model.Category;
+import com.example.app_selfcare.Adapter.FoodCategoryAdapter;
+import com.example.app_selfcare.Data.Model.Request.FoodCategoryCreateRequest;
+import com.example.app_selfcare.Data.Model.Response.ApiResponse;
+import com.example.app_selfcare.Data.Model.Response.FoodCategoryResponse;
+import com.example.app_selfcare.Data.remote.ApiClient;
+import com.example.app_selfcare.Data.remote.ApiService;
+import com.example.app_selfcare.FoodsByCategoryActivity;
 import com.example.app_selfcare.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodCategoriesFragment extends Fragment {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class FoodCategoriesFragment extends Fragment implements FoodCategoryAdapter.OnCategoryActionListener {
+
+    private static final String TAG = "FoodCategoriesFragment";
 
     private RecyclerView recyclerView;
     private FloatingActionButton fabAdd;
-    private CategoryAdapter adapter;
-    private List<Category> categoryList;
+    private View layoutLoading;
+    private View layoutEmpty;
+    private TextView tvTotalCategories;
+    private TextView tvActiveCategories;
+
+    private FoodCategoryAdapter adapter;
+    private ApiService apiService;
+    private List<FoodCategoryResponse> categoryList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -36,50 +59,258 @@ public class FoodCategoriesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        recyclerView = view.findViewById(R.id.recyclerViewFoodCategories);
-        fabAdd = view.findViewById(R.id.fabAddCategory);
+        apiService = ApiClient.getClientWithToken(requireContext()).create(ApiService.class);
 
-        categoryList = new ArrayList<>();
-        categoryList.add(new Category(10, "Món chính", "food", R.drawable.ic_food));
-        categoryList.add(new Category(11, "Đồ uống", "food", R.drawable.ic_food));
-        categoryList.add(new Category(12, "Tráng miệng", "food", R.drawable.ic_food));
-
+        initViews(view);
         setupRecyclerView();
         setupFabButton();
+        loadCategories();
+    }
+
+    private void initViews(View view) {
+        recyclerView = view.findViewById(R.id.recyclerViewFoodCategories);
+        fabAdd = view.findViewById(R.id.fabAddCategory);
+        layoutLoading = view.findViewById(R.id.layoutLoading);
+        layoutEmpty = view.findViewById(R.id.layoutEmpty);
+        tvTotalCategories = view.findViewById(R.id.tvTotalCategories);
+        tvActiveCategories = view.findViewById(R.id.tvActiveCategories);
     }
 
     private void setupRecyclerView() {
-        adapter = new CategoryAdapter(categoryList, new CategoryAdapter.OnCategoryClickListener() {
-            @Override
-            public void onEdit(Category category) {
-                Toast.makeText(getContext(), "Sửa: " + category.name, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onDelete(int id) {
-                for (Category c : categoryList) {
-                    if (c.id == id) {
-                        categoryList.remove(c);
-                        adapter.notifyDataSetChanged();
-                        break;
-                    }
-                }
-            }
-        });
-
+        adapter = new FoodCategoryAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
     }
 
     private void setupFabButton() {
-        fabAdd.setOnClickListener(v -> {
-            AddCategoryDialog dialog = new AddCategoryDialog();
-            dialog.setListener(category -> {
-                category.type = "food"; // QUAN TRỌNG
-                categoryList.add(category);
-                adapter.notifyItemInserted(categoryList.size() - 1);
-            });
-            dialog.show(getParentFragmentManager(), "add_food");
+        fabAdd.setOnClickListener(v -> showAddCategoryDialog());
+    }
+
+    private void loadCategories() {
+        showLoading(true);
+
+        apiService.getAllFoodCategories().enqueue(new Callback<ApiResponse<List<FoodCategoryResponse>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<FoodCategoryResponse>>> call,
+                                   Response<ApiResponse<List<FoodCategoryResponse>>> response) {
+                showLoading(false);
+
+                if (response.isSuccessful() && response.body() != null
+                        && response.body().getResult() != null) {
+                    categoryList.clear();
+                    categoryList.addAll(response.body().getResult());
+                    adapter.setData(categoryList);
+
+                    // Cập nhật thống kê
+                    updateStats();
+
+                    showEmpty(categoryList.isEmpty());
+                } else {
+                    Log.e(TAG, "Load categories failed: " + response.code());
+                    showEmpty(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<FoodCategoryResponse>>> call, Throwable t) {
+                showLoading(false);
+                showEmpty(true);
+                Log.e(TAG, "Load categories error", t);
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), "Lỗi tải danh mục", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
+    }
+
+    private void updateStats() {
+        int total = categoryList.size();
+        int active = 0;
+        for (FoodCategoryResponse cat : categoryList) {
+            if (cat.getFoodCount() > 0) {
+                active++;
+            }
+        }
+        tvTotalCategories.setText(String.valueOf(total));
+        tvActiveCategories.setText(String.valueOf(active));
+    }
+
+    private void showAddCategoryDialog() {
+        View dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_add_food_category, null);
+
+        TextInputEditText etName = dialogView.findViewById(R.id.etCategoryName);
+        TextInputEditText etDescription = dialogView.findViewById(R.id.etCategoryDescription);
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Thêm danh mục")
+                .setView(dialogView)
+                .setPositiveButton("Thêm", (dialog, which) -> {
+                    String name = etName.getText() != null ? etName.getText().toString().trim() : "";
+                    String desc = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
+
+                    if (name.isEmpty()) {
+                        Toast.makeText(getContext(), "Nhập tên danh mục", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    createCategory(name, desc);
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void createCategory(String name, String description) {
+        showLoading(true);
+
+        FoodCategoryCreateRequest request = new FoodCategoryCreateRequest(name, description);
+
+        apiService.createFoodCategory(request).enqueue(new Callback<ApiResponse<FoodCategoryResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<FoodCategoryResponse>> call,
+                                   Response<ApiResponse<FoodCategoryResponse>> response) {
+                showLoading(false);
+
+                if (response.isSuccessful() && response.body() != null
+                        && response.body().getResult() != null) {
+                    Toast.makeText(getContext(), "Đã thêm danh mục", Toast.LENGTH_SHORT).show();
+                    loadCategories();
+                } else {
+                    Toast.makeText(getContext(), "Lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<FoodCategoryResponse>> call, Throwable t) {
+                showLoading(false);
+                Toast.makeText(getContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // ==================== OnCategoryActionListener ====================
+
+    @Override
+    public void onItemClick(FoodCategoryResponse category) {
+        // Mở màn hình danh sách món ăn theo danh mục
+        Intent intent = new Intent(requireContext(), FoodsByCategoryActivity.class);
+        intent.putExtra("categoryId", category.getCategoryId());
+        intent.putExtra("categoryName", category.getCategoryName());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onEditClick(FoodCategoryResponse category) {
+        showEditCategoryDialog(category);
+    }
+
+    @Override
+    public void onDeleteClick(FoodCategoryResponse category) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Xác nhận xóa")
+                .setMessage("Bạn có chắc muốn xóa danh mục \"" + category.getCategoryName() + "\"?")
+                .setPositiveButton("Xóa", (dialog, which) -> deleteCategory(category))
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void showEditCategoryDialog(FoodCategoryResponse category) {
+        View dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_add_food_category, null);
+
+        TextInputEditText etName = dialogView.findViewById(R.id.etCategoryName);
+        TextInputEditText etDescription = dialogView.findViewById(R.id.etCategoryDescription);
+
+        etName.setText(category.getCategoryName());
+        etDescription.setText(category.getDescription());
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Sửa danh mục")
+                .setView(dialogView)
+                .setPositiveButton("Lưu", (dialog, which) -> {
+                    String name = etName.getText() != null ? etName.getText().toString().trim() : "";
+                    String desc = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
+
+                    if (name.isEmpty()) {
+                        Toast.makeText(getContext(), "Nhập tên danh mục", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    updateCategory(category.getCategoryId(), name, desc);
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void updateCategory(long categoryId, String name, String description) {
+        showLoading(true);
+
+        FoodCategoryCreateRequest request = new FoodCategoryCreateRequest(name, description);
+
+        apiService.updateFoodCategory(categoryId, request).enqueue(new Callback<ApiResponse<FoodCategoryResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<FoodCategoryResponse>> call,
+                                   Response<ApiResponse<FoodCategoryResponse>> response) {
+                showLoading(false);
+
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Đã cập nhật danh mục", Toast.LENGTH_SHORT).show();
+                    loadCategories();
+                } else {
+                    Toast.makeText(getContext(), "Lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<FoodCategoryResponse>> call, Throwable t) {
+                showLoading(false);
+                Toast.makeText(getContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void deleteCategory(FoodCategoryResponse category) {
+        showLoading(true);
+
+        apiService.deleteFoodCategory(category.getCategoryId()).enqueue(new Callback<ApiResponse<Void>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+                showLoading(false);
+
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Đã xóa danh mục", Toast.LENGTH_SHORT).show();
+                    loadCategories();
+                } else {
+                    Toast.makeText(getContext(), "Lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+                showLoading(false);
+                Toast.makeText(getContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showLoading(boolean show) {
+        if (layoutLoading != null) {
+            layoutLoading.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void showEmpty(boolean show) {
+        if (layoutEmpty != null) {
+            layoutEmpty.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+        if (recyclerView != null) {
+            recyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadCategories();
     }
 }

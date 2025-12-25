@@ -215,7 +215,7 @@ public class Avatar extends AppCompatActivity {
 
         // Call API
         ApiService apiService = ApiClient.getClientWithToken(this).create(ApiService.class);
-        Call<ApiResponse<UserResponse>> call = apiService.updateProfile(
+        Call<ApiResponse<UserResponse>> call = apiService.updateProfileWithToken(
                 genderBody,
                 dateOfBirthBody,
                 heightBody,

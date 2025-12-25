@@ -51,7 +51,10 @@ public class FoodResponse implements Serializable {
     private String mealType;
 
     @SerializedName("categoryResponse")
-    private CategoryResponse categoryResponse;
+    private FoodCategoryResponse categoryResponse;
+
+    @SerializedName("goal")
+    private String goal;
 
     // Getters and Setters
     public int getFoodId() {
@@ -174,12 +177,20 @@ public class FoodResponse implements Serializable {
         this.mealType = mealType;
     }
 
-    public CategoryResponse getCategoryResponse() {
+    public FoodCategoryResponse getCategoryResponse() {
         return categoryResponse;
     }
 
-    public void setCategoryResponse(CategoryResponse categoryResponse) {
+    public void setCategoryResponse(FoodCategoryResponse categoryResponse) {
         this.categoryResponse = categoryResponse;
+    }
+
+    public String getGoal() {
+        return goal;
+    }
+
+    public void setGoal(String goal) {
+        this.goal = goal;
     }
 
     // Helper method to convert to Food model (if needed)

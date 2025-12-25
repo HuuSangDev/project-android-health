@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_weight="1"
-            android:text="Thông báo"
+            android:text="@string/notifications"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -81,7 +81,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cập nhật điểm cá nhân"
+                    android:text="@string/personal_points_update"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Điều chỉnh tác cá nhân"
+                    android:text="@string/personal_points_desc"
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
 
@@ -139,7 +139,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Thông báo uống nước"
+                    android:text="@string/water_notification"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -149,7 +149,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Bạn cần uống 2000ml nước/ngày"
+                    android:text="@string/water_notification_desc"
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
 
@@ -197,7 +197,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Thông báo luyện tập"
+                    android:text="@string/exercise_notification"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -207,7 +207,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Tập luyện điều độ mỗi ngày"
+                    android:text="@string/exercise_notification_desc"
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
 
@@ -255,7 +255,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Thông báo bữa ăn"
+                    android:text="@string/meal_notification"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -265,7 +265,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Hãy nhớ ăn trong thâm hụt calo"
+                    android:text="@string/meal_notification_desc"
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
 
@@ -314,7 +314,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Trang chủ"
+                android:text="@string/nav_home"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -339,7 +339,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Tập luyện"
+                android:text="@string/nav_workout"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -363,7 +363,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Món Ăn"
+                android:text="@string/nav_food"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -389,7 +389,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Cá nhân"
+                android:text="@string/nav_profile"
                 android:textColor="#FF9F63"
                 android:textSize="11sp" />
         </LinearLayout>

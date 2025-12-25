@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/colorBackground">
 
     <!-- ===================== PHẦN HEADER + TABS (GIỮ NGUYÊN) ===================== -->
     <ScrollView
@@ -36,10 +36,11 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvHelloName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Xin chào, An!"
-                        android:textColor="@android:color/black"
+                        android:text="@string/hello_name"
+                        android:textColor="@color/colorTextPrimary"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -47,22 +48,32 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Hôm nay bạn nấu món gì?"
-                        android:textColor="#999999"
+                        android:text="@string/what_cook_today"
+                        android:textColor="@color/colorTextSecondary"
                         android:textSize="14sp" />
 
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/ivUserAvatar"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/ic_proflie"
                     android:background="@drawable/circle_background"
-                    android:padding="8dp"
-                    app:tint="#BDBDBD" />
+                    android:scaleType="centerCrop" />
 
             </LinearLayout>
-
+            <!-- ❤️ SAVED RECIPES -->
+            <TextView
+                android:id="@+id/tvSaved"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/saved_foods"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#0F955A"
+                android:layout_marginTop="12dp"
+                android:padding="8dp" />
             <!-- Search Bar -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="12dp"
-                    android:hint="Tìm kiếm công thức..."
+                    android:hint="@string/search_recipe"
                     android:textColorHint="#CCCCCC"
                     android:background="@null"
                     android:textSize="14sp" />
@@ -113,7 +124,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="All"
+                    android:text="@string/all"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:background="@drawable/bg_chip_selected"
@@ -127,7 +138,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sáng"
+                    android:text="@string/breakfast"
                     android:textColor="#0F955A"
                     android:background="@drawable/bg_chip_unselected"
                     android:padding="12dp"
@@ -140,7 +151,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Trưa"
+                    android:text="@string/lunch"
                     android:textColor="#0F955A"
                     android:background="@drawable/bg_chip_unselected"
                     android:padding="12dp"
@@ -153,7 +164,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Tối"
+                    android:text="@string/dinner"
                     android:textColor="#0F955A"
                     android:background="@drawable/bg_chip_unselected"
                     android:padding="12dp"
@@ -172,7 +183,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/headerScrollView"
         android:layout_above="@id/bottomNav"
-        android:background="#F5F5F5" />
+        android:background="@color/colorBackgroundSecondary" />
 
     <!-- Bottom navigation -->
     <!-- Thanh điều hướng dưới -->
@@ -206,7 +217,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Trang chủ"
+                android:text="@string/nav_home"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -231,7 +242,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Tập luyện"
+                android:text="@string/nav_workout"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -257,7 +268,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Món Ăn"
+                android:text="@string/nav_food"
                 android:textColor="#FF9F63"
                 android:textSize="11sp" />
         </LinearLayout>
@@ -281,7 +292,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Cá nhân"
+                android:text="@string/nav_profile"
                 android:textColor="#BDBDBD"
                 android:textSize="11sp" />
         </LinearLayout>

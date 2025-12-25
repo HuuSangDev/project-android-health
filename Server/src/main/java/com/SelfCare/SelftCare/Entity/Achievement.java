@@ -25,6 +25,7 @@ public class Achievement {
     String unit; // đơn vị (kg, ngày, lít...)
     String iconUrl; // URL icon thành tích
     String badgeColor; // màu badge
+    @Builder.Default
     Integer points = 0; // điểm thưởng
 
     LocalDateTime createdAt;

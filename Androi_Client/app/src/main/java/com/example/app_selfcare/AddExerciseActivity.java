@@ -90,8 +90,8 @@ public class AddExerciseActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-//        etExerciseName = findViewById(R.id.etExerciseName);
-//        etCaloriesPerMinute = findViewById(R.id.etCaloriesPerMinute);
+        etExerciseName = findViewById(R.id.etExerciseName);
+        etCaloriesPerMinute = findViewById(R.id.etCaloriesPerMinute);
         etDescription = findViewById(R.id.etDescription);
         etInstructions = findViewById(R.id.etInstructions);
         etEquipmentNeeded = findViewById(R.id.etEquipmentNeeded);
@@ -172,7 +172,7 @@ public class AddExerciseActivity extends AppCompatActivity {
         }
 
         // calories per minute
-        double caloriesPerMinute = 10.0; // mặc định
+        double caloriesPerMinute = 10.0; // default
         if (!TextUtils.isEmpty(caloriesStr)) {
             try {
                 caloriesPerMinute = Double.parseDouble(caloriesStr);
@@ -183,38 +183,22 @@ public class AddExerciseActivity extends AppCompatActivity {
             }
         }
 
-        // NOTE: model Exercise của bạn hiện đang dùng durationMinutes.
-        // Layout mới không có "durationMinutes" riêng, nên bạn có thể:
-        // 1) tự thêm field thời lượng (recommended), hoặc
-        // 2) set mặc định 30 phút như bạn đang làm.
+        // Duration for local storage
         int durationMinutes = 30;
 
-        // Tạo object Exercise mới
+        // Create Exercise object for local storage
         Exercise newExercise = new Exercise();
         newExercise.setName(name);
-
         newExercise.setDescription(TextUtils.isEmpty(desc) ? "Bài tập tốt cho sức khỏe" : desc);
-
-        // Nếu model có field khác thì set thêm (tuỳ model của bạn)
-        // newExercise.setInstructions(instructions);
-        // newExercise.setEquipmentNeeded(equipment);
-        // newExercise.setMuscleGroups(muscle);
-
+        newExercise.setInstructions(instructions);
         newExercise.setDurationMinutes(durationMinutes);
-
+        
         int caloriesBurned = (int) Math.round(durationMinutes * caloriesPerMinute);
         newExercise.setCaloriesBurned(caloriesBurned);
-
+        
         newExercise.setDifficulty(level);
         newExercise.setCategoryId("default");
-
-        // Nếu bạn chỉ lưu local bằng drawable id:
-        // -> giữ mặc định (vì imageUri/videoUri là file ngoài, model bạn chưa có field)
         newExercise.setImageResId(R.drawable.ic_active);
-
-        // Nếu bạn muốn lưu đường dẫn uri (cần model có field String):
-        // newExercise.setImageUri(imageUri != null ? imageUri.toString() : null);
-        // newExercise.setVideoUri(videoUri != null ? videoUri.toString() : null);
 
         ExerciseStorage.addExercise(this, newExercise);
 

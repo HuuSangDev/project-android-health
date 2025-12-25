@@ -3,66 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
-    app:cardCornerRadius="8dp"
+    android:layout_margin="6dp"
+    app:cardCornerRadius="16dp"
     app:cardElevation="4dp">
 
     <LinearLayout
-        android:id="@+id/item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:orientation="vertical">
 
-        <!-- Ảnh món ăn -->
+        <!-- ẢNH MÓN -->
         <ImageView
             android:id="@+id/iv_recipe_image"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="140dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_salad" /> <!-- Thay bằng ảnh thực tế -->
+            android:src="@drawable/ic_platter_background" />
 
-        <!-- Tên món -->
-        <TextView
-            android:id="@+id/tv_recipe_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tên món ăn"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp" />
-
-        <!-- Thời gian và icon -->
+        <!-- CONTENT -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="4dp">
+            android:orientation="vertical"
+            android:padding="10dp">
 
+            <!-- TÊN MÓN -->
+            <TextView
+                android:id="@+id/tv_recipe_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên món ăn"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textColor="#000000" />
+
+            <!-- THỜI GIAN -->
             <TextView
                 android:id="@+id/tv_recipe_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="⏰ 20 min"
-                android:textSize="14sp" />
-
-                        <ImageView
-                            android:id="@+id/iv_clock_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:src="@drawable/ic_search"
-                            /> <!-- Thay bằng icon clock -->
-
-                        <ImageView
-                            android:id="@+id/iv_envelope_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:src="@drawable/ic_search" /> <!-- Thay bằng icon envelope/check -->
+                android:text="⏰ 20 phút"
+                android:textSize="13sp"
+                android:textColor="#7A8D87"
+                android:layout_marginTop="4dp" />
 
         </LinearLayout>
-
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

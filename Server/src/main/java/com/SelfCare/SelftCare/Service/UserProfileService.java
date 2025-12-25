@@ -37,7 +37,7 @@ public class UserProfileService {
 
 
     @Transactional
-    @CachePut(value = "myProfile", key = "#email")
+
     public UserResponse updateProfile(String email, UpdateUserProfileRequest request) throws IOException {
        ;
         User user = userRepository.findByEmail(email)
@@ -88,7 +88,7 @@ public class UserProfileService {
     }
 
 
-    @Cacheable(value = "myProfile",key = "#email")
+
     public UserResponse getMyProfile(String email )
     {
 
@@ -123,7 +123,7 @@ public class UserProfileService {
     }
 
     @Transactional
-    @CachePut(value = "myProfile", key = "#email")
+
     public UserResponse updateAvatar(String email, UpdateAvatarRequest request) throws IOException {
 
         // 1. Check user

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ============ DARK MODE COLORS ============ -->
+    <!-- Main backgrounds - Sử dụng tông màu tối nhẹ, dễ nhìn -->
+    <color name="colorBackground">#121212</color>
+    <color name="colorBackgroundSecondary">#1A1A1A</color>
+    <color name="colorSurface">#1E1E1E</color>
+    
+    <!-- Text colors - Đảm bảo contrast tốt -->
+    <color name="colorTextPrimary">#FFFFFF</color>
+    <color name="colorTextSecondary">#B0B0B0</color>
+    <color name="colorTextHint">#707070</color>
+    <color name="colorTextOnDark">#FFFFFF</color>
+    
+    <!-- Component backgrounds -->
+    <color name="colorCardBackground">#1E1E1E</color>
+    <color name="colorMenuItemBackground">#2A2A2A</color>
+    <color name="colorBottomNavBackground">#1A1A1A</color>
+    <color name="colorHeaderBackground">#1E1E1E</color>
+    <color name="colorChartBackground">#252525</color>
+    <color name="colorInputBackground">#2A2A2E</color>
+    <color name="colorSearchBackground">#2A2A2E</color>
+    
+    <!-- Dividers & borders -->
+    <color name="colorDivider">#333333</color>
+    <color name="colorBorder">#3A3A3A</color>
+    
+    <!-- Navigation -->
+    <color name="colorBottomNavInactive">#707070</color>
+    <color name="colorBottomNavActive">#FF9F63</color>
+    
+    <!-- Profile section -->
+    <color name="colorProfileBackground">#1E1E1E</color>
+    <color name="colorStatsCardBackground">#252525</color>
+</resources>

@@ -1,6 +1,7 @@
 package com.SelfCare.SelftCare.DTO.Request;
 
 import com.SelfCare.SelftCare.Enum.DifficultyLevel;
+import com.SelfCare.SelftCare.Enum.Goal;
 import com.SelfCare.SelftCare.Enum.MealType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -37,6 +38,9 @@ public class CreateFoodRequest {
     DifficultyLevel difficultyLevel;
 
     Long categoryId;
+
+    @NotNull(message = "goal is required")
+    Goal goal;
 
 }
 

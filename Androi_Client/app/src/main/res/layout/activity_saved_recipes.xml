@@ -5,114 +5,171 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <!-- ================= HEADER ================= -->
+    <LinearLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:title="Món đã lưu"
-        android:titleTextColor="@android:color/white" />
+        android:layout_height="100dp"
+        android:background="@drawable/header_nav_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
 
-    <!-- ScrollView chứa RecyclerView -->
-    <ScrollView
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/back_button_style"
+            android:padding="10dp"
+            app:srcCompat="@drawable/ic_backk"
+            app:tint="@android:color/white"
+            android:contentDescription="Back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Món ăn đã lưu"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- ================= LIST SAVED FOOD ================= -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerSavedFood"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/header"
         android:layout_above="@id/bottomNav"
-        android:fillViewport="true">
+        android:padding="12dp"
+        android:clipToPadding="false" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+    <!-- ================= PROGRESS BAR ================= -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_saved_recipes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp" />
+    <!-- ================= EMPTY STATE ================= -->
+    <TextView
+        android:id="@+id/tvEmptyState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Chưa có món ăn nào được lưu"
+        android:textColor="@color/gray"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
-        </LinearLayout>
-    </ScrollView>
-
-    <!-- Bottom Navigation -->
+    <!-- ================= BOTTOM NAV ================= -->
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="76dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bottom_nav_bg"
-        android:elevation="8dp"
+        android:elevation="10dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="12dp">
 
-        <FrameLayout
+        <!-- HOME -->
+        <LinearLayout
+            android:id="@+id/navHome"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/homeIcon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:padding="12dp"
-                android:scaleType="centerInside"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_home"
-                android:background="@android:color/transparent"
-                android:onClick="onHomeClick" />
-        </FrameLayout>
+                app:tint="#BDBDBD" />
 
-        <FrameLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_home"
+                android:textColor="#BDBDBD"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- WORKOUT -->
+        <LinearLayout
+            android:id="@+id/navWorkout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/workoutIcon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:padding="12dp"
-                android:scaleType="centerInside"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_workout"
-                android:background="@android:color/transparent" />
-        </FrameLayout>
+                app:tint="#BDBDBD" />
 
-        <FrameLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_workout"
+                android:textColor="#BDBDBD"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- RECIPE -->
+        <LinearLayout
+            android:id="@+id/navPlanner"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/recipeIcon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:padding="12dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_recipe" />
-        </FrameLayout>
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="@drawable/bottom_nav_selected_bg"
+                android:padding="6dp"
+                android:src="@drawable/ic_statistic" />
 
-        <FrameLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_food"
+                android:textColor="#FF9F63"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- PROFILE -->
+        <LinearLayout
+            android:id="@+id/navProfile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/profileIcon"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:padding="12dp"
-                android:scaleType="centerInside"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/ic_proflie"
-                android:background="@android:color/transparent" />
-        </FrameLayout>
+                app:tint="#BDBDBD" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_profile"
+                android:textColor="#BDBDBD"
+                android:textSize="11sp" />
+        </LinearLayout>
     </LinearLayout>
+
 </RelativeLayout>

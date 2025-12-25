@@ -30,6 +30,7 @@ public class UserAchievement {
 
     Double achievedValue; // giá trị mà user đạt được
     LocalDateTime achievedAt; // thời gian đạt được
+    @Builder.Default
     Boolean isNotified = false; // đã thông báo?
 
     @PrePersist

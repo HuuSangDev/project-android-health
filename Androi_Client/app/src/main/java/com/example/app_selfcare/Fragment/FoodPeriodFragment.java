@@ -1,6 +1,6 @@
-// File: app/src/main/java/com/example/app_selfcare/Fragment/FoodPeriodFragment.java
 package com.example.app_selfcare.Fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.app_selfcare.Adapter.FoodPeriodAdapter;
+import com.example.app_selfcare.BaseActivity;
 import com.example.app_selfcare.Data.Model.Food;
+import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.Model.Response.FoodResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
@@ -34,18 +36,30 @@ public class FoodPeriodFragment extends Fragment {
 
     private static final String ARG_MEAL_TYPE = "mealType";
     private String mealType;
+
     private RecyclerView recyclerView;
     private FoodPeriodAdapter adapter;
     private LinearLayout layoutEmpty;
     private TextView tvEmptyMessage;
-    private ApiService apiService;
 
+    private ApiService apiService;
+    private BaseActivity baseActivity;
+
+    // ===== FACTORY =====
     public static FoodPeriodFragment newInstance(String mealType) {
         FoodPeriodFragment fragment = new FoodPeriodFragment();
         Bundle args = new Bundle();
         args.putString(ARG_MEAL_TYPE, mealType);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof BaseActivity) {
+            baseActivity = (BaseActivity) context;
+        }
     }
 
     @Override
@@ -58,14 +72,17 @@ public class FoodPeriodFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
         View view = inflater.inflate(R.layout.fragment_recipe_period, container, false);
 
         initViews(view);
         setupRecyclerView();
         initApiService();
-        loadFoodsFromApi(); // Gọi API thay vì dùng dữ liệu mẫu
+        loadFoodsFromApi();
 
         return view;
     }
@@ -75,21 +92,19 @@ public class FoodPeriodFragment extends Fragment {
         layoutEmpty = view.findViewById(R.id.layoutEmpty);
         tvEmptyMessage = view.findViewById(R.id.tvEmptyMessage);
 
-        if (mealType != null) {
-            switch (mealType) {
-                case "BREAKFAST":
-                    tvEmptyMessage.setText("Chưa có món ăn sáng nào");
-                    break;
-                case "LUNCH":
-                    tvEmptyMessage.setText("Chưa có món ăn trưa nào");
-                    break;
-                case "DINNER":
-                    tvEmptyMessage.setText("Chưa có món ăn tối nào");
-                    break;
-                case "ALL":
-                    tvEmptyMessage.setText("Chưa có món ăn nào");
-                    break;
-            }
+        switch (mealType) {
+            case "BREAKFAST":
+                tvEmptyMessage.setText("Chưa có món ăn sáng nào");
+                break;
+            case "LUNCH":
+                tvEmptyMessage.setText("Chưa có món ăn trưa nào");
+                break;
+            case "DINNER":
+                tvEmptyMessage.setText("Chưa có món ăn tối nào");
+                break;
+            default:
+                tvEmptyMessage.setText("Chưa có món ăn nào");
+                break;
         }
     }
 
@@ -100,71 +115,69 @@ public class FoodPeriodFragment extends Fragment {
     }
 
     private void initApiService() {
-        // Sử dụng getClientWithToken để tự động thêm Bearer token vào header
-        apiService = ApiClient.getClientWithToken(requireContext()).create(ApiService.class);
+        apiService = ApiClient
+                .getClientWithToken(requireContext())
+                .create(ApiService.class);
     }
 
     private void loadFoodsFromApi() {
-        Call<com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>>> call;
 
-        if (mealType == null || "ALL".equals(mealType)) {
-            // Gọi API lấy tất cả món ăn
-            call = apiService.getAllFoods();
-        } else {
-            // Gọi API lấy món ăn theo mealType
-            call = apiService.getFoodsByMealType(mealType);
+        if (baseActivity != null) {
+            baseActivity.showLoading();
         }
 
-        call.enqueue(new Callback<com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>>>() {
-            @Override
-            public void onResponse(Call<com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>>> call,
-                                   Response<com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>> apiResponse = response.body();
-                    if (apiResponse.getCode() == 200 && apiResponse.getResult() != null) {
-                        List<FoodResponse> foodResponses = apiResponse.getResult();
-                        List<Food> foods = convertToFoodList(foodResponses);
+        Call<ApiResponse<List<FoodResponse>>> call =
+                (mealType == null || "ALL".equals(mealType))
+                        ? apiService.getAllFoods()
+                        : apiService.getFoodsByMealType(mealType);
 
-                        if (foods.isEmpty()) {
-                            showEmpty();
-                        } else {
-                            recyclerView.setVisibility(View.VISIBLE);
-                            layoutEmpty.setVisibility(View.GONE);
-                            adapter.setFoodList(foods);
-                        }
-                    } else {
+        call.enqueue(new Callback<ApiResponse<List<FoodResponse>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<FoodResponse>>> call,
+                                   Response<ApiResponse<List<FoodResponse>>> response) {
+
+                if (baseActivity != null) {
+                    baseActivity.hideLoading();
+                }
+
+                if (response.isSuccessful()
+                        && response.body() != null
+                        && response.body().getCode() == 200
+                        && response.body().getResult() != null) {
+
+                    List<Food> foods = convert(response.body().getResult());
+
+                    if (foods.isEmpty()) {
                         showEmpty();
-                        Log.e("FoodPeriodFragment", "API Error: " + apiResponse.getMessage());
+                    } else {
+                        layoutEmpty.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        adapter.setFoodList(foods);
                     }
+
                 } else {
                     showEmpty();
-                    int statusCode = response.code();
-                    if (statusCode == 401) {
-                        Log.e("FoodPeriodFragment", "Unauthorized - Token missing or expired");
-                        Toast.makeText(requireContext(), "Vui lòng đăng nhập lại", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.e("FoodPeriodFragment", "Response error: " + response.message() + " (Code: " + statusCode + ")");
-                        Toast.makeText(requireContext(), "Lỗi khi tải dữ liệu: " + statusCode, Toast.LENGTH_SHORT).show();
-                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<com.example.app_selfcare.Data.Model.Response.ApiResponse<List<FoodResponse>>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<List<FoodResponse>>> call, Throwable t) {
+                if (baseActivity != null) {
+                    baseActivity.hideLoading();
+                }
                 showEmpty();
-                Log.e("FoodPeriodFragment", "API call failed", t);
-                Toast.makeText(requireContext(), "Không thể kết nối đến server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Không thể kết nối server", Toast.LENGTH_SHORT).show();
+                Log.e("FoodPeriodFragment", "API error", t);
             }
         });
     }
 
-    private List<Food> convertToFoodList(List<FoodResponse> foodResponses) {
-        List<Food> foods = new ArrayList<>();
-        for (FoodResponse foodResponse : foodResponses) {
-            Food food = foodResponse.toFood();
-            foods.add(food);
+    private List<Food> convert(List<FoodResponse> responses) {
+        List<Food> list = new ArrayList<>();
+        for (FoodResponse r : responses) {
+            list.add(r.toFood());
         }
-        return foods;
+        return list;
     }
 
     private void showEmpty() {

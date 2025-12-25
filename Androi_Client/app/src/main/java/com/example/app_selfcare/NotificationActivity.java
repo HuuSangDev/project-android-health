@@ -1,6 +1,7 @@
 // NotificationActivity.java
 package com.example.app_selfcare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.app_selfcare.utils.LocaleManager;
+
 public class NotificationActivity extends AppCompatActivity {
 
     private ImageView backButton;
@@ -18,6 +21,12 @@ public class NotificationActivity extends AppCompatActivity {
     private LinearLayout personalNotifLayout, waterNotifLayout, exerciseNotifLayout, foodNotifLayout;
     private Switch personalNotifSwitch, waterNotifSwitch, exerciseNotifSwitch, foodNotifSwitch;
     private TextView personalNotifDesc, waterNotifDesc, exerciseNotifDesc, foodNotifDesc;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocaleManager localeManager = new LocaleManager(newBase);
+        super.attachBaseContext(localeManager.applyLanguage(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +58,15 @@ public class NotificationActivity extends AppCompatActivity {
         exerciseNotifDesc = findViewById(R.id.exerciseNotifDesc);
         foodNotifDesc = findViewById(R.id.foodNotifDesc);
 
-        titleText.setText("Thông báo");
+        titleText.setText(R.string.notifications);
     }
 
     private void setupNotificationSettings() {
-        // Set notification descriptions
-        personalNotifDesc.setText("Điều chỉnh tác cá nhân");
-        waterNotifDesc.setText("Bạn cần uống bao nhiều ml nước/ngày");
-        exerciseNotifDesc.setText("Nhật tập luyện điều độ mỗi ngày");
-        foodNotifDesc.setText("Hãy nhật ăn trong thấy hôm nay");
+        // Set notification descriptions - using string resources
+        personalNotifDesc.setText(R.string.personal_points_desc);
+        waterNotifDesc.setText(R.string.water_notification_desc);
+        exerciseNotifDesc.setText(R.string.exercise_notification_desc);
+        foodNotifDesc.setText(R.string.meal_notification_desc);
 
         // Set default switch states
         personalNotifSwitch.setChecked(true);

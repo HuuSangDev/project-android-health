@@ -1,4 +1,3 @@
-// File: app/src/main/java/com/example/app_selfcare/Adapter/SavedFoodAdapter.java
 package com.example.app_selfcare.Adapter;
 
 import android.content.Context;
@@ -12,76 +11,74 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.app_selfcare.Data.Model.Food;
-import com.example.app_selfcare.RecipeDetailActivity; // hoặc RecipeDetailActivity nếu bạn vẫn dùng tên cũ
+import com.bumptech.glide.Glide;
+import com.example.app_selfcare.Data.Model.Response.SavedFoodResponse;
+import com.example.app_selfcare.FoodDetailActivity;
 import com.example.app_selfcare.R;
 
 import java.util.List;
 
-public class SavedFoodAdapter extends RecyclerView.Adapter<SavedFoodAdapter.ViewHolder> {
+public class SavedFoodAdapter extends RecyclerView.Adapter<SavedFoodAdapter.SavedFoodViewHolder> {
 
-    private final List<Food> foodList;
-    private final Context context;
+    private List<SavedFoodResponse> savedFoodList;
+    private Context context;
 
-    public SavedFoodAdapter(List<Food> foodList, Context context) {
-        this.foodList = foodList;
+    public SavedFoodAdapter(List<SavedFoodResponse> savedFoodList, Context context) {
+        this.savedFoodList = savedFoodList;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_saved_recipe, parent, false);
-        return new ViewHolder(view);
+    public SavedFoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_saved_food, parent, false);
+        return new SavedFoodViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Food food = foodList.get(position);
+    public void onBindViewHolder(@NonNull SavedFoodViewHolder holder, int position) {
+        SavedFoodResponse savedFood = savedFoodList.get(position);
+        
+        holder.tvFoodName.setText(savedFood.getFoodName());
+        holder.tvCalories.setText(savedFood.getFormattedCalories());
+        holder.tvTime.setText(savedFood.getTotalTime() + " phút");
+        
+        // Load image
+        Glide.with(context)
+                .load(savedFood.getImageUrl())
+                .placeholder(R.drawable.ic_platter_background)
+                .error(R.drawable.ic_platter_background)
+                .into(holder.ivFoodImage);
 
-        holder.tvFoodName.setText(food.getName());
-        holder.tvFoodTime.setText(food.getTimeMinutes() + " phút");
-        holder.tvCalories.setText(food.getCalories() + " kcal");
-        holder.tvDifficulty.setText(food.getDifficulty());
-
-        // Nếu có ảnh thật thì dùng Glide, tạm dùng placeholder
-        holder.ivFoodImage.setImageResource(R.drawable.ic_platter_background);
-
-        // Click vào món → mở chi tiết
+        // Click to view detail
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, RecipeDetailActivity.class);
-            try {
-                int id = Integer.parseInt(food.getId());
-                intent.putExtra("foodId", id);
-            } catch (NumberFormatException e) {
-                intent.putExtra("foodId", -1);
-            }
-            intent.putExtra("foodName", food.getName());
-            intent.putExtra("foodCalories", food.getCalories());
-            intent.putExtra("foodTime", food.getTimeMinutes());
-            intent.putExtra("foodDifficulty", food.getDifficulty());
-            intent.putExtra("foodDescription", food.getDescription());
-            // Nếu cần truyền nguyên liệu & bước nấu → dùng Parcelable hoặc Firebase ID
+            Intent intent = new Intent(context, FoodDetailActivity.class);
+            intent.putExtra("foodId", savedFood.getFoodId().intValue());
             context.startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
-        return foodList.size();
+        return savedFoodList.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivFoodImage;
-        TextView tvFoodName, tvFoodTime, tvCalories, tvDifficulty;
+    public void updateData(List<SavedFoodResponse> newSavedFoodList) {
+        this.savedFoodList.clear();
+        this.savedFoodList.addAll(newSavedFoodList);
+        notifyDataSetChanged();
+    }
 
-        ViewHolder(@NonNull View itemView) {
+    static class SavedFoodViewHolder extends RecyclerView.ViewHolder {
+        ImageView ivFoodImage;
+        TextView tvFoodName, tvCalories, tvTime;
+
+        public SavedFoodViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivFoodImage = itemView.findViewById(R.id.iv_recipe_image);
-            tvFoodName = itemView.findViewById(R.id.tv_recipe_name);
-            tvFoodTime = itemView.findViewById(R.id.tv_recipe_time);
-//            tvCalories = itemView.findViewById(R.id.tv_calories);
-//            tvDifficulty = itemView.findViewById(R.id.tv_difficulty);
+            ivFoodImage = itemView.findViewById(R.id.iv_food_image);
+            tvFoodName = itemView.findViewById(R.id.tv_food_name);
+            tvCalories = itemView.findViewById(R.id.tv_calories);
+            tvTime = itemView.findViewById(R.id.tv_time);
         }
     }
 }

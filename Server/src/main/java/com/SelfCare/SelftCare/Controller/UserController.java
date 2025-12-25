@@ -5,6 +5,7 @@ import com.SelfCare.SelftCare.DTO.Request.ChangePasswordRequest;
 import com.SelfCare.SelftCare.DTO.Request.UserProfileRequest;
 import com.SelfCare.SelftCare.DTO.Request.UserRegisterRequest;
 import com.SelfCare.SelftCare.DTO.Response.UserResponse;
+import com.SelfCare.SelftCare.Enum.Goal;
 import com.SelfCare.SelftCare.Service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -37,10 +38,16 @@ public class UserController {
         return ApiResponse.<String>builder()
                 .result("Đổi mật khẩu thành công")
                 .build();
-
     }
 
-
-
-
+    /**
+     * API lấy goal của user hiện tại (để Android subscribe đúng topic)
+     */
+    @GetMapping("/my-goal")
+    ApiResponse<Goal> getMyGoal() {
+        return ApiResponse.<Goal>builder()
+                .message("User goal")
+                .result(userService.getCurrentUserGoal())
+                .build();
+    }
 }

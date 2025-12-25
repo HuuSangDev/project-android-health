@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Firebase ###
+# QUAN TRỌNG: Không commit Firebase service account key!
+src/main/resources/firebase/serviceAccountKey.json
+**/serviceAccountKey.json
+**/firebase-adminsdk*.json

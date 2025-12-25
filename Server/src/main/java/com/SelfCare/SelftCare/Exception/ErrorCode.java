@@ -4,6 +4,7 @@ public enum ErrorCode {
 
     EMAIL_EXISTED(101,"email existed"),
     USER_NOT_FOUND(104,"user not found "),
+    USER_NOT_EXISTED(105,"user not existed"),
     PROFILE_NOT_FOUND(104,"user profile not found "),
     EMAIL_NOT_FOUND(102,"email not found"),
     UNAUTHENTICATED(999,"unauthenticated"),
@@ -17,6 +18,9 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(500,"uncategorized exception"),
     INVALID_PASSWORD(106, "invalid password"),
     PASSWORD_NOT_MATCH(107, "password not match"),
+    USER_PROFILE_NULL(188,"userprofile is null "),
+    NOTIFICATION_NOT_FOUND(206,"notification not found"),
+    INVALID_REQUEST(206,"invalid_request")
     ;
     private int code;
     private String message;

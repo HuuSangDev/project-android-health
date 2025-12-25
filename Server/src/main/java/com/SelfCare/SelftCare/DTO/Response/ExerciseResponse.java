@@ -1,9 +1,13 @@
 package com.SelfCare.SelftCare.DTO.Response;
 
+import com.SelfCare.SelftCare.Enum.Goal;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,11 +20,11 @@ public class ExerciseResponse {
      String description;
      String instructions;
      String difficultyLevel;
-     String equipmentNeeded;
-     String muscleGroups;
      String imageUrl;
      String videoUrl;
      LocalDateTime createdAt;
 
      ExerciseCategoryResponse category;
+
+     Goal goal;
 }
