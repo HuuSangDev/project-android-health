@@ -21,6 +21,9 @@
             android:name=".BaseActivity"
             android:exported="false" />
         <activity
+            android:name=".PremiumPackageActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddFoodActivity"
             android:exported="false" />
         <activity
