@@ -8,11 +8,20 @@ public class SearchItem {
     private final int id;
     private final String name;
     private final int type;
+    private final String imageUrl;
 
     public SearchItem(int id, String name, int type) {
         this.id = id;
         this.name = name;
         this.type = type;
+        this.imageUrl = null;
+    }
+
+    public SearchItem(int id, String name, int type, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.imageUrl = imageUrl;
     }
 
     public int getId() {
@@ -25,6 +34,10 @@ public class SearchItem {
 
     public int getType() {
         return type;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public String getTypeLabel() {

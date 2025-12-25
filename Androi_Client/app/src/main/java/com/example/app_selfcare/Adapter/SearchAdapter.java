@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.app_selfcare.Data.Model.SearchItem;
 import com.example.app_selfcare.R;
 
@@ -42,6 +44,35 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         holder.tvTitle.setText(item.getName());
         holder.tvType.setText(item.getTypeLabel());
+
+        // Set icon và màu dựa trên type
+        if (item.getType() == SearchItem.TYPE_FOOD) {
+            // Nếu có imageUrl thì load ảnh, không thì dùng icon mặc định
+            if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
+                Glide.with(holder.itemView.getContext())
+                    .load(item.getImageUrl())
+                    .placeholder(R.drawable.ic_food)
+                    .error(R.drawable.ic_food)
+                    .transform(new CircleCrop())
+                    .into(holder.imgIcon);
+            } else {
+                holder.imgIcon.setImageResource(R.drawable.ic_food);
+                holder.imgIcon.setColorFilter(holder.itemView.getContext().getResources().getColor(R.color.orange_primary, null));
+            }
+        } else if (item.getType() == SearchItem.TYPE_WORKOUT) {
+            // Nếu có imageUrl thì load ảnh, không thì dùng icon mặc định
+            if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
+                Glide.with(holder.itemView.getContext())
+                    .load(item.getImageUrl())
+                    .placeholder(R.drawable.ic_exercise)
+                    .error(R.drawable.ic_exercise)
+                    .transform(new CircleCrop())
+                    .into(holder.imgIcon);
+            } else {
+                holder.imgIcon.setImageResource(R.drawable.ic_exercise);
+                holder.imgIcon.setColorFilter(holder.itemView.getContext().getResources().getColor(R.color.blue_primary, null));
+            }
+        }
 
         holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
     }

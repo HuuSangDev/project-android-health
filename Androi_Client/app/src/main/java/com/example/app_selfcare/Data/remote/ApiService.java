@@ -19,6 +19,7 @@ import com.example.app_selfcare.Data.Model.Response.DailyLogResponse;
 import com.example.app_selfcare.Data.Model.Response.DeviceTokenResponse;
 import com.example.app_selfcare.Data.Model.Response.ExerciseCategoryResponse;
 import com.example.app_selfcare.Data.Model.Response.FoodCategoryResponse;
+import com.example.app_selfcare.Data.Model.Response.FoodCreateResponse;
 import com.example.app_selfcare.Data.Model.Response.FoodResponse;
 import com.example.app_selfcare.Data.Model.Response.PageResponse;
 import com.example.app_selfcare.Data.Model.Response.ExerciseResponse;
@@ -95,6 +96,10 @@ public interface ApiService {
     @PUT("app/Users/change-password")
     Call<ApiResponse<String>> changePassword(@Body ChangePasswordRequest request);
 
+    // Lấy goal của user hiện tại (để subscribe WebSocket đúng topic)
+    @GET("app/Users/my-goal")
+    Call<ApiResponse<String>> getMyGoal();
+
     // Food APIs
     @GET("app/foods/all")
     Call<ApiResponse<List<FoodResponse>>> getAllFoods();
@@ -108,6 +113,10 @@ public interface ApiService {
     // Search/Filter Foods (Admin)
     @POST("app/foods/search")
     Call<ApiResponse<PageResponse<FoodResponse>>> searchFoods(@Body FoodSearchRequest request);
+
+    // New endpoints for search functionality with correct response types
+    @GET("app/foods/all")
+    Call<ApiResponse<List<FoodCreateResponse>>> getAllFoodsForSearch();
 
     // Exercises APIs
     @GET("app/exercises/all")
