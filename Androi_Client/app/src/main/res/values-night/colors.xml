@@ -32,4 +32,8 @@
     <!-- Profile section -->
     <color name="colorProfileBackground">#1E1E1E</color>
     <color name="colorStatsCardBackground">#252525</color>
+    
+    <!-- Additional colors -->
+    <color name="orange">#FF8C42</color>
+    <color name="green">#4CAF50</color>
 </resources>

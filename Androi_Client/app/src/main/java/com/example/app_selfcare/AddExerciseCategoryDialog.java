@@ -11,9 +11,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.app_selfcare.Data.Model.Request.FoodCategoryCreateRequest;
+import com.example.app_selfcare.Data.Model.Request.ExerciseCategoryCreateRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
-import com.example.app_selfcare.Data.Model.Response.FoodCategoryResponse;
+import com.example.app_selfcare.Data.Model.Response.ExerciseCategoryResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
 import com.google.android.material.textfield.TextInputEditText;
@@ -22,12 +22,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddFoodCategoryDialog extends DialogFragment {
+public class AddExerciseCategoryDialog extends DialogFragment {
 
-    private static final String TAG = "AddFoodCategoryDialog";
+    private static final String TAG = "AddExerciseCategoryDialog";
 
     public interface OnCategoryAddedListener {
-        void onCategoryAdded(FoodCategoryResponse category);
+        void onCategoryAdded(ExerciseCategoryResponse category);
     }
 
     private OnCategoryAddedListener listener;
@@ -39,7 +39,7 @@ public class AddFoodCategoryDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View view = getLayoutInflater().inflate(R.layout.dialog_add_food_category, null);
+        View view = getLayoutInflater().inflate(R.layout.dialog_add_exercise_category, null);
 
         TextInputEditText etName = view.findViewById(R.id.etCategoryName);
         TextInputEditText etDescription = view.findViewById(R.id.etCategoryDescription);
@@ -73,16 +73,16 @@ public class AddFoodCategoryDialog extends DialogFragment {
         progressBar.setVisibility(View.VISIBLE);
 
         ApiService apiService = ApiClient.getClientWithToken(requireContext()).create(ApiService.class);
-        FoodCategoryCreateRequest request = new FoodCategoryCreateRequest(name, description);
+        ExerciseCategoryCreateRequest request = new ExerciseCategoryCreateRequest(name, description);
 
-        apiService.createFoodCategory(request).enqueue(new Callback<ApiResponse<FoodCategoryResponse>>() {
+        apiService.createExerciseCategory(request).enqueue(new Callback<ApiResponse<ExerciseCategoryResponse>>() {
             @Override
-            public void onResponse(Call<ApiResponse<FoodCategoryResponse>> call,
-                                   Response<ApiResponse<FoodCategoryResponse>> response) {
+            public void onResponse(Call<ApiResponse<ExerciseCategoryResponse>> call,
+                                   Response<ApiResponse<ExerciseCategoryResponse>> response) {
                 progressBar.setVisibility(View.GONE);
 
                 if (response.isSuccessful() && response.body() != null && response.body().getResult() != null) {
-                    FoodCategoryResponse category = response.body().getResult();
+                    ExerciseCategoryResponse category = response.body().getResult();
                     if (listener != null) {
                         listener.onCategoryAdded(category);
                     }
@@ -94,7 +94,7 @@ public class AddFoodCategoryDialog extends DialogFragment {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<FoodCategoryResponse>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<ExerciseCategoryResponse>> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
                 Log.e(TAG, "Create category failed", t);
                 Toast.makeText(getContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();

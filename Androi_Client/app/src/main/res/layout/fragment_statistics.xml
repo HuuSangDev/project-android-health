@@ -11,6 +11,30 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Loading Layout -->
+        <LinearLayout
+            android:id="@+id/layoutLoading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:indeterminateTint="#FF8C42" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Đang tải thống kê..."
+                android:textColor="#666666"
+                android:textSize="14sp" />
+        </LinearLayout>
+
         <!-- Header -->
         <TextView
             android:layout_width="wrap_content"
@@ -66,6 +90,7 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tvTotalUsers"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1,234"
@@ -89,6 +114,7 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tvActiveUsers"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="987"
@@ -180,6 +206,7 @@
                             android:layout_marginStart="12dp" />
 
                         <TextView
+                            android:id="@+id/tvTotalExercises"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="156"
@@ -216,6 +243,7 @@
                             android:layout_marginStart="12dp" />
 
                         <TextView
+                            android:id="@+id/tvTotalFoods"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="342"
@@ -252,6 +280,7 @@
                             android:layout_marginStart="12dp" />
 
                         <TextView
+                            android:id="@+id/tvTotalNotifications"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="89"

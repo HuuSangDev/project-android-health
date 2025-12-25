@@ -13,7 +13,11 @@ public class ExerciseCategoryCreateRequest {
     @SerializedName("iconUrl")
     private String iconUrl;
 
-    public ExerciseCategoryCreateRequest() {}
+    public ExerciseCategoryCreateRequest(String categoryName, String description) {
+        this.categoryName = categoryName;
+        this.description = description;
+        this.iconUrl = null;
+    }
 
     public ExerciseCategoryCreateRequest(String categoryName, String description, String iconUrl) {
         this.categoryName = categoryName;

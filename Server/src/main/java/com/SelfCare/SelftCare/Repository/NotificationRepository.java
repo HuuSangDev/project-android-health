@@ -24,4 +24,9 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
      * Lấy notifications theo goal cụ thể
      */
     List<Notification> findByGoalOrderByCreatedAtDesc(Goal goal);
+
+    /**
+     * Đếm số thông báo chưa đọc
+     */
+    long countByIsReadFalse();
 }

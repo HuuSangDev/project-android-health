@@ -61,10 +61,10 @@ public class AdminHomeActivity extends AppCompatActivity implements NavigationVi
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Load default fragment (Dashboard)
+        // Load default fragment (Statistics instead of Dashboard)
         if (savedInstanceState == null) {
-            loadFragment(new DashboardFragment());
-            navigationView.setCheckedItem(R.id.nav_statistics); // ⭐ SỬA ĐÂY
+            loadFragment(new StatisticsFragment());
+            navigationView.setCheckedItem(R.id.nav_statistics);
         }
     }
 
@@ -75,7 +75,6 @@ public class AdminHomeActivity extends AppCompatActivity implements NavigationVi
 
         int itemId = item.getItemId();
 
-        // ⭐ THÊM CASE DASHBOARD
         if (itemId == R.id.nav_statistics) {
             fragment = new StatisticsFragment();
             title = "Thống kê";
@@ -91,9 +90,6 @@ public class AdminHomeActivity extends AppCompatActivity implements NavigationVi
         } else if (itemId == R.id.nav_exercise_categories) {
             fragment = new ExerciseCategoriesFragment();
             title = "Danh mục Bài tập";
-        } else if (itemId == R.id.nav_users) {
-            fragment = new UsersFragment();
-            title = "Quản lí Người dùng";
         } else if (itemId == R.id.nav_notifications) {
             fragment = new NotificationsFragment();
             title = "Thông báo";
