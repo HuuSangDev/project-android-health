@@ -247,4 +247,24 @@ public interface ApiService {
     @DELETE("app/device-tokens/all")
     Call<ApiResponse<Void>> unregisterAllDeviceTokens();
 
+    // ==================== Admin Statistics APIs ====================
+    @GET("admin/statistics/overview")
+    Call<ApiResponse<com.example.app_selfcare.Data.Model.Response.StatisticsResponse>> getOverviewStatistics();
+
+    // ==================== Admin Notifications APIs ====================
+    @GET("notifications/all")
+    Call<ApiResponse<List<com.example.app_selfcare.Data.Model.Response.NotificationResponse>>> getAllNotifications();
+
+    @POST("notifications/send")
+    Call<ApiResponse<Void>> sendCustomNotification(@Body com.example.app_selfcare.Data.Model.Request.SendNotificationRequest request);
+
+    @POST("notifications/broadcast")
+    Call<ApiResponse<Void>> sendBroadcastNotification(@Body com.example.app_selfcare.Data.Model.Request.SendNotificationRequest request);
+
+    @PUT("notifications/{id}/read")
+    Call<ApiResponse<com.example.app_selfcare.Data.Model.Response.NotificationResponse>> markNotificationAsRead(@Path("id") Long id);
+
+    @PUT("notifications/read-all")
+    Call<ApiResponse<Void>> markAllNotificationsAsRead();
+
 }

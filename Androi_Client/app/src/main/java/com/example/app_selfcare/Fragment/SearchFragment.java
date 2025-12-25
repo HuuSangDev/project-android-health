@@ -269,8 +269,9 @@ public class SearchFragment extends Fragment {
                         List<ExerciseResponse> exercises = apiResponse.getResult();
                         
                         for (ExerciseResponse exercise : exercises) {
+                            int exerciseId = exercise.getExerciseId() != null ? exercise.getExerciseId().intValue() : 0;
                             SearchItem item = new SearchItem(
-                                exercise.getExerciseId().intValue(),
+                                exerciseId,
                                 exercise.getExerciseName(),
                                 SearchItem.TYPE_WORKOUT,
                                 exercise.getImageUrl()
@@ -278,7 +279,7 @@ public class SearchFragment extends Fragment {
                             allItems.add(item);
                             
                             // Lưu thông tin chi tiết để navigation
-                            exerciseDetailsMap.put(exercise.getExerciseId().intValue(), exercise);
+                            exerciseDetailsMap.put(exerciseId, exercise);
                         }
                         
                         updateUI();

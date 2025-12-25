@@ -45,10 +45,13 @@ public class AddFoodCategoryDialog extends DialogFragment {
         TextInputEditText etDescription = view.findViewById(R.id.etCategoryDescription);
         progressBar = view.findViewById(R.id.progressBar);
 
+        // Tạo dialog không có nút mặc định
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(view)
+                .setCancelable(true)
                 .create();
 
+        // Xử lý sự kiện cho các nút trong layout
         view.findViewById(R.id.btnCancel).setOnClickListener(v -> dismiss());
 
         view.findViewById(R.id.btnSaveCategory).setOnClickListener(v -> {

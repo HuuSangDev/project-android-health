@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.app_selfcare.AddFoodCategoryDialog;
 import com.example.app_selfcare.Adapter.FoodCategoryAdapter;
 import com.example.app_selfcare.Data.Model.Request.FoodCategoryCreateRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
@@ -136,56 +137,12 @@ public class FoodCategoriesFragment extends Fragment implements FoodCategoryAdap
     }
 
     private void showAddCategoryDialog() {
-        View dialogView = LayoutInflater.from(requireContext())
-                .inflate(R.layout.dialog_add_food_category, null);
-
-        TextInputEditText etName = dialogView.findViewById(R.id.etCategoryName);
-        TextInputEditText etDescription = dialogView.findViewById(R.id.etCategoryDescription);
-
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Thêm danh mục")
-                .setView(dialogView)
-                .setPositiveButton("Thêm", (dialog, which) -> {
-                    String name = etName.getText() != null ? etName.getText().toString().trim() : "";
-                    String desc = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
-
-                    if (name.isEmpty()) {
-                        Toast.makeText(getContext(), "Nhập tên danh mục", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    createCategory(name, desc);
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
-    }
-
-    private void createCategory(String name, String description) {
-        showLoading(true);
-
-        FoodCategoryCreateRequest request = new FoodCategoryCreateRequest(name, description);
-
-        apiService.createFoodCategory(request).enqueue(new Callback<ApiResponse<FoodCategoryResponse>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<FoodCategoryResponse>> call,
-                                   Response<ApiResponse<FoodCategoryResponse>> response) {
-                showLoading(false);
-
-                if (response.isSuccessful() && response.body() != null
-                        && response.body().getResult() != null) {
-                    Toast.makeText(getContext(), "Đã thêm danh mục", Toast.LENGTH_SHORT).show();
-                    loadCategories();
-                } else {
-                    Toast.makeText(getContext(), "Lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<FoodCategoryResponse>> call, Throwable t) {
-                showLoading(false);
-                Toast.makeText(getContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
-            }
+        AddFoodCategoryDialog dialog = new AddFoodCategoryDialog();
+        dialog.setListener(category -> {
+            Toast.makeText(getContext(), "Đã thêm danh mục", Toast.LENGTH_SHORT).show();
+            loadCategories();
         });
+        dialog.show(getParentFragmentManager(), "AddFoodCategoryDialog");
     }
 
     // ==================== OnCategoryActionListener ====================
@@ -224,22 +181,28 @@ public class FoodCategoriesFragment extends Fragment implements FoodCategoryAdap
         etName.setText(category.getCategoryName());
         etDescription.setText(category.getDescription());
 
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Sửa danh mục")
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
-                .setPositiveButton("Lưu", (dialog, which) -> {
-                    String name = etName.getText() != null ? etName.getText().toString().trim() : "";
-                    String desc = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
+                .setCancelable(true)
+                .create();
 
-                    if (name.isEmpty()) {
-                        Toast.makeText(getContext(), "Nhập tên danh mục", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+        // Xử lý sự kiện cho các nút trong layout
+        dialogView.findViewById(R.id.btnCancel).setOnClickListener(v -> dialog.dismiss());
 
-                    updateCategory(category.getCategoryId(), name, desc);
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
+        dialogView.findViewById(R.id.btnSaveCategory).setOnClickListener(v -> {
+            String name = etName.getText() != null ? etName.getText().toString().trim() : "";
+            String desc = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
+
+            if (name.isEmpty()) {
+                etName.setError("Nhập tên danh mục");
+                return;
+            }
+
+            updateCategory(category.getCategoryId(), name, desc);
+            dialog.dismiss();
+        });
+
+        dialog.show();
     }
 
     private void updateCategory(long categoryId, String name, String description) {

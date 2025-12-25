@@ -30,9 +30,6 @@
             android:name=".SavedFoodActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminFoodManagementActivity"
-            android:exported="false" />
-        <activity
             android:name=".FoodDetailActivity"
             android:exported="false" />
         <activity
@@ -134,12 +131,6 @@
             android:exported="false" />
         <activity
             android:name=".ChatActivity"
-            android:exported="false" />
-        <activity
-            android:name=".FoodsByCategoryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ExercisesByCategoryActivity"
             android:exported="false" />
 
         <!-- Firebase Cloud Messaging Service -->

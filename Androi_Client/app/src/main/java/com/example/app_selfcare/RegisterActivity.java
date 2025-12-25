@@ -8,13 +8,13 @@
 
     import androidx.activity.EdgeToEdge;
     import androidx.appcompat.app.AppCompatActivity;
+    import androidx.appcompat.app.AppCompatDelegate;
 
     import com.example.app_selfcare.Data.Model.Request.UserRegisterRequest;
     import com.example.app_selfcare.Data.Model.Response.ApiResponse;
     import com.example.app_selfcare.Data.Model.Response.UserResponse;
     import com.example.app_selfcare.Data.remote.ApiClient;
     import com.example.app_selfcare.Data.remote.ApiService;
-    import com.example.app_selfcare.upload.InforSex;
     import com.example.app_selfcare.utils.LocaleManager;
     import com.google.android.material.textfield.TextInputEditText;
 
@@ -35,6 +35,10 @@
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            
+            // Force light mode for register screen only (not affecting other activities)
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            
             EdgeToEdge.enable(this);
             setContentView(R.layout.activity_register);
 

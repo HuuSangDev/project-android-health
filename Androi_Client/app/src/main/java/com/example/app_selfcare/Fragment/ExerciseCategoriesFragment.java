@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.app_selfcare.AddExerciseCategoryDialog;
 import com.example.app_selfcare.Adapter.ExerciseCategoryAdapter;
 import com.example.app_selfcare.Data.Model.Request.ExerciseCategoryCreateRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
@@ -136,58 +137,12 @@ public class ExerciseCategoriesFragment extends Fragment implements ExerciseCate
     }
 
     private void showAddCategoryDialog() {
-        View dialogView = LayoutInflater.from(requireContext())
-                .inflate(R.layout.dialog_add_exercise_category, null);
-
-        TextInputEditText etName = dialogView.findViewById(R.id.etCategoryName);
-        TextInputEditText etDescription = dialogView.findViewById(R.id.etCategoryDescription);
-        TextInputEditText etIconUrl = dialogView.findViewById(R.id.etIconUrl);
-
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Thêm danh mục bài tập")
-                .setView(dialogView)
-                .setPositiveButton("Thêm", (dialog, which) -> {
-                    String name = etName.getText() != null ? etName.getText().toString().trim() : "";
-                    String desc = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
-                    String iconUrl = etIconUrl.getText() != null ? etIconUrl.getText().toString().trim() : "";
-
-                    if (name.isEmpty()) {
-                        Toast.makeText(getContext(), "Nhập tên danh mục", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    createCategory(name, desc, iconUrl);
-                })
-                .setNegativeButton("Hủy", null)
-                .show();
-    }
-
-    private void createCategory(String name, String description, String iconUrl) {
-        showLoading(true);
-
-        ExerciseCategoryCreateRequest request = new ExerciseCategoryCreateRequest(name, description, iconUrl);
-
-        apiService.createExerciseCategory(request).enqueue(new Callback<ApiResponse<ExerciseCategoryResponse>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<ExerciseCategoryResponse>> call,
-                                   Response<ApiResponse<ExerciseCategoryResponse>> response) {
-                showLoading(false);
-
-                if (response.isSuccessful() && response.body() != null
-                        && response.body().getResult() != null) {
-                    Toast.makeText(getContext(), "Đã thêm danh mục", Toast.LENGTH_SHORT).show();
-                    loadCategories();
-                } else {
-                    Toast.makeText(getContext(), "Lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<ExerciseCategoryResponse>> call, Throwable t) {
-                showLoading(false);
-                Toast.makeText(getContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
-            }
+        AddExerciseCategoryDialog dialog = new AddExerciseCategoryDialog();
+        dialog.setListener(category -> {
+            Toast.makeText(getContext(), "Đã thêm danh mục", Toast.LENGTH_SHORT).show();
+            loadCategories();
         });
+        dialog.show(getParentFragmentManager(), "AddExerciseCategoryDialog");
     }
 
     // ==================== OnCategoryActionListener ====================
@@ -222,11 +177,9 @@ public class ExerciseCategoriesFragment extends Fragment implements ExerciseCate
 
         TextInputEditText etName = dialogView.findViewById(R.id.etCategoryName);
         TextInputEditText etDescription = dialogView.findViewById(R.id.etCategoryDescription);
-        TextInputEditText etIconUrl = dialogView.findViewById(R.id.etIconUrl);
 
         etName.setText(category.getCategoryName());
         etDescription.setText(category.getDescription());
-        etIconUrl.setText(category.getIconUrl());
 
         new AlertDialog.Builder(requireContext())
                 .setTitle("Sửa danh mục bài tập")
@@ -234,23 +187,22 @@ public class ExerciseCategoriesFragment extends Fragment implements ExerciseCate
                 .setPositiveButton("Lưu", (dialog, which) -> {
                     String name = etName.getText() != null ? etName.getText().toString().trim() : "";
                     String desc = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
-                    String iconUrl = etIconUrl.getText() != null ? etIconUrl.getText().toString().trim() : "";
 
                     if (name.isEmpty()) {
                         Toast.makeText(getContext(), "Nhập tên danh mục", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    updateCategory(category.getCategoryId(), name, desc, iconUrl);
+                    updateCategory(category.getCategoryId(), name, desc);
                 })
                 .setNegativeButton("Hủy", null)
                 .show();
     }
 
-    private void updateCategory(long categoryId, String name, String description, String iconUrl) {
+    private void updateCategory(long categoryId, String name, String description) {
         showLoading(true);
 
-        ExerciseCategoryCreateRequest request = new ExerciseCategoryCreateRequest(name, description, iconUrl);
+        ExerciseCategoryCreateRequest request = new ExerciseCategoryCreateRequest(name, description);
 
         apiService.updateExerciseCategory(categoryId, request).enqueue(new Callback<ApiResponse<ExerciseCategoryResponse>>() {
             @Override
