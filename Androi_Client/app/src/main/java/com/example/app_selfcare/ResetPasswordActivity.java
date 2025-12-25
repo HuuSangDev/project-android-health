@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.app_selfcare.Data.Model.Request.ResetPasswordRequest;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
@@ -27,6 +28,10 @@ public class ResetPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Force light mode for reset password screen
+        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        
         setContentView(R.layout.activity_reset_password);
 
         // Lấy email từ Intent

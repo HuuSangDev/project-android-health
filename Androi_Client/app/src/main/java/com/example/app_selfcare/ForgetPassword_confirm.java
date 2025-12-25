@@ -7,6 +7,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.app_selfcare.Data.Model.Request.ForgotPasswordRequest;
 import com.example.app_selfcare.Data.Model.Request.VerifyOtpRequest;
@@ -27,6 +28,10 @@ public class ForgetPassword_confirm extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Force light mode for OTP verification screen
+        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_forget_password_confirm);
 
