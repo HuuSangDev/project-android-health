@@ -2,6 +2,8 @@ package com.example.app_selfcare;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,8 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,12 +34,13 @@ import com.example.app_selfcare.utils.LocaleManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 public class WorkoutTrainingActivity extends AppCompatActivity {
 
     private static final String TAG = "WorkoutTrainingActivity";
 
-    private ImageView imgExercise;
+    private ImageView imgExercise, btnPlayVideo;
+    private VideoView videoExercise;
+    private ProgressBar videoLoading;
     private TextView tvExerciseName, tvCurrentProgress, tvInstruction;
     private Button btnCompleteWorkout;
 
@@ -42,12 +48,14 @@ public class WorkoutTrainingActivity extends AppCompatActivity {
     private int exerciseId = -1;
     private String exerciseName = "";
     private double caloriesPerMinute = 0;
+    private String videoUrl = null;
 
     private int currentSet = 1;
     private int totalSets = 3;
     private Handler timerHandler;
     private Runnable timerRunnable;
     private int elapsedSeconds = 0;
+    private boolean isVideoPlaying = false;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -75,12 +83,23 @@ public class WorkoutTrainingActivity extends AppCompatActivity {
 
     private void initViews() {
         imgExercise = findViewById(R.id.imgExercise);
+        videoExercise = findViewById(R.id.videoExercise);
+        videoLoading = findViewById(R.id.videoLoading);
+        btnPlayVideo = findViewById(R.id.btnPlayVideo);
         tvExerciseName = findViewById(R.id.tvExerciseName);
         tvCurrentProgress = findViewById(R.id.tvCurrentProgress);
         tvInstruction = findViewById(R.id.tvInstruction);
         btnCompleteWorkout = findViewById(R.id.btnCompleteWorkout);
 
         btnCompleteWorkout.setOnClickListener(v -> completeWorkout());
+        
+        // Setup video controls
+        btnPlayVideo.setOnClickListener(v -> playVideo());
+        imgExercise.setOnClickListener(v -> {
+            if (videoUrl != null && !videoUrl.isEmpty()) {
+                playVideo();
+            }
+        });
     }
 
     private void initApiService() {
@@ -122,6 +141,10 @@ public class WorkoutTrainingActivity extends AppCompatActivity {
         tvInstruction.setText(exercise.getInstructions() != null ? exercise.getInstructions() : "Không có hướng dẫn");
         updateProgress();
 
+        // Lưu videoUrl
+        videoUrl = exercise.getVideoUrl();
+
+        // Hiển thị thumbnail image
         if (exercise.getImageUrl() != null && !exercise.getImageUrl().isEmpty()) {
             Glide.with(this)
                     .load(exercise.getImageUrl())
@@ -129,6 +152,70 @@ public class WorkoutTrainingActivity extends AppCompatActivity {
                     .error(R.drawable.img_pushup)
                     .centerCrop()
                     .into(imgExercise);
+        }
+
+        // Hiển thị nút play nếu có video
+        if (videoUrl != null && !videoUrl.isEmpty()) {
+            btnPlayVideo.setVisibility(View.VISIBLE);
+        } else {
+            btnPlayVideo.setVisibility(View.GONE);
+        }
+    }
+
+    private void playVideo() {
+        if (videoUrl == null || videoUrl.isEmpty()) {
+            Toast.makeText(this, "Không có video cho bài tập này", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Ẩn image, hiện video
+        imgExercise.setVisibility(View.GONE);
+        btnPlayVideo.setVisibility(View.GONE);
+        videoExercise.setVisibility(View.VISIBLE);
+        videoLoading.setVisibility(View.VISIBLE);
+
+        try {
+            Uri videoUri = Uri.parse(videoUrl);
+            videoExercise.setVideoURI(videoUri);
+
+            // Thêm MediaController để điều khiển video
+            MediaController mediaController = new MediaController(this);
+            mediaController.setAnchorView(videoExercise);
+            videoExercise.setMediaController(mediaController);
+
+            videoExercise.setOnPreparedListener(mp -> {
+                videoLoading.setVisibility(View.GONE);
+                mp.setLooping(true); // Lặp video
+                videoExercise.start();
+                isVideoPlaying = true;
+            });
+
+            videoExercise.setOnErrorListener((mp, what, extra) -> {
+                Log.e(TAG, "Video error: what=" + what + ", extra=" + extra);
+                videoLoading.setVisibility(View.GONE);
+                Toast.makeText(this, "Không thể phát video", Toast.LENGTH_SHORT).show();
+                showImageFallback();
+                return true;
+            });
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error playing video", e);
+            Toast.makeText(this, "Lỗi phát video", Toast.LENGTH_SHORT).show();
+            showImageFallback();
+        }
+    }
+
+    private void showImageFallback() {
+        videoExercise.setVisibility(View.GONE);
+        videoLoading.setVisibility(View.GONE);
+        imgExercise.setVisibility(View.VISIBLE);
+        btnPlayVideo.setVisibility(View.VISIBLE);
+    }
+
+    private void stopVideo() {
+        if (videoExercise != null && isVideoPlaying) {
+            videoExercise.stopPlayback();
+            isVideoPlaying = false;
         }
     }
 
@@ -177,9 +264,26 @@ public class WorkoutTrainingActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (videoExercise != null && isVideoPlaying) {
+            videoExercise.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (videoExercise != null && isVideoPlaying) {
+            videoExercise.start();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         stopTimer();
+        stopVideo();
     }
 
     private void setupNavigation() {

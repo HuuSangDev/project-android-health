@@ -35,7 +35,8 @@ public class SecurityConfig {
                             "/Users/Register",
                             "/api/chat/**",
                             "/ws/**",           // WebSocket endpoint
-                            "/notifications/**" // Notification API
+                            "/notifications/**", // Notification API
+                            "/admin/cache/**"   // Cache management (tạm thời cho dev)
                     ).permitAll()
                             .anyRequest().authenticated()//
                         );

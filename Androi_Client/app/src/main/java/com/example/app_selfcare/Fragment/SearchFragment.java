@@ -50,7 +50,6 @@ public class SearchFragment extends Fragment {
     private ImageView btnBack, btnClearSearch;
     private RecyclerView rvSuggestions;
     private LinearLayout layoutEmptyState, layoutSuggestions;
-    private TextView tvSectionTitle;
     private ProgressBar progressBar;
 
     private SearchAdapter adapter;
@@ -89,7 +88,6 @@ public class SearchFragment extends Fragment {
         rvSuggestions = view.findViewById(R.id.rvSuggestions);
         layoutEmptyState = view.findViewById(R.id.layoutEmptyState);
         layoutSuggestions = view.findViewById(R.id.layoutSuggestions);
-        tvSectionTitle = layoutSuggestions.findViewById(R.id.tvSectionTitle);
         
         // Tạo ProgressBar programmatically nếu chưa có trong layout
         progressBar = new ProgressBar(getContext());
@@ -391,6 +389,34 @@ public class SearchFragment extends Fragment {
         } catch (Exception e) {
             Log.e(TAG, "Error opening exercise detail", e);
             Toast.makeText(getContext(), "Không thể mở chi tiết bài tập", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Lưu item vào lịch sử tìm kiếm
+     */
+    private void saveToHistory(SearchItem item) {
+        if (historyManager != null) {
+            String imageUrl = item.getImageUrl() != null ? item.getImageUrl() : "";
+            String category = item.getType() == SearchItem.TYPE_FOOD ? "Món ăn" : "Bài tập";
+            historyManager.addToHistory(item, imageUrl, category);
+            Log.d(TAG, "Saved to history: " + item.getName());
+        }
+    }
+
+    /**
+     * Hiển thị lịch sử tìm kiếm
+     */
+    private void showHistory() {
+        if (historyManager != null && historyManager.hasHistory()) {
+            isShowingHistory = true;
+            filteredItems.clear();
+            filteredItems.addAll(historyManager.getHistoryAsSearchItems());
+            updateUI();
+            Log.d(TAG, "Showing history with " + filteredItems.size() + " items");
+        } else {
+            isShowingHistory = false;
+            showAllItems();
         }
     }
 }

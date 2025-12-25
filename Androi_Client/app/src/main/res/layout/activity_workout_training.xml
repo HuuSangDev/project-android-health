@@ -69,12 +69,44 @@
                 app:cardCornerRadius="24dp"
                 app:cardElevation="4dp">
 
-                <ImageView
-                    android:id="@+id/imgExercise"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/img_pushup" />
+                    android:layout_height="220dp">
+
+                    <!-- Video Player -->
+                    <VideoView
+                        android:id="@+id/videoExercise"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone" />
+
+                    <!-- Fallback Image (khi không có video) -->
+                    <ImageView
+                        android:id="@+id/imgExercise"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_pushup" />
+
+                    <!-- Play button overlay -->
+                    <ImageView
+                        android:id="@+id/btnPlayVideo"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center"
+                        android:src="@android:drawable/ic_media_play"
+                        android:background="@drawable/bg_play_button"
+                        android:padding="16dp"
+                        android:visibility="gone" />
+
+                    <!-- Loading indicator -->
+                    <ProgressBar
+                        android:id="@+id/videoLoading"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+                </FrameLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
