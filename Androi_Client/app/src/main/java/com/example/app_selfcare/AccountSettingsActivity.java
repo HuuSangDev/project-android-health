@@ -136,6 +136,28 @@ public class AccountSettingsActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void showSignOutDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(R.string.sign_out)
+                .setMessage(R.string.sign_out_confirmation)
+                .setPositiveButton(R.string.sign_out, (dialog, which) -> {
+                    // Clear user data
+                    getSharedPreferences("APP_DATA", MODE_PRIVATE)
+                            .edit()
+                            .clear()
+                            .apply();
+                    
+                    Toast.makeText(this, R.string.signed_out_successfully, Toast.LENGTH_SHORT).show();
+                    
+                    Intent intent = new Intent(AccountSettingsActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
     private void restartApp() {
         // Restart toàn bộ app từ HomeActivity để áp dụng ngôn ngữ mới cho tất cả màn hình
         Intent intent = new Intent(this, HomeActivity.class);
@@ -174,11 +196,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         languageLayout.setOnClickListener(v -> showLanguageDialog());
         
-        signOutButton.setOnClickListener(v -> {
-            Intent intent = new Intent(AccountSettingsActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        });
+        signOutButton.setOnClickListener(v -> showSignOutDialog());
 
         // Bottom Navigation
         setupBottomNavigation();

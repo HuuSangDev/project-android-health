@@ -46,6 +46,8 @@
     <string name="language">Ngôn ngữ</string>
     <string name="help">Trợ giúp</string>
     <string name="sign_out">Đăng xuất</string>
+    <string name="sign_out_confirmation">Bạn có chắc chắn muốn đăng xuất?</string>
+    <string name="signed_out_successfully">Đã đăng xuất thành công</string>
     
     <!-- Language -->
     <string name="language_vietnamese">Tiếng Việt</string>

@@ -1,5 +1,6 @@
 package com.example.app_selfcare.Ui.Admin;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.app_selfcare.LoginActivity;
 import com.example.app_selfcare.R;
 import com.example.app_selfcare.Fragment.*;
+import com.example.app_selfcare.utils.LocaleManager;
 import com.google.android.material.navigation.NavigationView;
 
 public class AdminHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -24,6 +26,12 @@ public class AdminHomeActivity extends AppCompatActivity implements NavigationVi
     private NavigationView navigationView;
     private Toolbar toolbar;
     private ActionBarDrawerToggle toggle;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocaleManager localeManager = new LocaleManager(newBase);
+        super.attachBaseContext(localeManager.applyLanguage(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,16 +126,22 @@ public class AdminHomeActivity extends AppCompatActivity implements NavigationVi
 
     private void showLogoutDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Đăng xuất")
-                .setMessage("Bạn có chắc chắn muốn đăng xuất?")
-                .setPositiveButton("Đăng xuất", (dialog, which) -> {
-                    Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show();
+                .setTitle(R.string.sign_out)
+                .setMessage(R.string.sign_out_confirmation)
+                .setPositiveButton(R.string.sign_out, (dialog, which) -> {
+                    // Clear admin data if needed
+                    getSharedPreferences("APP_DATA", MODE_PRIVATE)
+                            .edit()
+                            .clear()
+                            .apply();
+                    
+                    Toast.makeText(this, R.string.signed_out_successfully, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(AdminHomeActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 })
-                .setNegativeButton("Hủy", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
