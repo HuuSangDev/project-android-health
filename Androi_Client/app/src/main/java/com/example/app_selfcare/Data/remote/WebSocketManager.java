@@ -16,8 +16,9 @@ import ua.naiksoftware.stomp.dto.LifecycleEvent;
 public class WebSocketManager {
 
     private static final String TAG = "WebSocketManager";
+//    private static final String WS_URL = "ws://13.214.39.228:8080/ws/websocket";
     private static final String WS_URL = "ws://10.0.2.2:8080/ws/websocket"; // Emulator
-    // private static final String WS_URL = "ws://YOUR_IP:8080/ws/websocket"; // Real device
+
 
     private static WebSocketManager instance;
     private StompClient stompClient;

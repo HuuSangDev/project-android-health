@@ -1,5 +1,6 @@
 package com.example.app_selfcare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.Model.Response.ExerciseResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
 import com.example.app_selfcare.Data.remote.ApiService;
+import com.example.app_selfcare.utils.LocaleManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,6 +48,12 @@ public class WorkoutTrainingActivity extends AppCompatActivity {
     private Handler timerHandler;
     private Runnable timerRunnable;
     private int elapsedSeconds = 0;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LocaleManager localeManager = new LocaleManager(newBase);
+        super.attachBaseContext(localeManager.applyLanguage(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

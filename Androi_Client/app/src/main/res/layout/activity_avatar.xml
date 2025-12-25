@@ -35,8 +35,9 @@
             android:layout_marginStart="16dp" />
     </LinearLayout>
 
-    <!-- 3 avatar mẫu -->
+    <!-- 3 avatar mẫu + preview -->
     <LinearLayout
+        android:id="@+id/avatarContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -69,6 +70,17 @@
             android:background="@drawable/avatar_background_gray"
             android:padding="8dp"
             android:layout_marginStart="16dp" />
+
+        <!-- Preview ImageView for selected image -->
+        <ImageView
+            android:id="@+id/previewAvatar"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/avatar_background_orange"
+            android:padding="8dp"
+            android:layout_marginStart="16dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
     </LinearLayout>
 
     <!-- Tiêu đề chính -->
@@ -85,7 +97,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Chúng tôi có sẵn 23 avatar xinh xắn, hoặc bạn có thể tải lên ảnh từ máy"
+        android:text="Thiê lập avatar cho tài khoản"
         android:textColor="#666666"
         android:textSize="14sp"
         android:gravity="center"
@@ -103,31 +115,46 @@
         android:padding="32dp">
 
         <FrameLayout
+            android:id="@+id/uploadArea"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="24dp"
+            android:clickable="true"
+            android:focusable="true">
 
             <!-- Vòng tròn nét đứt -->
             <ImageView
+                android:id="@+id/dashedCircle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/dashed_circle"
                 android:scaleType="fitXY" />
 
-            <!-- Icon upload -->
+            <!-- Icon upload (sẽ ẩn khi có preview) -->
             <ImageView
+                android:id="@+id/uploadIcon"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_upload"
                 app:tint="#999999" />
+
+            <!-- Preview image (ẩn ban đầu) -->
+            <ImageView
+                android:id="@+id/previewImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:background="@drawable/circle_background" />
         </FrameLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hoặc tải ảnh từ thiết bị"
+            android:text="Tải ảnh từ thiết bị"
             android:textColor="#333333"
             android:textSize="17sp"
             android:textStyle="bold"

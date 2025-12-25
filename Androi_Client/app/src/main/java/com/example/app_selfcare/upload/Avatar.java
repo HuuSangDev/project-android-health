@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.app_selfcare.Data.Model.Response.ApiResponse;
 import com.example.app_selfcare.Data.Model.Response.UserResponse;
 import com.example.app_selfcare.Data.remote.ApiClient;
@@ -40,7 +42,8 @@ import retrofit2.Response;
 
 public class Avatar extends AppCompatActivity {
 
-    private ImageView avatar1, avatar2, avatar3;
+    private ImageView avatar1, avatar2, avatar3, previewAvatar, uploadIcon, previewImage, dashedCircle;
+    private FrameLayout uploadArea;
     private Button uploadButton, continueButton;
     private Uri selectedAvatarUri;
     private int selectedAvatarResId = -1; // -1 means no predefined avatar selected
@@ -81,6 +84,11 @@ public class Avatar extends AppCompatActivity {
         avatar1 = findViewById(R.id.avatar1);
         avatar2 = findViewById(R.id.avatar2);
         avatar3 = findViewById(R.id.avatar3);
+        previewAvatar = findViewById(R.id.previewAvatar);
+        uploadArea = findViewById(R.id.uploadArea);
+        uploadIcon = findViewById(R.id.uploadIcon);
+        previewImage = findViewById(R.id.previewImage);
+        dashedCircle = findViewById(R.id.dashedCircle);
         uploadButton = findViewById(R.id.uploadButton);
         continueButton = findViewById(R.id.continueButton);
 
@@ -91,6 +99,10 @@ public class Avatar extends AppCompatActivity {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         selectedAvatarUri = result.getData().getData();
                         selectedAvatarResId = -1; // Clear predefined selection
+                        
+                        // Show preview of selected image
+                        showSelectedImagePreview();
+                        
                         Toast.makeText(this, "Avatar đã được chọn", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -100,27 +112,29 @@ public class Avatar extends AppCompatActivity {
         avatar1.setOnClickListener(v -> {
             selectedAvatarResId = R.drawable.avatar1;
             selectedAvatarUri = null;
+            hideSelectedImagePreview();
             updateAvatarSelection();
         });
 
         avatar2.setOnClickListener(v -> {
             selectedAvatarResId = R.drawable.avatar2;
             selectedAvatarUri = null;
+            hideSelectedImagePreview();
             updateAvatarSelection();
         });
 
         avatar3.setOnClickListener(v -> {
             selectedAvatarResId = R.drawable.avatar3;
             selectedAvatarUri = null;
+            hideSelectedImagePreview();
             updateAvatarSelection();
         });
 
         // Upload button listener
-        uploadButton.setOnClickListener(v -> {
-            Intent pickImage = new Intent(Intent.ACTION_PICK);
-            pickImage.setType("image/*");
-            imagePickerLauncher.launch(pickImage);
-        });
+        uploadButton.setOnClickListener(v -> openImagePicker());
+        
+        // Upload area click listener
+        uploadArea.setOnClickListener(v -> openImagePicker());
 
         // Continue button listener
         continueButton.setOnClickListener(v -> updateUserProfile());
@@ -130,6 +144,12 @@ public class Avatar extends AppCompatActivity {
             finish();
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
+    }
+
+    private void openImagePicker() {
+        Intent pickImage = new Intent(Intent.ACTION_PICK);
+        pickImage.setType("image/*");
+        imagePickerLauncher.launch(pickImage);
     }
 
     private void updateAvatarSelection() {
@@ -145,6 +165,43 @@ public class Avatar extends AppCompatActivity {
             avatar2.setBackgroundResource(R.drawable.avatar_background_orange);
         } else if (selectedAvatarResId == R.drawable.avatar3) {
             avatar3.setBackgroundResource(R.drawable.avatar_background_orange);
+        }
+    }
+
+    private void showSelectedImagePreview() {
+        if (selectedAvatarUri != null && previewImage != null) {
+            // Hide upload icon and show preview image
+            uploadIcon.setVisibility(android.view.View.GONE);
+            previewImage.setVisibility(android.view.View.VISIBLE);
+            
+            // Load image using Glide into the circular preview
+            Glide.with(this)
+                    .load(selectedAvatarUri)
+                    .placeholder(R.drawable.ic_proflie)
+                    .error(R.drawable.ic_proflie)
+                    .centerCrop()
+                    .into(previewImage);
+                    
+            // Also update the top preview avatar
+            if (previewAvatar != null) {
+                Glide.with(this)
+                        .load(selectedAvatarUri)
+                        .placeholder(R.drawable.ic_proflie)
+                        .error(R.drawable.ic_proflie)
+                        .centerCrop()
+                        .into(previewAvatar);
+                previewAvatar.setVisibility(android.view.View.VISIBLE);
+            }
+        }
+    }
+
+    private void hideSelectedImagePreview() {
+        if (previewImage != null) {
+            previewImage.setVisibility(android.view.View.GONE);
+            uploadIcon.setVisibility(android.view.View.VISIBLE);
+        }
+        if (previewAvatar != null) {
+            previewAvatar.setVisibility(android.view.View.GONE);
         }
     }
 

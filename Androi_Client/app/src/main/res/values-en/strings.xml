@@ -46,6 +46,8 @@
     <string name="language">Language</string>
     <string name="help">Help</string>
     <string name="sign_out">Sign Out</string>
+    <string name="sign_out_confirmation">Are you sure you want to sign out?</string>
+    <string name="signed_out_successfully">Signed out successfully</string>
     
     <!-- Language -->
     <string name="language_vietnamese">Vietnamese</string>
@@ -67,9 +69,9 @@
     <string name="saved_foods">Saved Foods</string>
     <string name="search_recipe">Search recipes...</string>
     <string name="all">All</string>
-    <string name="breakfast">Breakfast</string>
+    <string name="breakfast">Morning</string>
     <string name="lunch">Lunch</string>
-    <string name="dinner">Dinner</string>
+    <string name="dinner">Evening</string>
     <string name="exercises_text">%d exercises</string>
     
     <!-- Days of week -->
