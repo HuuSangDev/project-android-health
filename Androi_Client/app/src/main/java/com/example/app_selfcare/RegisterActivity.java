@@ -8,6 +8,7 @@
 
     import androidx.activity.EdgeToEdge;
     import androidx.appcompat.app.AppCompatActivity;
+    import androidx.appcompat.app.AppCompatDelegate;
 
     import com.example.app_selfcare.Data.Model.Request.UserRegisterRequest;
     import com.example.app_selfcare.Data.Model.Response.ApiResponse;
@@ -35,6 +36,10 @@
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            
+            // Force light mode for register screen only (not affecting other activities)
+            getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            
             EdgeToEdge.enable(this);
             setContentView(R.layout.activity_register);
 
