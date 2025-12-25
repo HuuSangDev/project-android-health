@@ -6,9 +6,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://dpg-d4ikios9c44c73aubcdg-a.singapore-postgres.render.com:5432/selfcare_db?sslmode=require
-    username: selfcare_db_user
-    password: VpMQyjB00GbI1LVKF0lr0TjymWmYac1y
+    url: jdbc:postgresql://dpg-d55pa3muk2gs73c33dr0-a.singapore-postgres.render.com:5432/selfcare_app?sslmode=require
+    username: root
+    password: 2m5OydRh8hIBY50BuhYlvZwoTsuBxXLZ
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -56,7 +56,7 @@ cloudinary:
 
 # Gemini AI Configuration
 gemini:
-  api-key: "${GEMINI_API_KEY:AIzaSyB228bTvPoSiY1rvIIbMxIO2Fp74CMPj9U}"
+  api-key: "${GEMINI_API_KEY:AIzaSyAwgLtKVohLdkm3Kozdo9GNOSnY8-4GxdI}"
   # Sử dụng gemini-1.5-flash (nhanh hơn) hoặc gemini-1.5-pro (chính xác hơn)
   api-url: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
 

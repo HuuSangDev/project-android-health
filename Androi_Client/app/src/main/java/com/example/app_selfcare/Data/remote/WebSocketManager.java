@@ -8,23 +8,25 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
-import ua.naiksoftware.stomp.dto.LifecycleEvent;
 
 /**
  * Singleton class để quản lý kết nối WebSocket STOMP
+ * Subscribe theo goal của user để nhận notification phù hợp
  */
 public class WebSocketManager {
 
     private static final String TAG = "WebSocketManager";
-    private static final String WS_URL = "ws://10.0.2.2:8080/ws/websocket"; // Emulator
-    // private static final String WS_URL = "ws://YOUR_IP:8080/ws/websocket"; // Real device
+    private static final String WS_URL = "ws://13.214.39.228:8080/ws/websocket"; // AWS EC2
+    // private static final String WS_URL = "ws://10.0.2.2:8080/ws/websocket"; // Emulator
 
     private static WebSocketManager instance;
     private StompClient stompClient;
     private CompositeDisposable compositeDisposable;
     private NotificationListener notificationListener;
+    private Disposable topicDisposable;
 
     private boolean isConnected = false;
+    private String currentGoal = null; // Goal hiện tại đang subscribe
 
     public interface NotificationListener {
         void onNotificationReceived(String type, Long targetId, String title, String message);
@@ -46,9 +48,18 @@ public class WebSocketManager {
         this.notificationListener = listener;
     }
 
-    public void connect() {
+    /**
+     * Kết nối WebSocket và subscribe theo goal
+     * @param goal Goal của user (WEIGHT_LOSS, MAINTAIN, WEIGHT_GAIN)
+     */
+    public void connect(String goal) {
+        this.currentGoal = goal;
+
         if (stompClient != null && stompClient.isConnected()) {
-            Log.d(TAG, "Already connected");
+            Log.d(TAG, "Already connected, resubscribing to goal: " + goal);
+            // Nếu đã kết nối, chỉ cần resubscribe
+            unsubscribeCurrentTopic();
+            subscribeToNotifications(goal);
             return;
         }
 
@@ -67,7 +78,8 @@ public class WebSocketManager {
                             if (notificationListener != null) {
                                 notificationListener.onConnectionStateChanged(true);
                             }
-                            subscribeToNotifications();
+                            // Subscribe theo goal sau khi kết nối
+                            subscribeToNotifications(currentGoal);
                             break;
                         case ERROR:
                             Log.e(TAG, "WebSocket ERROR", lifecycleEvent.getException());
@@ -95,30 +107,80 @@ public class WebSocketManager {
         stompClient.connect();
     }
 
-    private void subscribeToNotifications() {
+    /**
+     * Kết nối không có goal (fallback, không khuyến khích)
+     */
+    public void connect() {
+        connect(null);
+    }
+
+    /**
+     * Hủy subscribe topic hiện tại
+     */
+    private void unsubscribeCurrentTopic() {
+        if (topicDisposable != null && !topicDisposable.isDisposed()) {
+            topicDisposable.dispose();
+            topicDisposable = null;
+            Log.d(TAG, "Unsubscribed from current topic");
+        }
+    }
+
+    /**
+     * Subscribe tới topic theo goal
+     */
+    private void subscribeToNotifications(String goal) {
         if (stompClient == null || !stompClient.isConnected()) {
             Log.w(TAG, "Cannot subscribe - not connected");
             return;
         }
 
-        Disposable topicDisposable = stompClient.topic("/topic/notifications")
+        // Hủy subscription cũ nếu có
+        unsubscribeCurrentTopic();
+
+        // Xác định topic dựa trên goal
+        String topic;
+        if (goal != null && !goal.isEmpty()) {
+            topic = "/topic/notifications/" + goal;
+        } else {
+            // Fallback: subscribe tất cả (không khuyến khích)
+            topic = "/topic/notifications/WEIGHT_LOSS"; // Default
+            Log.w(TAG, "No goal provided, using default topic");
+        }
+
+        topicDisposable = stompClient.topic(topic)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(topicMessage -> {
                     String payload = topicMessage.getPayload();
-                    Log.d(TAG, "Received notification: " + payload);
+                    Log.d(TAG, "Received notification from " + topic + ": " + payload);
                     parseAndNotify(payload);
                 }, throwable -> {
-                    Log.e(TAG, "Error subscribing to topic", throwable);
+                    Log.e(TAG, "Error subscribing to topic: " + topic, throwable);
                 });
 
         compositeDisposable.add(topicDisposable);
-        Log.d(TAG, "Subscribed to /topic/notifications");
+        Log.d(TAG, "Subscribed to " + topic);
+    }
+
+    /**
+     * Thay đổi goal và resubscribe
+     */
+    public void changeGoal(String newGoal) {
+        if (newGoal == null || newGoal.equals(currentGoal)) {
+            return;
+        }
+
+        Log.d(TAG, "Changing goal from " + currentGoal + " to " + newGoal);
+        currentGoal = newGoal;
+
+        if (isConnected) {
+            unsubscribeCurrentTopic();
+            subscribeToNotifications(newGoal);
+        }
     }
 
     private void parseAndNotify(String json) {
         try {
-            // Parse JSON manually (hoặc dùng Gson)
             org.json.JSONObject obj = new org.json.JSONObject(json);
             String type = obj.optString("type", "");
             Long targetId = obj.optLong("targetId", -1);
@@ -134,6 +196,7 @@ public class WebSocketManager {
     }
 
     public void disconnect() {
+        unsubscribeCurrentTopic();
         if (stompClient != null) {
             stompClient.disconnect();
         }
@@ -141,10 +204,15 @@ public class WebSocketManager {
             compositeDisposable.clear();
         }
         isConnected = false;
+        currentGoal = null;
         Log.d(TAG, "Disconnected");
     }
 
     public boolean isConnected() {
         return isConnected && stompClient != null && stompClient.isConnected();
+    }
+
+    public String getCurrentGoal() {
+        return currentGoal;
     }
 }

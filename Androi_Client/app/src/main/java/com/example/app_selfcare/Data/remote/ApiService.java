@@ -81,6 +81,10 @@ public interface ApiService {
     @PUT("app/Users/change-password")
     Call<ApiResponse<String>> changePassword(@Body ChangePasswordRequest request);
 
+    // Lấy goal của user hiện tại (để subscribe WebSocket đúng topic)
+    @GET("app/Users/my-goal")
+    Call<ApiResponse<String>> getMyGoal();
+
     // Food APIs
     @GET("app/foods/all")
     Call<ApiResponse<List<FoodResponse>>> getAllFoods();

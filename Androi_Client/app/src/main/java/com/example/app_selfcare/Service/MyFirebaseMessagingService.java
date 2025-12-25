@@ -14,9 +14,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.example.app_selfcare.FoodDetailActivity;
 import com.example.app_selfcare.NotificationActivity;
 import com.example.app_selfcare.R;
+import com.example.app_selfcare.RecipeDetailActivity;
 import com.example.app_selfcare.WorkoutDetailActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -162,7 +162,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else {
             switch (type) {
                 case "FOOD":
-                    intent = new Intent(this, FoodDetailActivity.class);
+                    intent = new Intent(this, RecipeDetailActivity.class);
                     try {
                         intent.putExtra("foodId", Integer.parseInt(targetId));
                     } catch (NumberFormatException e) {

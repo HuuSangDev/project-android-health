@@ -83,8 +83,8 @@ public class ExerciseService {
 
         Exercise saved = exerciseRepository.save(exercise);
 
-        // Gửi thông báo qua WebSocket
-        notificationService.notifyNewExercise(saved.getExerciseId(), saved.getExerciseName());
+        // Gửi thông báo qua WebSocket theo goal
+        notificationService.notifyNewExercise(saved.getExerciseId(), saved.getExerciseName(), saved.getGoal());
 
         // 5. Dùng mapper để trả response
         return exerciseMapper.toResponse(saved);
