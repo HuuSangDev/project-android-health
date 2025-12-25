@@ -1,5 +1,6 @@
 package com.SelfCare.SelftCare.Entity;
 
+import com.SelfCare.SelftCare.Enum.Goal;
 import com.SelfCare.SelftCare.Enum.NotificationType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,6 +28,9 @@ public class Notification {
     NotificationType type; // FOOD hoặc EXERCISE
 
     Long targetId; // ID của Food hoặc Exercise được tạo
+
+    @Enumerated(EnumType.STRING)
+    Goal goal; // Goal của notification (null = broadcast cho tất cả)
 
     @Builder.Default
     boolean isRead = false;

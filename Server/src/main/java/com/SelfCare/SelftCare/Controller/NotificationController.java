@@ -1,11 +1,13 @@
 package com.SelfCare.SelftCare.Controller;
 
 import com.SelfCare.SelftCare.DTO.ApiResponse;
+import com.SelfCare.SelftCare.DTO.Request.SendNotificationRequest;
 import com.SelfCare.SelftCare.DTO.Response.NotificationResponse;
 import com.SelfCare.SelftCare.Service.NotificationService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +19,43 @@ import java.util.List;
 public class NotificationController {
 
     NotificationService notificationService;
+
+    /**
+     * API để Admin gửi thông báo tùy chỉnh theo goal
+     * POST /notifications/send
+     * Body: { "title": "...", "message": "...", "type": "FOOD/EXERCISE", "targetId": 123, "goal": "WEIGHT_LOSS" }
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/send")
+    public ApiResponse<Void> sendCustomNotification(@RequestBody SendNotificationRequest request) {
+        notificationService.sendCustomNotification(
+                request.getTitle(),
+                request.getMessage(),
+                request.getType(),
+                request.getTargetId(),
+                request.getGoal()
+        );
+        return ApiResponse.<Void>builder()
+                .message("Đã gửi thông báo thành công tới goal: " + request.getGoal())
+                .build();
+    }
+
+    /**
+     * API để Admin gửi thông báo broadcast (không cần targetId)
+     * POST /notifications/broadcast
+     * Body: { "title": "...", "message": "..." }
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/broadcast")
+    public ApiResponse<Void> sendBroadcastNotification(@RequestBody SendNotificationRequest request) {
+        notificationService.sendBroadcastNotification(
+                request.getTitle(),
+                request.getMessage()
+        );
+        return ApiResponse.<Void>builder()
+                .message("Đã gửi thông báo broadcast thành công")
+                .build();
+    }
 
     @GetMapping("/all")
     public ApiResponse<List<NotificationResponse>> getAllNotifications() {

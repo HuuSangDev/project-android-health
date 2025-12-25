@@ -24,6 +24,7 @@ import com.example.app_selfcare.Data.remote.ApiService;
 
 import com.example.app_selfcare.Ui.Admin.AdminHomeActivity;
 import com.example.app_selfcare.upload.InforSex;
+import com.example.app_selfcare.utils.FcmTokenManager;
 import com.example.app_selfcare.utils.LocaleManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -107,6 +108,10 @@ public class LoginActivity extends AppCompatActivity {
 
                         // Lưu token vào SharedPreferences
                         saveToken(token);
+
+                        // Đăng ký FCM token sau khi login thành công
+                        registerFcmToken();
+
                         if (role == null) {
                             Toast.makeText(LoginActivity.this, "Không tìm thấy role!", Toast.LENGTH_SHORT).show();
                             return;
@@ -198,9 +203,11 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-
-
-
-
-
+    /**
+     * Đăng ký FCM token sau khi login thành công
+     */
+    private void registerFcmToken() {
+        FcmTokenManager fcmTokenManager = new FcmTokenManager(this);
+        fcmTokenManager.registerToken();
+    }
 }

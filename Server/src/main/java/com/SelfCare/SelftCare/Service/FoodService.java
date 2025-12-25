@@ -117,8 +117,10 @@ public class FoodService {
 
         Food saved = foodRepository.save(food);
         
-        // Gửi thông báo qua WebSocket
-        notificationService.notifyNewFood(saved.getFoodId(), saved.getFoodName());
+        // Gửi thông báo qua WebSocket theo goal của food
+        if (saved.getGoal() != null) {
+            notificationService.notifyNewFood(saved.getFoodId(), saved.getFoodName(), saved.getGoal());
+        }
         
         // 5. Build Response
         return FoodCreateResponse.builder()
@@ -143,9 +145,7 @@ public class FoodService {
 
 
     public Page<FoodCreateResponse> searchFood(FoodSearchRequest req) {
-
         log.info("[SEARCH_FOOD] request={}", req);
-
         try {
             Specification<Food> spec = Specification
                     .where(FoodSpecification.nameContains(req.getKeyword()))
@@ -226,6 +226,16 @@ public class FoodService {
 
     }
 
+    /**
+     * Lấy tất cả Food không lọc theo goal (dành cho Admin)
+     */
+    public List<FoodCreateResponse> getAllFoodsNoFilter() {
+        List<Food> foods = foodRepository.findAll();
+        return foods.stream()
+                .map(foodMapper::toFoodResponse)
+                .collect(Collectors.toList());
+    }
+
     @Cacheable(value = "foodsByMeal", key = "#email + '_' + #mealType")
     public List<FoodCreateResponse> getFoodsByMealType(String email,MealType mealType) {
 
@@ -244,6 +254,25 @@ public class FoodService {
 
         return foods.stream()
                 .map(food -> foodMapper.toFoodResponse(food))
+                .collect(Collectors.toList());
+    }
+
+    // Lấy danh sách món ăn theo category
+    @Cacheable(value = "foodsByCategory", key = "#email + '_' + #categoryId")
+    public List<FoodCreateResponse> getFoodsByCategory(String email, Long categoryId) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        
+        UserProfile profile = user.getUserProfile();
+        if (profile == null || profile.getHealthGoal() == null) {
+            throw new AppException(ErrorCode.USER_PROFILE_NULL);
+        }
+
+        Goal goal = profile.getHealthGoal();
+        List<Food> foods = foodRepository.findByGoalAndFoodCategory_CategoryId(goal, categoryId);
+
+        return foods.stream()
+                .map(foodMapper::toFoodResponse)
                 .collect(Collectors.toList());
     }
 

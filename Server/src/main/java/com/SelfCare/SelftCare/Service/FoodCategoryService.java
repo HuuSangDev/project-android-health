@@ -60,10 +60,12 @@ public class FoodCategoryService {
     }
 
     private FoodCategoryResponse toResponse(FoodCategory category) {
+        int foodCount = category.getFoods() != null ? category.getFoods().size() : 0;
         return FoodCategoryResponse.builder()
                 .categoryId(category.getCategoryId())
                 .categoryName(category.getCategoryName())
                 .description(category.getDescription())
+                .foodCount(foodCount)
                 .build();
     }
 }
