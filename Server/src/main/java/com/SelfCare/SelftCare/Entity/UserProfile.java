@@ -25,7 +25,6 @@ public class UserProfile {
      Double weight;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     Goal healthGoal;
 
     @OneToOne

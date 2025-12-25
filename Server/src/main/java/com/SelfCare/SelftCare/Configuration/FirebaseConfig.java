@@ -23,6 +23,10 @@ public class FirebaseConfig {
     @Value("${firebase.service-account-file:firebase/serviceAccountKey.json}")
     private String serviceAccountFile;
 
+    // Hỗ trợ đọc từ environment variable (cho Docker)
+    @Value("${firebase.credentials.path:#{null}}")
+    private String credentialsPath;
+
     @PostConstruct
     public void initialize() {
         try {
@@ -47,21 +51,37 @@ public class FirebaseConfig {
 
     private InputStream getServiceAccountStream() {
         try {
-            // Thử đọc từ classpath trước
+            // 1. Ưu tiên đọc từ credentialsPath (Docker mount)
+            if (credentialsPath != null && !credentialsPath.isEmpty()) {
+                java.io.File file = new java.io.File(credentialsPath);
+                if (file.exists()) {
+                    log.info("Loading Firebase credentials from external path: {}", credentialsPath);
+                    return new FileInputStream(file);
+                }
+            }
+
+            // 2. Thử đọc từ file system (serviceAccountFile có thể là absolute path)
+            java.io.File file = new java.io.File(serviceAccountFile);
+            if (file.exists() && file.isAbsolute()) {
+                log.info("Loading Firebase credentials from absolute path: {}", serviceAccountFile);
+                return new FileInputStream(file);
+            }
+
+            // 3. Thử đọc từ classpath
             Resource resource = new ClassPathResource(serviceAccountFile);
             if (resource.exists()) {
                 log.info("Loading Firebase credentials from classpath: {}", serviceAccountFile);
                 return resource.getInputStream();
             }
 
-            // Nếu không có trong classpath, thử đọc từ file system
-            java.io.File file = new java.io.File(serviceAccountFile);
+            // 4. Thử đọc từ relative file system path
             if (file.exists()) {
-                log.info("Loading Firebase credentials from file system: {}", serviceAccountFile);
+                log.info("Loading Firebase credentials from relative path: {}", serviceAccountFile);
                 return new FileInputStream(file);
             }
 
-            log.warn("Firebase service account file not found at: {}", serviceAccountFile);
+            log.warn("Firebase service account file not found. Checked paths: credentialsPath={}, serviceAccountFile={}", 
+                    credentialsPath, serviceAccountFile);
             return null;
         } catch (IOException e) {
             log.error("Error loading Firebase credentials: {}", e.getMessage());

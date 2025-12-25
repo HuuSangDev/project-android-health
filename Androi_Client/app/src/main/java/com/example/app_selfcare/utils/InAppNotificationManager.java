@@ -15,9 +15,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.app_selfcare.FoodDetailActivity;
 import com.example.app_selfcare.NotificationActivity;
 import com.example.app_selfcare.R;
+import com.example.app_selfcare.RecipeDetailActivity;
 import com.example.app_selfcare.WorkoutDetailActivity;
 
 /**
@@ -158,7 +158,7 @@ public class InAppNotificationManager {
         } else {
             switch (currentType) {
                 case "FOOD":
-                    intent = new Intent(activity, FoodDetailActivity.class);
+                    intent = new Intent(activity, RecipeDetailActivity.class);
                     intent.putExtra("foodId", currentTargetId.intValue());
                     break;
 

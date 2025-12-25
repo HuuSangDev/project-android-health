@@ -1,6 +1,7 @@
 package com.example.app_selfcare;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,14 +11,23 @@ import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.app_selfcare.Data.Model.Response.ApiResponse;
+import com.example.app_selfcare.Data.remote.ApiClient;
+import com.example.app_selfcare.Data.remote.ApiService;
 import com.example.app_selfcare.Data.remote.WebSocketManager;
 import com.example.app_selfcare.utils.InAppNotificationManager;
 import com.example.app_selfcare.utils.LocaleManager;
 import com.example.app_selfcare.utils.ThemeManager;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public abstract class BaseActivity extends AppCompatActivity implements WebSocketManager.NotificationListener {
 
     private static final String TAG = "BaseActivity";
+    private static final String PREF_NAME = "APP_DATA";
+    private static final String KEY_USER_GOAL = "USER_GOAL";
 
     private View loadingView;
     protected LocaleManager localeManager;
@@ -25,10 +35,12 @@ public abstract class BaseActivity extends AppCompatActivity implements WebSocke
     
     // In-app notification manager
     protected InAppNotificationManager inAppNotificationManager;
+    
+    // API Service
+    private ApiService apiService;
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        // Áp dụng ngôn ngữ đã lưu cho Activity này
         localeManager = new LocaleManager(newBase);
         super.attachBaseContext(localeManager.applyLanguage(newBase));
     }
@@ -37,13 +49,12 @@ public abstract class BaseActivity extends AppCompatActivity implements WebSocke
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        // Khởi tạo in-app notification manager
         inAppNotificationManager = new InAppNotificationManager(this);
+        apiService = ApiClient.getClientWithToken(this).create(ApiService.class);
     }
 
     @Override
     public void setContentView(int layoutResID) {
-        // Khởi tạo theme manager nếu chưa có
         if (themeManager == null) {
             themeManager = new ThemeManager(this);
         }
@@ -66,8 +77,8 @@ public abstract class BaseActivity extends AppCompatActivity implements WebSocke
     protected void onResume() {
         super.onResume();
         
-        // Kết nối WebSocket và đăng ký listener
-        connectWebSocket();
+        // Kết nối WebSocket với goal của user
+        connectWebSocketWithGoal();
     }
 
     @Override
@@ -82,22 +93,87 @@ public abstract class BaseActivity extends AppCompatActivity implements WebSocke
     protected void onDestroy() {
         super.onDestroy();
         
-        // Cleanup notification manager
         if (inAppNotificationManager != null) {
             inAppNotificationManager.destroy();
         }
     }
 
     /**
-     * Kết nối WebSocket và đăng ký listener
+     * Kết nối WebSocket với goal của user
      */
-    private void connectWebSocket() {
+    private void connectWebSocketWithGoal() {
         WebSocketManager wsManager = WebSocketManager.getInstance();
         wsManager.setNotificationListener(this);
+
+        // Lấy goal đã lưu từ SharedPreferences
+        String savedGoal = getSavedGoal();
         
-        if (!wsManager.isConnected()) {
-            wsManager.connect();
+        if (savedGoal != null && !savedGoal.isEmpty()) {
+            // Đã có goal, kết nối luôn
+            if (!wsManager.isConnected() || !savedGoal.equals(wsManager.getCurrentGoal())) {
+                wsManager.connect(savedGoal);
+            }
+        } else {
+            // Chưa có goal, gọi API lấy goal
+            fetchAndConnectWithGoal(wsManager);
         }
+    }
+
+    /**
+     * Gọi API lấy goal và kết nối WebSocket
+     */
+    private void fetchAndConnectWithGoal(WebSocketManager wsManager) {
+        apiService.getMyGoal().enqueue(new Callback<ApiResponse<String>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<String>> call, Response<ApiResponse<String>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getResult() != null) {
+                    String goal = response.body().getResult();
+                    Log.d(TAG, "Fetched user goal: " + goal);
+                    
+                    // Lưu goal vào SharedPreferences
+                    saveGoal(goal);
+                    
+                    // Kết nối WebSocket với goal
+                    wsManager.connect(goal);
+                } else {
+                    Log.w(TAG, "Failed to fetch goal, using default");
+                    // Fallback: kết nối với goal mặc định
+                    wsManager.connect("WEIGHT_LOSS");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
+                Log.e(TAG, "Error fetching goal", t);
+                // Fallback: kết nối với goal mặc định
+                wsManager.connect("WEIGHT_LOSS");
+            }
+        });
+    }
+
+    /**
+     * Lưu goal vào SharedPreferences
+     */
+    private void saveGoal(String goal) {
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        prefs.edit().putString(KEY_USER_GOAL, goal).apply();
+    }
+
+    /**
+     * Lấy goal đã lưu từ SharedPreferences
+     */
+    private String getSavedGoal() {
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        return prefs.getString(KEY_USER_GOAL, null);
+    }
+
+    /**
+     * Cập nhật goal mới (gọi khi user thay đổi goal trong profile)
+     */
+    public void updateUserGoal(String newGoal) {
+        saveGoal(newGoal);
+        WebSocketManager.getInstance().changeGoal(newGoal);
+        Log.d(TAG, "Updated user goal to: " + newGoal);
     }
 
     // ==================== WebSocket Notification Listener ====================
@@ -106,7 +182,6 @@ public abstract class BaseActivity extends AppCompatActivity implements WebSocke
     public void onNotificationReceived(String type, Long targetId, String title, String message) {
         Log.d(TAG, "Notification received: " + title + " - " + message);
         
-        // Hiển thị in-app notification bar
         if (inAppNotificationManager != null) {
             inAppNotificationManager.showNotification(type, targetId, title, message);
         }
@@ -119,14 +194,12 @@ public abstract class BaseActivity extends AppCompatActivity implements WebSocke
 
     // ==================== Loading Methods ====================
 
-    // BẬT LOADING (DÙNG TEXT TRONG XML)
     public void showLoading() {
         if (loadingView != null) {
             loadingView.setVisibility(View.VISIBLE);
         }
     }
 
-    // TẮT LOADING
     public void hideLoading() {
         if (loadingView != null) {
             loadingView.setVisibility(View.GONE);
