@@ -31,13 +31,12 @@ public class WorkoutDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "WorkoutDetailActivity";
 
-    // Views
     private ImageView ivExerciseImage;
     private TextView tvExerciseName, tvDifficulty, tvCalories;
-    private TextView tvMuscleGroups, tvEquipment, tvDescription;
-    private TextView tvInstructions, tvCategory;
+    private TextView tvDescription, tvInstructions;
     private ProgressBar progressBar;
     private View scrollView;
+    private Button btnStartWorkout;
 
     private ApiService apiService;
     private int exerciseId = -1;
@@ -58,14 +57,9 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         initApiService();
         setupNavigation();
 
-        // Nhận exerciseId từ Intent
         exerciseId = getIntent().getIntExtra("exerciseId", -1);
-        String exerciseName = getIntent().getStringExtra("exerciseName");
-
         if (exerciseId != -1) {
             loadExerciseDetail(exerciseId);
-        } else if (exerciseName != null) {
-            tvExerciseName.setText(exerciseName);
         }
     }
 
@@ -74,13 +68,11 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         tvExerciseName = findViewById(R.id.tvExerciseName);
         tvDifficulty = findViewById(R.id.tvDifficulty);
         tvCalories = findViewById(R.id.tvCalories);
-        tvMuscleGroups = findViewById(R.id.tvMuscleGroups);
-        tvEquipment = findViewById(R.id.tvEquipment);
         tvDescription = findViewById(R.id.tvDescription);
         tvInstructions = findViewById(R.id.tvInstructions);
-        tvCategory = findViewById(R.id.tvCategory);
         progressBar = findViewById(R.id.progressBar);
         scrollView = findViewById(R.id.scrollView);
+        btnStartWorkout = findViewById(R.id.btnStartWorkout);
     }
 
     private void initApiService() {
@@ -97,14 +89,14 @@ public class WorkoutDetailActivity extends AppCompatActivity {
                 showLoading(false);
 
                 if (response.isSuccessful() && response.body() != null) {
-                    ApiResponse<ExerciseResponse> apiResponse = response.body();
-                    if (apiResponse.getCode() == 200 && apiResponse.getResult() != null) {
-                        bindData(apiResponse.getResult());
+                    ExerciseResponse exercise = response.body().getResult();
+                    if (exercise != null) {
+                        bindData(exercise);
                     } else {
                         showError("Không tìm thấy bài tập");
                     }
                 } else {
-                    showError("Lỗi tải dữ liệu: " + response.code());
+                    showError("Lỗi tải dữ liệu");
                 }
             }
 
@@ -118,49 +110,28 @@ public class WorkoutDetailActivity extends AppCompatActivity {
     }
 
     private void bindData(ExerciseResponse exercise) {
-        // Tên bài tập
         tvExerciseName.setText(exercise.getExerciseName());
+        tvDifficulty.setText(mapDifficulty(exercise.getDifficultyLevel()));
+        tvCalories.setText(String.format("%.1f cal/phút", exercise.getCaloriesPerMinute()));
+        tvDescription.setText(exercise.getDescription() != null ? exercise.getDescription() : "Chưa có mô tả");
+        tvInstructions.setText(exercise.getInstructions() != null ? exercise.getInstructions() : "Chưa có hướng dẫn");
 
-        // Độ khó
-        String difficulty = mapDifficulty(exercise.getDifficultyLevel());
-        tvDifficulty.setText(difficulty);
-
-        // Calories
-        tvCalories.setText(String.format("%.1f", exercise.getCaloriesPerMinute()));
-
-        // Nhóm cơ
-        tvMuscleGroups.setText(exercise.getMuscleGroups() != null ? 
-                exercise.getMuscleGroups() : "Chưa xác định");
-
-        // Thiết bị
-        tvEquipment.setText(exercise.getEquipmentNeeded() != null ? 
-                exercise.getEquipmentNeeded() : "Không cần");
-
-        // Mô tả
-        tvDescription.setText(exercise.getDescription() != null ? 
-                exercise.getDescription() : "Chưa có mô tả");
-
-        // Hướng dẫn
-        tvInstructions.setText(exercise.getInstructions() != null ? 
-                exercise.getInstructions() : "Chưa có hướng dẫn");
-
-        // Danh mục
-        if (exercise.getCategory() != null) {
-            tvCategory.setText(exercise.getCategory().getCategoryName());
-        } else {
-            tvCategory.setText("Chưa phân loại");
-        }
-
-        // Load ảnh
-        String imageUrl = exercise.getImageUrl();
-        if (imageUrl != null && !imageUrl.isEmpty()) {
+        if (exercise.getImageUrl() != null && !exercise.getImageUrl().isEmpty()) {
             Glide.with(this)
-                    .load(imageUrl)
+                    .load(exercise.getImageUrl())
                     .placeholder(R.drawable.img_pushup)
                     .error(R.drawable.img_pushup)
                     .centerCrop()
                     .into(ivExerciseImage);
         }
+
+        btnStartWorkout.setOnClickListener(v -> {
+            Intent intent = new Intent(WorkoutDetailActivity.this, WorkoutTrainingActivity.class);
+            intent.putExtra("exerciseId", exerciseId);
+            intent.putExtra("exerciseName", exercise.getExerciseName());
+            intent.putExtra("caloriesPerMinute", exercise.getCaloriesPerMinute());
+            startActivity(intent);
+        });
     }
 
     private String mapDifficulty(String level) {
@@ -184,9 +155,7 @@ public class WorkoutDetailActivity extends AppCompatActivity {
 
     private void setupNavigation() {
         ImageView backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(v -> {
-            finish();
-        });
+        backButton.setOnClickListener(v -> finish());
 
         LinearLayout homeNav = findViewById(R.id.navHome);
         LinearLayout workoutNav = findViewById(R.id.navWorkout);
@@ -216,13 +185,6 @@ public class WorkoutDetailActivity extends AppCompatActivity {
         profileNav.setOnClickListener(v -> {
             startActivity(new Intent(this, ProfileActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        });
-
-        Button startWorkoutButton = findViewById(R.id.btnStartWorkout);
-        startWorkoutButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, WorkoutTrainingActivity.class);
-            intent.putExtra("exerciseId", exerciseId);
-            startActivity(intent);
         });
     }
 }

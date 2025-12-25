@@ -73,8 +73,6 @@ public class ExerciseService {
                 .description(request.getDescription())
                 .instructions(request.getInstructions())
                 .difficultyLevel(request.getDifficultyLevel())
-                .equipmentNeeded(request.getEquipmentNeeded())
-                .muscleGroups(request.getMuscleGroups())
                 .imageUrl(imageUrl)
                 .videoUrl(videoUrl)
                 .exerciseCategory(category)
@@ -181,8 +179,6 @@ public class ExerciseService {
         exercise.setDescription(request.getDescription());
         exercise.setInstructions(request.getInstructions());
         exercise.setDifficultyLevel(request.getDifficultyLevel());
-        exercise.setEquipmentNeeded(request.getEquipmentNeeded());
-        exercise.setMuscleGroups(request.getMuscleGroups());
         exercise.setGoal(request.getGoal());
 
         Exercise saved = exerciseRepository.save(exercise);

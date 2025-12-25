@@ -9,13 +9,13 @@ import com.google.gson.annotations.SerializedName;
 public class ExerciseResponse {
 
     @SerializedName("exerciseId")
-    private int exerciseId;
+    private Long exerciseId;
 
     @SerializedName("exerciseName")
     private String exerciseName;
 
     @SerializedName("caloriesPerMinute")
-    private double caloriesPerMinute;
+    private Double caloriesPerMinute;
 
     @SerializedName("description")
     private String description;
@@ -42,9 +42,12 @@ public class ExerciseResponse {
     private String createdAt;
 
     @SerializedName("category")
-    private CategoryResponse category;
+    private ExerciseCategoryResponse category;
 
-    public int getExerciseId() {
+    @SerializedName("goal")
+    private String goal;
+
+    public Long getExerciseId() {
         return exerciseId;
     }
 
@@ -52,7 +55,7 @@ public class ExerciseResponse {
         return exerciseName;
     }
 
-    public double getCaloriesPerMinute() {
+    public Double getCaloriesPerMinute() {
         return caloriesPerMinute;
     }
 
@@ -88,8 +91,12 @@ public class ExerciseResponse {
         return createdAt;
     }
 
-    public CategoryResponse getCategory() {
+    public ExerciseCategoryResponse getCategory() {
         return category;
+    }
+
+    public String getGoal() {
+        return goal;
     }
 
     /**
@@ -97,14 +104,13 @@ public class ExerciseResponse {
      */
     public Exercise toExercise() {
         Exercise e = new Exercise();
-        e.setId(exerciseId);
+        e.setId(exerciseId != null ? exerciseId.intValue() : 0);
         e.setName(exerciseName);
         e.setDescription(description != null ? description : "");
+        e.setInstructions(instructions != null ? instructions : "");
         e.setCaloriesPerMinute(caloriesPerMinute);
-        // caloriesBurned có thể tính theo 1 phút để hiển thị ở chỗ khác nếu cần
-        e.setCaloriesBurned((int) Math.round(caloriesPerMinute));
-        e.setDifficulty(mapDifficulty(difficultyLevel));
-        e.setCategoryId(category != null ? category.getCategoryName() : "");
+        e.setDifficultyLevel(mapDifficulty(difficultyLevel));
+        e.setCategoryName(category != null ? category.getCategoryName() : "");
         e.setImageUrl(imageUrl);
         return e;
     }

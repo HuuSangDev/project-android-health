@@ -17,9 +17,11 @@
         android:theme="@style/Theme.App_selfCare"
         android:usesCleartextTraffic="true"
         android:localeConfig="@xml/locales_config">
-
         <activity
             android:name=".BaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PremiumPackageActivity"
             android:exported="false" />
         <activity
             android:name=".AddFoodActivity"
@@ -56,6 +58,9 @@
             android:exported="false" />
         <activity
             android:name=".PersonalInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditPersonalInfoActivity"
             android:exported="false" />
         <activity
             android:name=".Ui.Onboarding.Onboarding2Activity"

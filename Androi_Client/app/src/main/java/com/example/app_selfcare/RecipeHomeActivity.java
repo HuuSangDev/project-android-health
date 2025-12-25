@@ -1,19 +1,35 @@
 package com.example.app_selfcare;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.example.app_selfcare.Data.Model.Response.ApiResponse;
+import com.example.app_selfcare.Data.Model.Response.UserProfileResponse;
+import com.example.app_selfcare.Data.Model.Response.UserResponse;
+import com.example.app_selfcare.Data.remote.ApiClient;
+import com.example.app_selfcare.Data.remote.ApiService;
 import com.example.app_selfcare.Fragment.FoodPeriodFragment;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RecipeHomeActivity extends BaseActivity {
 
     private View navHome, navWorkout, navPlanner, navProfile;
     private TextView tvAll, tvBreakfast, tvLunch, tvDinner, tvSaved;
+    private TextView tvHelloName;
+    private ImageView ivUserAvatar;
 
     private String currentMealType = "ALL";
 
@@ -26,6 +42,7 @@ public class RecipeHomeActivity extends BaseActivity {
 
         initViews();
         setupClickListeners();
+        loadUserProfile();
 
         loadFragment("ALL");
         updateTabSelection(tvAll);
@@ -41,8 +58,10 @@ public class RecipeHomeActivity extends BaseActivity {
         tvBreakfast = findViewById(R.id.tvBreakfast);
         tvLunch = findViewById(R.id.tvLunch);
         tvDinner = findViewById(R.id.tvDinner);
-
         tvSaved = findViewById(R.id.tvSaved);
+        
+        tvHelloName = findViewById(R.id.tvHelloName);
+        ivUserAvatar = findViewById(R.id.ivUserAvatar);
     }
 
     private void setupClickListeners() {
@@ -112,5 +131,51 @@ public class RecipeHomeActivity extends BaseActivity {
     private void resetTab(TextView tab) {
         tab.setBackgroundResource(R.drawable.bg_chip_unselected);
         tab.setTextColor(Color.parseColor("#0F955A"));
+    }
+
+    private void loadUserProfile() {
+        SharedPreferences prefs = getSharedPreferences("APP_DATA", MODE_PRIVATE);
+        String token = prefs.getString("TOKEN", null);
+
+        if (token == null) {
+            Log.w("RecipeHomeActivity", "No token found");
+            return;
+        }
+
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        apiService.getUserProfile("Bearer " + token).enqueue(new Callback<ApiResponse<UserResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<UserResponse>> call, Response<ApiResponse<UserResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getResult() != null) {
+                    UserResponse user = response.body().getResult();
+                    updateUserInfo(user);
+                } else {
+                    Log.w("RecipeHomeActivity", "Failed to load user profile");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<UserResponse>> call, Throwable t) {
+                Log.e("RecipeHomeActivity", "Error loading user profile: " + t.getMessage());
+            }
+        });
+    }
+
+    private void updateUserInfo(UserResponse user) {
+        // Cập nhật tên người dùng
+        if (user.getFullName() != null && !user.getFullName().isEmpty()) {
+            tvHelloName.setText("Xin chào, " + user.getFullName());
+        }
+
+        // Cập nhật avatar
+        UserProfileResponse profile = user.getUserProfileResponse();
+        if (profile != null && profile.getAvatarUrl() != null && !profile.getAvatarUrl().isEmpty()) {
+            Glide.with(this)
+                    .load(profile.getAvatarUrl())
+                    .placeholder(R.drawable.ic_proflie)
+                    .error(R.drawable.ic_proflie)
+                    .circleCrop()
+                    .into(ivUserAvatar);
+        }
     }
 }

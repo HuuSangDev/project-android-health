@@ -65,180 +65,6 @@
                     android:text="170" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Mục tiêu -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mục tiêu của bạn"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp"/>
-
-            <RadioGroup
-                android:id="@+id/radioGroupGoal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="20dp">
-
-                <RadioButton
-                    android:id="@+id/rbGain"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Tăng cân"
-                    android:textSize="16sp"
-                    android:padding="8dp"
-                    android:buttonTint="#4CAF50" />
-
-                <RadioButton
-                    android:id="@+id/rbMaintain"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Giữ cân"
-                    android:textSize="16sp"
-                    android:checked="true"
-                    android:padding="8dp"
-                    android:buttonTint="#FF9800" />
-
-                <RadioButton
-                    android:id="@+id/rbLose"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Giảm cân"
-                    android:textSize="16sp"
-                    android:padding="8dp"
-                    android:buttonTint="#F44336" />
-            </RadioGroup>
-
-            <!-- Giờ ngủ -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:boxStrokeColor="#4CAF50"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etSleepHours"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Ngủ bao nhiêu tiếng?"
-                    android:inputType="numberDecimal"
-                    android:text="7.5" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Mức stress -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mức stress (1-10)"
-                android:textSize="14sp"
-                android:layout_marginBottom="8dp"/>
-            <SeekBar
-                android:id="@+id/seekStress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="10"
-                android:progress="4"
-                android:progressTint="#F44336"
-                android:thumbTint="#F44336"
-                android:layout_marginBottom="16dp"/>
-
-            <!-- Mức năng lượng -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mức năng lượng (1-10)"
-                android:textSize="14sp"
-                android:layout_marginBottom="8dp"/>
-            <SeekBar
-                android:id="@+id/seekEnergy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="10"
-                android:progress="7"
-                android:progressTint="#4CAF50"
-                android:thumbTint="#4CAF50"
-                android:layout_marginBottom="20dp"/>
-
-            <!-- Tâm trạng -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hôm nay bạn cảm thấy thế nào?"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp"/>
-
-            <RadioGroup
-                android:id="@+id/radioGroupMood"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="20dp">
-
-                <RadioButton
-                    android:id="@+id/rbVeryBad"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="😞"
-                    android:textSize="20sp"
-                    android:buttonTint="#F44336" />
-
-                <RadioButton
-                    android:id="@+id/rbBad"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="😕"
-                    android:textSize="20sp"
-                    android:buttonTint="#FF5722" />
-
-                <RadioButton
-                    android:id="@+id/rbNeutral"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="😐"
-                    android:textSize="20sp"
-                    android:checked="true"
-                    android:buttonTint="#FF9800" />
-
-                <RadioButton
-                    android:id="@+id/rbGood"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="🙂"
-                    android:textSize="20sp"
-                    android:buttonTint="#4CAF50" />
-
-                <RadioButton
-                    android:id="@+id/rbVeryGood"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="😄"
-                    android:textSize="20sp"
-                    android:buttonTint="#2E7D32" />
-            </RadioGroup>
-
-            <!-- Ghi chú -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:boxStrokeColor="#666666"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etNotes"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:hint="Ghi chú thêm (tùy chọn)"
-                    android:gravity="top"
-                    android:inputType="textMultiLine" />
-            </com.google.android.material.textfield.TextInputLayout>
-
             <!-- BMI Result -->
             <TextView
                 android:id="@+id/tvBMIResult"
@@ -251,7 +77,23 @@
                 android:gravity="center"
                 android:background="#10FF8C42"
                 android:padding="14dp"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="20dp" />
+
+            <!-- Ghi chú -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:boxStrokeColor="#666666"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:hint="Ghi chú thêm (tùy chọn)"
+                    android:gravity="top"
+                    android:inputType="textMultiLine" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Nút Hành động -->
             <LinearLayout

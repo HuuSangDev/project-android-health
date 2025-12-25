@@ -52,8 +52,40 @@
             android:orientation="vertical">
 
             <!-- Tên bài tập -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutExerciseName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tên bài tập"
+                app:startIconTint="#FF6B6B"
+                app:counterEnabled="true"
+                app:counterMaxLength="100">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etExerciseName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Calo đốt cháy mỗi phút -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutCaloriesPerMinute"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Calo đốt cháy/phút"
+                app:startIconTint="#FF9800"
+                app:helperText="VD: 10.5">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCaloriesPerMinute"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Mô tả -->
             <com.google.android.material.textfield.TextInputLayout

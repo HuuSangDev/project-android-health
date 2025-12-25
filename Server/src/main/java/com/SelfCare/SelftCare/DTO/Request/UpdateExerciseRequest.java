@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,9 +29,6 @@ public class UpdateExerciseRequest {
 
     @NotBlank(message = "difficultyLevel is required")
     String difficultyLevel;
-
-    String equipmentNeeded;
-    String muscleGroups;
 
     // file optional
     MultipartFile image;

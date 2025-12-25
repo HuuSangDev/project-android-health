@@ -59,9 +59,12 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:contentDescription="Settings" />
+
             </LinearLayout>
 
             <!-- Profile Section -->
+
+            <!-- Chart Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,9 +77,9 @@
                     android:id="@+id/profileImage"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_proflie"
                     android:contentDescription="Profile"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/avatar1"
                     app:shapeAppearanceOverlay="@style/CircleImageView" />
 
                 <TextView
@@ -97,62 +100,193 @@
                     android:text="phucpy12345@gmail.com"
                     android:textColor="@color/colorTextSecondary"
                     android:textSize="14sp" />
+
             </LinearLayout>
 
-            <!-- Chart Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_margin="16dp"
-                android:background="@drawable/bg_chart_section"
-                android:padding="16dp"
-                android:elevation="4dp">
+                android:padding="16dp">
 
+                <!-- Header với nút điều hướng tuần -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:id="@+id/btnPreviousWeek"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_backk"
+                        android:padding="8dp"
+                        android:scaleType="centerInside"
+                        android:contentDescription="Previous Week" />
 
                     <TextView
+                        android:id="@+id/tvWeekLabel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/progress"
-                        android:textColor="@color/colorTextPrimary"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:text="Tuần này"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:gravity="center" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/this_week"
-                        android:textColor="@color/orange_primary"
-                        android:textSize="14sp" />
+                    <ImageView
+                        android:id="@+id/btnNextWeek"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_backk"
+                        android:padding="8dp"
+                        android:scaleType="centerInside"
+                        android:rotation="180"
+                        android:contentDescription="Next Week" />
+
                 </LinearLayout>
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/chartView"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp" />
-
-                <!-- Week Labels -->
-                <LinearLayout
+                <!-- Ngày tháng -->
+                <TextView
+                    android:id="@+id/tvWeekDateRange"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp">
+                    android:text="01/01 - 07/01"
+                    android:textColor="@color/gray"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:layout_marginBottom="16dp" />
 
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/mon" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/tue" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/wed" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/thu" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/fri" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/sat" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/sun" android:textAlignment="center" android:textSize="12sp" android:textColor="@color/colorTextSecondary"/>
-                </LinearLayout>
+                <!-- Card cho biểu đồ -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Biểu đồ -->
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/chartView"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:layout_marginBottom="16dp" />
+
+                        <!-- Stats dưới biểu đồ -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="12dp"
+                                android:background="@drawable/stat_card_bg">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Hiện tại"
+                                    android:textColor="@color/gray"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/tvCurrentWeight"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="68 kg"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="4dp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="12dp"
+                                android:background="@drawable/stat_card_bg">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Thay đổi"
+                                    android:textColor="@color/gray"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/tvWeightChange"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="-2 kg"
+                                    android:textColor="#FF5555"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="4dp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="12dp"
+                                android:background="@drawable/stat_card_bg">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Trung bình"
+                                    android:textColor="@color/gray"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/tvAverageWeight"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="69 kg"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="4dp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Loading indicator -->
+                <ProgressBar
+                    android:id="@+id/chartProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    android:layout_marginTop="16dp" />
+
             </LinearLayout>
 
             <!-- Update Info Button -->

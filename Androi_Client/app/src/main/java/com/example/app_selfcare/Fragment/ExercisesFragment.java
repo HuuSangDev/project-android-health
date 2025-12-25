@@ -45,6 +45,25 @@ public class ExercisesFragment extends Fragment {
 
         setupRecyclerView();
         setupFabButton();
+        setupFilterButton(view);
+    }
+
+    private void setupFilterButton(View view) {
+        View btnFilter = view.findViewById(R.id.btnFilter);
+        btnFilter.setOnClickListener(v -> showResetDialog());
+    }
+
+    private void showResetDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Reset dữ liệu mẫu")
+                .setMessage("Bạn có muốn xóa tất cả bài tập hiện tại và tải lại 10 bài tập mẫu mới không?")
+                .setPositiveButton("Reset", (dialog, which) -> {
+                    ExerciseStorage.resetToSeedData(requireContext());
+                    loadExercises();
+                    Toast.makeText(requireContext(), "Đã reset dữ liệu mẫu thành công!", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 
     private void setupRecyclerView() {
