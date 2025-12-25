@@ -51,7 +51,6 @@ public class FoodService {
     NotificationService notificationService;
 
 
-
     // Tạm bỏ cache để tránh lỗi deserialize từ Redis
     // @Cacheable(value = "foodDetail", key = "#foodId")
     public FoodCreateResponse getFoodDetail(Long foodId) {
@@ -61,12 +60,13 @@ public class FoodService {
         return foodMapper.toFoodResponse(food);
     }
 
-
-
-    @CacheEvict(
-            value = { "allFoods", "foodsByMeal", "foodDetail" },
-            allEntries = true
-    )
+    @Caching(evict = {
+            @CacheEvict(value = "allFoods", allEntries = true),
+            @CacheEvict(value = "foodsByMeal", allEntries = true),
+            @CacheEvict(value = "foodDetail", allEntries = true),
+            @CacheEvict(value = "foodsByGoal", allEntries = true),
+            @CacheEvict(value = "foodsByCategory", allEntries = true)
+    })
     public FoodCreateResponse createFood(CreateFoodRequest request) throws IOException {
 
         // 1. Lấy category nếu có
@@ -118,8 +118,12 @@ public class FoodService {
         Food saved = foodRepository.save(food);
         
         // Gửi thông báo qua WebSocket theo goal của food
+        log.info("Food created: id={}, name={}, goal={}", saved.getFoodId(), saved.getFoodName(), saved.getGoal());
         if (saved.getGoal() != null) {
             notificationService.notifyNewFood(saved.getFoodId(), saved.getFoodName(), saved.getGoal());
+            log.info("Notification sent for food: {}", saved.getFoodName());
+        } else {
+            log.warn("Food has no goal, notification NOT sent: {}", saved.getFoodName());
         }
         
         // 5. Build Response
@@ -280,7 +284,8 @@ public class FoodService {
     @Caching(evict = {
             @CacheEvict(value = "foodDetail", key = "#foodId"),
             @CacheEvict(value = "foodsByGoal", allEntries = true),
-            @CacheEvict(value = "foodsByMeal", allEntries = true)
+            @CacheEvict(value = "foodsByMeal", allEntries = true),
+            @CacheEvict(value = "foodsByCategory", allEntries = true)
     })
     public void deleteFood(Long foodId) {
 
@@ -293,7 +298,8 @@ public class FoodService {
     @Caching(evict = {
             @CacheEvict(value = "foodDetail", key = "#foodId"),
             @CacheEvict(value = "foodsByGoal", allEntries = true),
-            @CacheEvict(value = "foodsByMeal", allEntries = true)
+            @CacheEvict(value = "foodsByMeal", allEntries = true),
+            @CacheEvict(value = "foodsByCategory", allEntries = true)
     })
     public FoodCreateResponse updateFood(Long foodId, UpdateFoodRequest request) throws IOException {
 

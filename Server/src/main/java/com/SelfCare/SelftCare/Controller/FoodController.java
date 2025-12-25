@@ -8,6 +8,7 @@ import com.SelfCare.SelftCare.DTO.Request.UpdateFoodRequest;
 import com.SelfCare.SelftCare.DTO.Response.FoodCreateResponse;
 import com.SelfCare.SelftCare.Enum.MealType;
 import com.SelfCare.SelftCare.Service.FoodService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -38,7 +39,7 @@ public class FoodController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
-    ApiResponse<FoodCreateResponse> createFood(@ModelAttribute  CreateFoodRequest request) throws IOException {
+    ApiResponse<FoodCreateResponse> createFood(@Valid @ModelAttribute  CreateFoodRequest request) throws IOException {
         return ApiResponse.<FoodCreateResponse>builder()
                 .result(foodService.createFood(request))
                 .message("Tạo món ăn thành công")

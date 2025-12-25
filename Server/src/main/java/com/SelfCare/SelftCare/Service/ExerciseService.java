@@ -39,12 +39,11 @@ public class ExerciseService {
     UserRepository userRepository;
     NotificationService notificationService;
     @Caching(evict = {
-            // Xóa cache danh sách bài tập theo Goal (của tất cả user)
             @CacheEvict(value = "exercisesByGoal", allEntries = true),
-            // Xóa cache danh sách bài tập theo Category (của tất cả user)
-            @CacheEvict(value = "exercisesByGoalAndCategory", allEntries = true)
+            @CacheEvict(value = "exercisesByGoalAndCategory", allEntries = true),
+            @CacheEvict(value = "exercise_detail", allEntries = true)
     })
-    @Transactional // Nên thêm Transactional vì có lưu DB
+    @Transactional
     public ExerciseResponse createExercise(CreateExerciseRequest request) throws IOException {
 
         // 1. Lấy category
@@ -89,9 +88,10 @@ public class ExerciseService {
     }
 
     /**
-     * Lấy chi tiết bài tập theo ID với cache
+     * Lấy chi tiết bài tập theo ID
+     * Tạm bỏ cache để tránh lỗi deserialize từ Redis
      */
-    @Cacheable(value = "exercise_detail", key = "#id")
+    // @Cacheable(value = "exercise_detail", key = "#id")
     public ExerciseResponse getExerciseById(Long id) {
         Exercise exercise = exerciseRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.EXERCISE_NOT_FOUND));

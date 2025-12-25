@@ -41,7 +41,7 @@ public class WorkoutSliderAdapter extends RecyclerView.Adapter<WorkoutSliderAdap
         ExerciseResponse exercise = exercises.get(position);
         
         holder.tvWorkoutName.setText(exercise.getExerciseName());
-        holder.tvCalories.setText(String.format("%.1f cal/phút", exercise.getCaloriesPerMinute()));
+        holder.tvCalories.setText((double) exercise.getCaloriesPerMinute() + " cal/phút");
         holder.tvDifficulty.setText(mapDifficulty(exercise.getDifficultyLevel()));
         
         // Load image

@@ -50,7 +50,6 @@ public class SearchFragment extends Fragment {
     private ImageView btnBack, btnClearSearch;
     private RecyclerView rvSuggestions;
     private LinearLayout layoutEmptyState, layoutSuggestions;
-    private TextView tvSectionTitle;
     private ProgressBar progressBar;
 
     private SearchAdapter adapter;
@@ -394,45 +393,30 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    /**
+     * Lưu item vào lịch sử tìm kiếm
+     */
     private void saveToHistory(SearchItem item) {
-        try {
-            String imageUrl = item.getImageUrl();
-            String category = "";
-            
-            // Determine category based on type
-            if (item.getType() == SearchItem.TYPE_FOOD) {
-                category = "Món ăn";
-                FoodCreateResponse food = foodDetailsMap.get(item.getId());
-                if (food != null && imageUrl == null) {
-                    imageUrl = food.getImageUrl();
-                }
-            } else if (item.getType() == SearchItem.TYPE_WORKOUT) {
-                category = "Bài tập";
-                ExerciseResponse exercise = exerciseDetailsMap.get(item.getId());
-                if (exercise != null && imageUrl == null) {
-                    imageUrl = exercise.getImageUrl();
-                }
-            }
-            
+        if (historyManager != null) {
+            String imageUrl = item.getImageUrl() != null ? item.getImageUrl() : "";
+            String category = item.getType() == SearchItem.TYPE_FOOD ? "Món ăn" : "Bài tập";
             historyManager.addToHistory(item, imageUrl, category);
             Log.d(TAG, "Saved to history: " + item.getName());
-        } catch (Exception e) {
-            Log.e(TAG, "Error saving to history", e);
         }
     }
 
+    /**
+     * Hiển thị lịch sử tìm kiếm
+     */
     private void showHistory() {
-        try {
+        if (historyManager != null && historyManager.hasHistory()) {
             isShowingHistory = true;
             filteredItems.clear();
-            
-            List<SearchItem> historyItems = historyManager.getHistoryAsSearchItems();
-            filteredItems.addAll(historyItems);
-            
-            Log.d(TAG, "Showing history with " + historyItems.size() + " items");
+            filteredItems.addAll(historyManager.getHistoryAsSearchItems());
             updateUI();
-        } catch (Exception e) {
-            Log.e(TAG, "Error showing history", e);
+            Log.d(TAG, "Showing history with " + filteredItems.size() + " items");
+        } else {
+            isShowingHistory = false;
             showAllItems();
         }
     }
