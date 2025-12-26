@@ -51,10 +51,12 @@ public class FoodController {
     ApiResponse<List<FoodCreateResponse>> getFoodsByMealType(@PathVariable MealType mealType)  {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        
         return ApiResponse.<List<FoodCreateResponse>>builder()
-                .result(foodService.getFoodsByMealType(email,mealType))
+                .result(foodService.getFoodsByMealType(email, mealType, isAdmin))
                 .message("get meal success")
-
                 .build();
     }
 
@@ -62,6 +64,18 @@ public class FoodController {
     ApiResponse<List<FoodCreateResponse>> getAllFoods()  {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        
+        // Nếu là admin, trả về tất cả foods
+        if (isAdmin) {
+            return ApiResponse.<List<FoodCreateResponse>>builder()
+                    .message("get all foods success")
+                    .result(foodService.getAllFoodsNoFilter())
+                    .build();
+        }
+        
+        // Nếu là user thường, lọc theo goal
         return ApiResponse.<List<FoodCreateResponse>>builder()
                 .message("get all foods success")
                 .result(foodService.getAllFoods(email))
@@ -84,9 +98,12 @@ public class FoodController {
     ApiResponse<List<FoodCreateResponse>> getFoodsByCategory(@PathVariable Long categoryId) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        
         return ApiResponse.<List<FoodCreateResponse>>builder()
                 .message("get foods by category success")
-                .result(foodService.getFoodsByCategory(email, categoryId))
+                .result(foodService.getFoodsByCategory(email, categoryId, isAdmin))
                 .build();
     }
 

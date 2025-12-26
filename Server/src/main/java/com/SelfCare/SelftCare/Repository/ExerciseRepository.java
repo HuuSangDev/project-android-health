@@ -17,5 +17,8 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
             Goal goal,
             Long categoryId
     );
+    
+    // theo category only (cho admin)
+    List<Exercise> findByExerciseCategory_CategoryId(Long categoryId);
 }
 

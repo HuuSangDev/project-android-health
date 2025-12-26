@@ -16,5 +16,6 @@ public interface FoodRepository extends JpaRepository<Food, Long>, JpaSpecificat
     List<Food> findByGoal(Goal goal);
     List<Food> findByGoalAndFoodCategory_CategoryId(Goal goal, Long categoryId);
     List<Food> findByFoodCategory_CategoryId(Long categoryId);
+    List<Food> findByMealType(MealType mealType);
 }
 

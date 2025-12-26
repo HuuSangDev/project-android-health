@@ -100,10 +100,19 @@ public class ExerciseService {
 
     @Cacheable(
             value = "exercisesByGoal",
-            key = "#email"
+            key = "#email + '_' + #isAdmin"
     )
-    public List<ExerciseResponse> getAllExercisesByUserGoal(String email) {
+    public List<ExerciseResponse> getAllExercisesByUserGoal(String email, boolean isAdmin) {
 
+        // Nếu là admin, trả về tất cả exercises
+        if (isAdmin) {
+            return exerciseRepository.findAll()
+                    .stream()
+                    .map(exerciseMapper::toResponse)
+                    .toList();
+        }
+
+        // Nếu là user thường, lọc theo goal
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
@@ -122,13 +131,24 @@ public class ExerciseService {
 
     @Cacheable(
             value = "exercisesByGoalAndCategory",
-            key = "#email + '_' + #categoryId"
+            key = "#email + '_' + #categoryId + '_' + #isAdmin"
     )
     public List<ExerciseResponse> getExercisesByCategory(
             String email,
-            Long categoryId
+            Long categoryId,
+            boolean isAdmin
     ) {
 
+        // Nếu là admin, trả về tất cả exercises theo category
+        if (isAdmin) {
+            return exerciseRepository
+                    .findByExerciseCategory_CategoryId(categoryId)
+                    .stream()
+                    .map(exerciseMapper::toResponse)
+                    .toList();
+        }
+
+        // Nếu là user thường, lọc theo goal và category
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 

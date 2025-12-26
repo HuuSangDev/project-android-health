@@ -240,13 +240,21 @@ public class FoodService {
                 .collect(Collectors.toList());
     }
 
-    @Cacheable(value = "foodsByMeal", key = "#email + '_' + #mealType")
-    public List<FoodCreateResponse> getFoodsByMealType(String email,MealType mealType) {
+    @Cacheable(value = "foodsByMeal", key = "#email + '_' + #mealType + '_' + #isAdmin")
+    public List<FoodCreateResponse> getFoodsByMealType(String email, MealType mealType, boolean isAdmin) {
 
+        // Nếu là admin, trả về tất cả foods theo mealType
+        if (isAdmin) {
+            List<Food> foods = foodRepository.findByMealType(mealType);
+            return foods.stream()
+                    .map(food -> foodMapper.toFoodResponse(food))
+                    .collect(Collectors.toList());
+        }
 
+        // Nếu là user thường, lọc theo goal và mealType
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        // 2. Lấy goal từ profile
+        
         UserProfile profile = user.getUserProfile();
         if (profile == null || profile.getHealthGoal() == null) {
             throw new AppException(ErrorCode.USER_PROFILE_NULL);
@@ -255,15 +263,24 @@ public class FoodService {
         Goal goal = profile.getHealthGoal();
         List<Food> foods = foodRepository.findByGoalAndMealType(goal, mealType);
 
-
         return foods.stream()
                 .map(food -> foodMapper.toFoodResponse(food))
                 .collect(Collectors.toList());
     }
 
     // Lấy danh sách món ăn theo category
-    @Cacheable(value = "foodsByCategory", key = "#email + '_' + #categoryId")
-    public List<FoodCreateResponse> getFoodsByCategory(String email, Long categoryId) {
+    @Cacheable(value = "foodsByCategory", key = "#email + '_' + #categoryId + '_' + #isAdmin")
+    public List<FoodCreateResponse> getFoodsByCategory(String email, Long categoryId, boolean isAdmin) {
+        
+        // Nếu là admin, trả về tất cả foods theo category
+        if (isAdmin) {
+            List<Food> foods = foodRepository.findByFoodCategory_CategoryId(categoryId);
+            return foods.stream()
+                    .map(foodMapper::toFoodResponse)
+                    .collect(Collectors.toList());
+        }
+
+        // Nếu là user thường, lọc theo goal và category
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         
