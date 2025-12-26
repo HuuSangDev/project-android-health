@@ -56,6 +56,18 @@ public class ExerciseController {
                 .build();
     }
 
+    /**
+     * API lấy tất cả Exercise không lọc theo goal (dành cho Admin)
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/all-admin")
+    public ApiResponse<List<ExerciseResponse>> getAllExercisesAdmin() {
+        return ApiResponse.<List<ExerciseResponse>>builder()
+                .result(exerciseService.getAllExercises())
+                .message("Danh sách tất cả bài tập")
+                .build();
+    }
+
 
     @GetMapping("/category/{categoryId}")
     public ApiResponse<List<ExerciseResponse>> getExercisesByCategory(@PathVariable Long categoryId) {

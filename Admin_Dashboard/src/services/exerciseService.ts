@@ -1,9 +1,11 @@
-import api from './api';
-import { ApiResponse, Exercise, ExerciseCategory } from '../types/health';
+import api from "./api";
+import { ApiResponse, Exercise, ExerciseCategory } from "../types/health";
 
 export const exerciseService = {
   getAllExercises: async (): Promise<Exercise[]> => {
-    const response = await api.get<ApiResponse<Exercise[]>>('/exercises/all');
+    const response = await api.get<ApiResponse<Exercise[]>>(
+      "/exercises/all-admin"
+    );
     return response.data.result;
   },
 
@@ -13,16 +15,24 @@ export const exerciseService = {
   },
 
   createExercise: async (formData: FormData): Promise<Exercise> => {
-    const response = await api.post<ApiResponse<Exercise>>('/exercises/create', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await api.post<ApiResponse<Exercise>>(
+      "/exercises/create",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
     return response.data.result;
   },
 
   updateExercise: async (id: number, formData: FormData): Promise<Exercise> => {
-    const response = await api.put<ApiResponse<Exercise>>(`/exercises/${id}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await api.put<ApiResponse<Exercise>>(
+      `/exercises/${id}`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
     return response.data.result;
   },
 
@@ -32,17 +42,32 @@ export const exerciseService = {
 
   // Exercise Categories
   getAllCategories: async (): Promise<ExerciseCategory[]> => {
-    const response = await api.get<ApiResponse<ExerciseCategory[]>>('/exercise-categories/all');
+    const response = await api.get<ApiResponse<ExerciseCategory[]>>(
+      "/exercise-categories/all"
+    );
     return response.data.result;
   },
 
-  createCategory: async (data: { categoryName: string; description?: string; iconUrl?: string }): Promise<ExerciseCategory> => {
-    const response = await api.post<ApiResponse<ExerciseCategory>>('/exercise-categories/create', data);
+  createCategory: async (data: {
+    categoryName: string;
+    description?: string;
+    iconUrl?: string;
+  }): Promise<ExerciseCategory> => {
+    const response = await api.post<ApiResponse<ExerciseCategory>>(
+      "/exercise-categories/create",
+      data
+    );
     return response.data.result;
   },
 
-  updateCategory: async (id: number, data: { categoryName: string; description?: string; iconUrl?: string }): Promise<ExerciseCategory> => {
-    const response = await api.put<ApiResponse<ExerciseCategory>>(`/exercise-categories/${id}`, data);
+  updateCategory: async (
+    id: number,
+    data: { categoryName: string; description?: string; iconUrl?: string }
+  ): Promise<ExerciseCategory> => {
+    const response = await api.put<ApiResponse<ExerciseCategory>>(
+      `/exercise-categories/${id}`,
+      data
+    );
     return response.data.result;
   },
 

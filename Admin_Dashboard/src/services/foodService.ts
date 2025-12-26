@@ -1,9 +1,10 @@
-import api from './api';
-import { ApiResponse, Food, FoodCategory } from '../types/health';
+import api from "./api";
+import { ApiResponse, Food, FoodCategory } from "../types/health";
 
 export const foodService = {
   getAllFoods: async (): Promise<Food[]> => {
-    const response = await api.get<ApiResponse<Food[]>>('/foods/all');
+    // Dùng endpoint admin để lấy tất cả foods không filter theo goal
+    const response = await api.get<ApiResponse<Food[]>>("/foods/all-admin");
     return response.data.result;
   },
 
@@ -13,16 +14,28 @@ export const foodService = {
   },
 
   createFood: async (formData: FormData): Promise<Food> => {
-    const response = await api.post<ApiResponse<Food>>('/foods/create', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await api.post<ApiResponse<Food>>(
+      "/foods/create",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        timeout: 60000, // 60 seconds for file upload
+      }
+    );
     return response.data.result;
   },
 
   updateFood: async (id: number, formData: FormData): Promise<Food> => {
-    const response = await api.put<ApiResponse<Food>>(`/foods/${id}`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await api.put<ApiResponse<Food>>(
+      `/foods/${id}`,
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+        timeout: 60000,
+      }
+    );
     return response.data.result;
   },
 
@@ -32,17 +45,31 @@ export const foodService = {
 
   // Food Categories
   getAllCategories: async (): Promise<FoodCategory[]> => {
-    const response = await api.get<ApiResponse<FoodCategory[]>>('/categories/all');
+    const response = await api.get<ApiResponse<FoodCategory[]>>(
+      "/categories/all"
+    );
     return response.data.result;
   },
 
-  createCategory: async (data: { categoryName: string; description?: string }): Promise<FoodCategory> => {
-    const response = await api.post<ApiResponse<FoodCategory>>('/categories/create', data);
+  createCategory: async (data: {
+    categoryName: string;
+    description?: string;
+  }): Promise<FoodCategory> => {
+    const response = await api.post<ApiResponse<FoodCategory>>(
+      "/categories/create",
+      data
+    );
     return response.data.result;
   },
 
-  updateCategory: async (id: number, data: { categoryName: string; description?: string }): Promise<FoodCategory> => {
-    const response = await api.put<ApiResponse<FoodCategory>>(`/categories/${id}`, data);
+  updateCategory: async (
+    id: number,
+    data: { categoryName: string; description?: string }
+  ): Promise<FoodCategory> => {
+    const response = await api.put<ApiResponse<FoodCategory>>(
+      `/categories/${id}`,
+      data
+    );
     return response.data.result;
   },
 

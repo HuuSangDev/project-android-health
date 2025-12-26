@@ -38,14 +38,11 @@ public class MailService {
         // Kiểm tra email tồn tại trong hệ thống
         if (!userRepository.existsByEmail(mail)) {
             throw new AppException(ErrorCode.EMAIL_NOT_FOUND);
+            
         }
 
         String otp = generateOtp();
-
-        // Lưu OTP vào Redis (hiệu lực 5 phút)
         redisTemplate.opsForValue().set("otp:" + mail, otp, 5, TimeUnit.MINUTES);
-
-        // Gửi email
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mail);
         message.setSubject("Mã xác thực đặt lại mật khẩu");
@@ -53,7 +50,6 @@ public class MailService {
         javaMailSender.send(message);
     }
 
-    // 🔹 Kiểm tra OTP người dùng nhập
     public boolean verifyOtp(UserVerifyRequest request ) {
         String email=request.getEmail();
         String inputOtp=request.getOtp();

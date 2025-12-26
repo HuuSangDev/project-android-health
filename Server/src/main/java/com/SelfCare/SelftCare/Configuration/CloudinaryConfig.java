@@ -19,8 +19,6 @@ public class CloudinaryConfig {
     @Value("${cloudinary.api-secret}")
     private String apiSecret;
 
-
-
     @Bean
     public Cloudinary cloudinary() {
         Map<String, String> config = new HashMap<>();
@@ -29,4 +27,5 @@ public class CloudinaryConfig {
         config.put("api_secret", apiSecret);
         return new Cloudinary(config);
     }
+
 }

@@ -18,7 +18,7 @@ public class WebSocketManager {
     private static final String TAG = "WebSocketManager";
     
     // Local Emulator - Native WebSocket (không có SockJS)
-    private static final String WS_URL = "ws://10.0.2.2:8080/ws";
+    private static final String WS_URL = "ws://18.140.113.39:8080/ws";
     // AWS EC2: private static final String WS_URL = "ws://13.214.39.228:8080/ws";
 
     private static WebSocketManager instance;

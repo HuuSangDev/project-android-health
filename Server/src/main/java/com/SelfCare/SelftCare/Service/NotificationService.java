@@ -200,6 +200,7 @@ public class NotificationService {
     /**
      * Lấy thông báo theo goal
      */
+
     public List<NotificationResponse> getNotificationsByGoal(Goal goal) {
         return notificationRepository.findByGoalOrGoalIsNullOrderByCreatedAtDesc(goal)
                 .stream()
@@ -253,4 +254,6 @@ public class NotificationService {
                 .goal(notification.getGoal())
                 .build();
     }
+
+
 }
