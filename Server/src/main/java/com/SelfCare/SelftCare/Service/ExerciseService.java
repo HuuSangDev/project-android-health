@@ -199,6 +199,16 @@ public class ExerciseService {
         exerciseRepository.delete(exercise);
     }
 
+    /**
+     * Lấy tất cả bài tập không lọc theo goal (dành cho Admin)
+     */
+    public List<ExerciseResponse> getAllExercises() {
+        return exerciseRepository.findAll()
+                .stream()
+                .map(exerciseMapper::toResponse)
+                .toList();
+    }
+
 
 
 

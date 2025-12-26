@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     // Local Emulator
-    private static final String BASE_URL = "http://10.0.2.2:8080/";
+    private static final String BASE_URL = "http://18.140.113.39:8080/";
     // AWS EC2: private static final String BASE_URL = "http://13.214.39.228:8080/";
 
     private static Retrofit retrofit;

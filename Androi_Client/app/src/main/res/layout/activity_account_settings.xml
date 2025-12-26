@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- activity_account_settings.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -38,304 +37,308 @@
 
     </LinearLayout>
 
-    <!-- Menu Items -->
-    <LinearLayout
+    <!-- Scrollable Content -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="16dp">
-        <!-- Backup & Restore + Premium (NEW) -->
+        android:fillViewport="true">
+
         <LinearLayout
-            android:id="@+id/layoutBackupPremium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="14dp">
+            android:padding="16dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnBackupRestore"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:text="Sao lưu và Khôi phục"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:paddingHorizontal="18dp"
-                app:icon="@drawable/ic_cloud"
-                app:iconPadding="10dp"
-                app:iconTint="@android:color/white"
-                app:backgroundTint="#12B886"
-                app:cornerRadius="18dp" />
-
-            <TextView
-                android:id="@+id/tvBackupHint"
+            <!-- Backup & Restore + Premium -->
+            <LinearLayout
+                android:id="@+id/layoutBackupPremium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="14dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnBackupRestore"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:text="Sao lưu và Khôi phục"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:paddingHorizontal="18dp"
+                    app:icon="@drawable/ic_cloud"
+                    app:iconPadding="10dp"
+                    app:iconTint="@android:color/white"
+                    app:backgroundTint="#12B886"
+                    app:cornerRadius="18dp" />
+
+                <TextView
+                    android:id="@+id/tvBackupHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Đăng nhập và đồng bộ dữ liệu của bạn"
+                    android:textColor="#666666"
+                    android:textSize="13sp"
+                    android:gravity="center" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGoPremium"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="12dp"
+                    android:text="Chuyển sang Premium"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:paddingHorizontal="18dp"
+                    app:icon="@drawable/ic_crown"
+                    app:iconPadding="10dp"
+                    app:iconTint="#111111"
+                    app:backgroundTint="#FBBF24"
+                    app:cornerRadius="18dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/personalInfoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:background="@drawable/bg_menu_item"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/ic_proflie"
+                    app:tint="@color/orange_primary" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/personal_info"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_arrow_forward"
+                    app:tint="@color/colorTextSecondary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/notificationLayout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
                 android:layout_marginTop="8dp"
-                android:text="Đăng nhập và đồng bộ dữ liệu của bạn"
-                android:textColor="#666666"
-                android:textSize="13sp"
-                android:gravity="center" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:background="@drawable/bg_menu_item"
+                android:clickable="true"
+                android:focusable="true">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnGoPremium"
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/ic_bell"
+                    app:tint="@color/orange_primary" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/notifications"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_arrow_forward"
+                    app:tint="@color/colorTextSecondary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/passwordLayout"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:layout_marginTop="12dp"
-                android:text="Chuyển sang Premium"
-                android:textAllCaps="false"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:background="@drawable/bg_menu_item"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/ic_lockk"
+                    app:tint="@color/orange_primary" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/change_password"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_arrow_forward"
+                    app:tint="@color/colorTextSecondary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/darkmode"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:background="@drawable/bg_menu_item">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/ic_moon"
+                    app:tint="@color/orange_primary" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/dark_mode"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/darkModeSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:trackTint="@color/colorDivider"
+                    app:thumbTint="@color/orange_primary" />
+            </LinearLayout>
+
+            <!-- Language Selection -->
+            <LinearLayout
+                android:id="@+id/languageLayout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:background="@drawable/bg_menu_item"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_language"
+                    app:tint="@color/orange_primary" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/language"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvCurrentLanguage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tiếng Việt"
+                    android:textColor="@color/orange_primary"
+                    android:textSize="14sp"
+                    android:layout_marginEnd="8dp" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_arrow_forward"
+                    app:tint="@color/colorTextSecondary" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/helpLayout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:background="@drawable/bg_menu_item"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_question"
+                    app:tint="@color/orange_primary" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/help"
+                    android:textColor="@color/colorTextPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_arrow_forward"
+                    app:tint="@color/colorTextSecondary" />
+            </LinearLayout>
+
+            <!-- Sign Out Button -->
+            <Button
+                android:id="@+id/signOutButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/sign_out"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:textSize="16sp"
-                android:paddingHorizontal="18dp"
-                app:icon="@drawable/ic_crown"
-                app:iconPadding="10dp"
-                app:iconTint="#111111"
-                app:backgroundTint="#FBBF24"
-                app:cornerRadius="18dp" />
+                android:background="@drawable/notification_icon_background_orange"
+                app:backgroundTint="@null" />
 
         </LinearLayout>
+    </ScrollView>
 
-
-
-        <LinearLayout
-            android:id="@+id/personalInfoLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="16dp"
-            android:background="@drawable/bg_menu_item"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/ic_proflie"
-                app:tint="@color/orange_primary" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:text="@string/personal_info"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_arrow_forward"
-                app:tint="@color/colorTextSecondary" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/notificationLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="16dp"
-            android:background="@drawable/bg_menu_item"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:background="@drawable/ic_bell"
-                app:tint="@color/orange_primary" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:text="@string/notifications"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_arrow_forward"
-                app:tint="@color/colorTextSecondary" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/passwordLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="16dp"
-            android:background="@drawable/bg_menu_item"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/ic_lockk"
-                app:tint="@color/orange_primary" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:text="@string/change_password"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_arrow_forward"
-                app:tint="@color/colorTextSecondary" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/darkmode"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="16dp"
-            android:background="@drawable/bg_menu_item">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/ic_moon"
-                app:tint="@color/orange_primary" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:text="@string/dark_mode"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/darkModeSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:trackTint="@color/colorDivider"
-                app:thumbTint="@color/orange_primary" />
-        </LinearLayout>
-
-        <!-- Language Selection -->
-        <LinearLayout
-            android:id="@+id/languageLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="16dp"
-            android:background="@drawable/bg_menu_item"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_language"
-                app:tint="@color/orange_primary" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:text="@string/language"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvCurrentLanguage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tiếng Việt"
-                android:textColor="@color/orange_primary"
-                android:textSize="14sp"
-                android:layout_marginEnd="8dp" />
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_arrow_forward"
-                app:tint="@color/colorTextSecondary" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/helpLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:padding="16dp"
-            android:background="@drawable/bg_menu_item"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/ic_question"
-                app:tint="@color/orange_primary" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:text="@string/help"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_arrow_forward"
-                app:tint="@color/colorTextSecondary" />
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-    <!-- Sign Out Button -->
-    <Button
-        android:id="@+id/signOutButton"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="16dp"
-        android:text="@string/sign_out"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:background="@drawable/notification_icon_background_orange"
-        app:backgroundTint="@null" />
-
-
+    <!-- Bottom Navigation -->
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
@@ -445,6 +448,5 @@
                 android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
-
 
 </LinearLayout>

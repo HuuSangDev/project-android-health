@@ -70,7 +70,6 @@ public class UserService {
         String email = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
-
         // 2. Tìm user
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));

@@ -29,6 +29,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private SwitchCompat darkModeSwitch;
     private ThemeManager themeManager;
     private LocaleManager localeManager;
+    private com.google.android.material.button.MaterialButton btnGoPremium;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -63,6 +64,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
         signOutButton = findViewById(R.id.signOutButton);
         darkModeSwitch = findViewById(R.id.darkModeSwitch);
         tvCurrentLanguage = findViewById(R.id.tvCurrentLanguage);
+        btnGoPremium = findViewById(R.id.btnGoPremium);
 
         titleText.setText(R.string.account_settings);
     }
@@ -197,6 +199,14 @@ public class AccountSettingsActivity extends AppCompatActivity {
         languageLayout.setOnClickListener(v -> showLanguageDialog());
         
         signOutButton.setOnClickListener(v -> showSignOutDialog());
+
+        // Premium button
+        if (btnGoPremium != null) {
+            btnGoPremium.setOnClickListener(v -> {
+                Intent intent = new Intent(AccountSettingsActivity.this, PremiumIntroActivity.class);
+                startActivity(intent);
+            });
+        }
 
         // Bottom Navigation
         setupBottomNavigation();
