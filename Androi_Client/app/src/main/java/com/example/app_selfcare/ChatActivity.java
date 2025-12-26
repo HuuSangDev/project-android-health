@@ -26,21 +26,41 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * ChatActivity - Màn hình chat với AI trợ lý sức khỏe
+ * 
+ * Chức năng chính:
+ * - Giao diện chat realtime với AI (Gemini)
+ * - Gửi tin nhắn và nhận phản hồi từ AI
+ * - Lưu trữ conversationId để duy trì ngữ cảnh hội thoại
+ * - Hiển thị loading khi đang chờ phản hồi
+ */
 public class ChatActivity extends AppCompatActivity {
 
+    // Views
     private RecyclerView recyclerViewMessages;
     private TextInputEditText editTextMessage;
     private FloatingActionButton buttonSend;
     private ProgressBar progressBar;
+    
+    // Adapter quản lý danh sách tin nhắn
     private ChatAdapter chatAdapter;
+    
+    // ID cuộc hội thoại để duy trì ngữ cảnh với AI
     private String conversationId = null;
 
+    /**
+     * Khởi tạo Activity
+     * - Thiết lập toolbar với nút back
+     * - Khởi tạo RecyclerView cho danh sách tin nhắn
+     * - Thiết lập các sự kiện cho input và button
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        // Setup Toolbar
+        // Thiết lập Toolbar với nút back
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -48,27 +68,28 @@ public class ChatActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        // Initialize views
+        // Ánh xạ các view
         recyclerViewMessages = findViewById(R.id.recyclerViewMessages);
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonSend = findViewById(R.id.buttonSend);
         progressBar = findViewById(R.id.progressBar);
 
-        // Setup RecyclerView
+        // Thiết lập RecyclerView với LinearLayoutManager
         chatAdapter = new ChatAdapter();
         recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewMessages.setAdapter(chatAdapter);
 
-        // Add welcome message
+        // Thêm tin nhắn chào mừng từ bot
         chatAdapter.addBotMessage("Xin chào! Tôi là trợ lý AI chuyên về chăm sóc sức khỏe. Tôi có thể giúp gì cho bạn hôm nay?");
 
-        // Enable/disable send button based on input
+        // Bật/tắt nút gửi dựa trên nội dung input
         editTextMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Chỉ bật nút gửi khi có nội dung
                 buttonSend.setEnabled(s.toString().trim().length() > 0);
             }
 
@@ -76,10 +97,10 @@ public class ChatActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
-        // Send button click
+        // Sự kiện click nút gửi
         buttonSend.setOnClickListener(v -> sendMessage());
 
-        // Send on Enter key (optional)
+        // Gửi tin nhắn khi nhấn Enter (tùy chọn)
         editTextMessage.setOnEditorActionListener((v, actionId, event) -> {
             if (event != null && event.getAction() == android.view.KeyEvent.ACTION_DOWN) {
                 sendMessage();
@@ -88,7 +109,7 @@ public class ChatActivity extends AppCompatActivity {
             return false;
         });
 
-        // Scroll to bottom when new message is added
+        // Tự động cuộn xuống khi có tin nhắn mới
         chatAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -98,6 +119,12 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Gửi tin nhắn đến AI và xử lý phản hồi
+     * - Thêm tin nhắn user vào chat
+     * - Gọi API chat với Gemini AI
+     * - Hiển thị phản hồi từ AI
+     */
     private void sendMessage() {
         String message = editTextMessage.getText().toString().trim();
         if (message.isEmpty()) {
@@ -164,8 +191,14 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Xử lý sự kiện click trên menu item
+     * @param item Menu item được click
+     * @return true nếu đã xử lý, false nếu không
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Xử lý nút back trên toolbar
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;

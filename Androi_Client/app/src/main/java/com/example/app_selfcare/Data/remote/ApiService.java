@@ -208,6 +208,39 @@ public interface ApiService {
     @DELETE("app/exercise-categories/{categoryId}")
     Call<ApiResponse<Void>> deleteExerciseCategory(@Path("categoryId") long categoryId);
 
+    // ==================== Admin Exercise APIs ====================
+    @Multipart
+    @POST("app/exercises/create")
+    Call<ApiResponse<ExerciseResponse>> createExercise(
+            @Part("exerciseName") RequestBody exerciseName,
+            @Part("caloriesPerMinute") RequestBody caloriesPerMinute,
+            @Part("description") RequestBody description,
+            @Part("instructions") RequestBody instructions,
+            @Part("difficultyLevel") RequestBody difficultyLevel,
+            @Part("categoryId") RequestBody categoryId,
+            @Part("goal") RequestBody goal,
+            @Part MultipartBody.Part image,
+            @Part MultipartBody.Part video
+    );
+
+    @Multipart
+    @PUT("app/exercises/{exerciseId}")
+    Call<ApiResponse<ExerciseResponse>> updateExercise(
+            @Path("exerciseId") long exerciseId,
+            @Part("exerciseName") RequestBody exerciseName,
+            @Part("caloriesPerMinute") RequestBody caloriesPerMinute,
+            @Part("description") RequestBody description,
+            @Part("instructions") RequestBody instructions,
+            @Part("difficultyLevel") RequestBody difficultyLevel,
+            @Part("categoryId") RequestBody categoryId,
+            @Part("goal") RequestBody goal,
+            @Part MultipartBody.Part image,
+            @Part MultipartBody.Part video
+    );
+
+    @DELETE("app/exercises/{exerciseId}")
+    Call<ApiResponse<Void>> deleteExercise(@Path("exerciseId") long exerciseId);
+
     // ==================== Saved Foods APIs ====================
     @POST("app/saved-foods/save")
     Call<ApiResponse<String>> saveFood(@Body SaveFoodRequest request);

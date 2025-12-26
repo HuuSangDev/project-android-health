@@ -47,8 +47,11 @@ public class ExerciseController {
     public ApiResponse<List<ExerciseResponse>> AllExercisesByUserGoal() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        
         return ApiResponse.<List<ExerciseResponse>>builder()
-                .result(exerciseService.getAllExercisesByUserGoal(email))
+                .result(exerciseService.getAllExercisesByUserGoal(email, isAdmin))
                 .message("Danh sách bài tập")
                 .build();
     }
@@ -70,8 +73,11 @@ public class ExerciseController {
     public ApiResponse<List<ExerciseResponse>> getExercisesByCategory(@PathVariable Long categoryId) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        
         return ApiResponse.<List<ExerciseResponse>>builder()
-                .result(exerciseService.getExercisesByCategory(email,categoryId ))
+                .result(exerciseService.getExercisesByCategory(email, categoryId, isAdmin))
                 .message("Danh sách bài tập")
                 .build();
     }

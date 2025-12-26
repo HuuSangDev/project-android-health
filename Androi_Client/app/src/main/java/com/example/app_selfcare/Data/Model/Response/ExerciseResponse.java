@@ -3,10 +3,12 @@ package com.example.app_selfcare.Data.Model.Response;
 import com.example.app_selfcare.Data.Model.Exercise;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Model ánh xạ trực tiếp JSON trả về từ API /app/exercises/all.
  */
-public class ExerciseResponse {
+public class ExerciseResponse implements Serializable {
 
     @SerializedName("exerciseId")
     private Long exerciseId;
@@ -25,12 +27,6 @@ public class ExerciseResponse {
 
     @SerializedName("difficultyLevel")
     private String difficultyLevel;
-
-    @SerializedName("equipmentNeeded")
-    private String equipmentNeeded;
-
-    @SerializedName("muscleGroups")
-    private String muscleGroups;
 
     @SerializedName("imageUrl")
     private String imageUrl;
@@ -69,14 +65,6 @@ public class ExerciseResponse {
 
     public String getDifficultyLevel() {
         return difficultyLevel;
-    }
-
-    public String getEquipmentNeeded() {
-        return equipmentNeeded;
-    }
-
-    public String getMuscleGroups() {
-        return muscleGroups;
     }
 
     public String getImageUrl() {

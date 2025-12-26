@@ -36,6 +36,12 @@
             android:name=".FoodDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".FoodsByCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExercisesByCategoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".HelpActivity"
             android:exported="false" />
         <activity

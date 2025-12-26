@@ -43,6 +43,7 @@ public class AddFoodCategoryDialog extends DialogFragment {
 
         TextInputEditText etName = view.findViewById(R.id.etCategoryName);
         TextInputEditText etDescription = view.findViewById(R.id.etCategoryDescription);
+        TextInputEditText etIconUrl = view.findViewById(R.id.etCategoryIconUrl);
         progressBar = view.findViewById(R.id.progressBar);
 
         // Tạo dialog không có nút mặc định
@@ -57,23 +58,24 @@ public class AddFoodCategoryDialog extends DialogFragment {
         view.findViewById(R.id.btnSaveCategory).setOnClickListener(v -> {
             String name = etName.getText() != null ? etName.getText().toString().trim() : "";
             String description = etDescription.getText() != null ? etDescription.getText().toString().trim() : "";
+            String iconUrl = etIconUrl.getText() != null ? etIconUrl.getText().toString().trim() : "";
 
             if (TextUtils.isEmpty(name)) {
                 etName.setError("Nhập tên danh mục");
                 return;
             }
 
-            createCategory(name, description);
+            createCategory(name, description, iconUrl);
         });
 
         return dialog;
     }
 
-    private void createCategory(String name, String description) {
+    private void createCategory(String name, String description, String iconUrl) {
         progressBar.setVisibility(View.VISIBLE);
 
         ApiService apiService = ApiClient.getClientWithToken(requireContext()).create(ApiService.class);
-        FoodCategoryCreateRequest request = new FoodCategoryCreateRequest(name, description);
+        FoodCategoryCreateRequest request = new FoodCategoryCreateRequest(name, description, iconUrl);
 
         apiService.createFoodCategory(request).enqueue(new Callback<ApiResponse<FoodCategoryResponse>>() {
             @Override

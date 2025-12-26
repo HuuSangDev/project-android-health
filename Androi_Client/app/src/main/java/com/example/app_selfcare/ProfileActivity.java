@@ -48,28 +48,58 @@ import retrofit2.Response;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * ProfileActivity - Màn hình hồ sơ cá nhân của người dùng
+ * 
+ * Chức năng chính:
+ * - Hiển thị thông tin cá nhân (tên, email, avatar)
+ * - Hiển thị chỉ số sức khỏe (cân nặng, BMI, mục tiêu)
+ * - Biểu đồ theo dõi cân nặng theo tuần (tuần này/tuần trước)
+ * - Cập nhật thông tin sức khỏe hàng ngày (daily log)
+ * - Điều hướng đến cài đặt tài khoản
+ */
 public class ProfileActivity extends AppCompatActivity {
 
+    // Views - Header
     private ImageView btnBack, btnSettings;
     private ImageView profileImage;
+    
+    // Views - Bottom Navigation
     private LinearLayout navHome, navWorkout, navPlanner, navProfile;
     private LinearLayout updateInfor;
+    
+    // Views - Chart section
     private BarChart chartView;
     private ProgressBar chartProgressBar;
+    
+    // Views - User info
     private TextView pointsText, weightText, bmiText, fullName, Email;
     private TextView tvCurrentWeight, tvWeightChange, tvAverageWeight;
     private TextView tvWeekLabel, tvWeekDateRange;
     private ImageView btnPreviousWeek, btnNextWeek;
+    
+    // Managers
     private ChartManager chartManager;
     private ApiService apiService;
+    
+    // State - true nếu đang xem tuần hiện tại
     private boolean isCurrentWeek = true;
 
+    /**
+     * Áp dụng ngôn ngữ đã lưu trước khi Activity được tạo
+     */
     @Override
     protected void attachBaseContext(Context newBase) {
         LocaleManager localeManager = new LocaleManager(newBase);
         super.attachBaseContext(localeManager.applyLanguage(newBase));
     }
 
+    /**
+     * Khởi tạo Activity
+     * - Thiết lập giao diện
+     * - Load thông tin profile
+     * - Load dữ liệu biểu đồ
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,8 +112,8 @@ public class ProfileActivity extends AppCompatActivity {
             return insets;
         });
 
-        fullName=findViewById(R.id.userName);
-        Email=findViewById(R.id.userEmail);
+        fullName = findViewById(R.id.userName);
+        Email = findViewById(R.id.userEmail);
         profileImage = findViewById(R.id.profileImage);
 
         initViews();
@@ -93,6 +123,9 @@ public class ProfileActivity extends AppCompatActivity {
         loadChartData();
     }
 
+    /**
+     * Ánh xạ các view từ layout và khởi tạo các manager
+     */
     @SuppressLint("WrongViewCast")
     private void initViews() {
         chartView = findViewById(R.id.chartView);
@@ -123,6 +156,10 @@ public class ProfileActivity extends AppCompatActivity {
         updateWeekLabel();
     }
 
+    /**
+     * Load thông tin profile người dùng từ API
+     * Cập nhật tên, email, avatar, cân nặng, BMI
+     */
     private void fetchProfile() {
         SharedPreferences prefs = getSharedPreferences("APP_DATA", MODE_PRIVATE);
         String token = prefs.getString("TOKEN", null);
@@ -193,7 +230,11 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-private void setupClickListeners() {
+    /**
+     * Thiết lập các sự kiện click cho các view
+     * Bao gồm: back, settings, update info, bottom nav, week navigation
+     */
+    private void setupClickListeners() {
         btnBack.setOnClickListener(v -> finish());
         btnSettings.setOnClickListener(v -> {
             startActivity(new Intent(this, AccountSettingsActivity.class));
@@ -212,6 +253,9 @@ private void setupClickListeners() {
         btnNextWeek.setOnClickListener(v -> goToNextWeek());
     }
 
+    /**
+     * Chuyển sang xem dữ liệu tuần trước
+     */
     private void goToPreviousWeek() {
         if (isCurrentWeek) {
             isCurrentWeek = false;
@@ -220,6 +264,9 @@ private void setupClickListeners() {
         }
     }
 
+    /**
+     * Chuyển sang xem dữ liệu tuần hiện tại
+     */
     private void goToNextWeek() {
         if (!isCurrentWeek) {
             isCurrentWeek = true;
@@ -228,6 +275,10 @@ private void setupClickListeners() {
         }
     }
 
+    /**
+     * Cập nhật label hiển thị tuần (tuần này/tuần trước)
+     * và khoảng ngày tương ứng
+     */
     private void updateWeekLabel() {
         LocalDate today = LocalDate.now();
         int dayOfWeek = today.getDayOfWeek().getValue(); // 1=Monday, 7=Sunday
@@ -246,19 +297,33 @@ private void setupClickListeners() {
         }
     }
 
+    /**
+     * Format khoảng ngày thành chuỗi dd/MM - dd/MM
+     * @param startDate Ngày bắt đầu
+     * @param endDate Ngày kết thúc
+     * @return Chuỗi đã format
+     */
     private String formatDateRange(LocalDate startDate, LocalDate endDate) {
         return String.format("%02d/%02d - %02d/%02d", 
                 startDate.getDayOfMonth(), startDate.getMonthValue(),
                 endDate.getDayOfMonth(), endDate.getMonthValue());
     }
 
+    /**
+     * Điều hướng đến Activity khác và finish Activity hiện tại
+     * @param cls Class của Activity đích
+     */
     private void navigateAndFinish(Class<?> cls) {
         startActivity(new Intent(this, cls));
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         finish();
     }
 
-    // DIALOG CẬP NHẬT THÔNG TIN SỨC KHỎE
+    /**
+     * Hiển thị dialog cập nhật thông tin sức khỏe
+     * Cho phép nhập cân nặng, chiều cao, ghi chú
+     * Tính BMI realtime khi nhập
+     */
     private void showUpdateProfileDialog() {
         Dialog dialog = new Dialog(this, R.style.DialogTheme);
         dialog.setContentView(R.layout.dialog_update_profile);
@@ -319,6 +384,12 @@ private void setupClickListeners() {
         dialog.show();
     }
 
+    /**
+     * Tính và hiển thị BMI realtime trong dialog
+     * @param weightStr Cân nặng (kg)
+     * @param heightStr Chiều cao (cm)
+     * @param tv TextView để hiển thị kết quả
+     */
     private void calculateAndShowBMI(String weightStr, String heightStr, TextView tv) {
         try {
             if (!weightStr.isEmpty() && !heightStr.isEmpty()) {
@@ -335,6 +406,12 @@ private void setupClickListeners() {
         }
     }
 
+    /**
+     * Tính BMI và trả về chuỗi kết quả
+     * @param weightStr Cân nặng (kg)
+     * @param heightStr Chiều cao (cm)
+     * @return Chuỗi "BMI - Trạng thái"
+     */
     private String calculateBMI(String weightStr, String heightStr) {
         try {
             float weight = Float.parseFloat(weightStr);
@@ -350,6 +427,11 @@ private void setupClickListeners() {
     }
 
     // ==================== CHART DATA ====================
+
+    /**
+     * Load dữ liệu biểu đồ cân nặng từ API
+     * Tùy thuộc vào isCurrentWeek để gọi API tuần này hoặc tuần trước
+     */
     private void loadChartData() {
         showChartLoading(true);
 
@@ -400,6 +482,9 @@ private void setupClickListeners() {
         }
     }
 
+    /**
+     * Hiển thị thông báo khi không có dữ liệu
+     */
     private void showNoDataMessage() {
         chartView.clear();
         tvCurrentWeight.setText("--");
@@ -408,6 +493,10 @@ private void setupClickListeners() {
         Toast.makeText(this, "Không có dữ liệu cho tuần này", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Cập nhật biểu đồ và các thống kê với dữ liệu mới
+     * @param logs Danh sách daily log
+     */
     private void updateChartWithData(List<DailyLogResponse> logs) {
         if (logs == null || logs.isEmpty()) {
             chartView.clear();
@@ -437,11 +526,23 @@ private void setupClickListeners() {
         tvAverageWeight.setText(String.format("%.1f kg", avgWeight));
     }
 
+    /**
+     * Hiển thị/ẩn loading cho biểu đồ
+     * @param show true để hiển thị loading
+     */
     private void showChartLoading(boolean show) {
         chartProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
         chartView.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
+    /**
+     * Lưu daily log lên server
+     * Cập nhật UI và reload biểu đồ sau khi lưu thành công
+     * @param request Request object chứa dữ liệu
+     * @param dialog Dialog cần đóng sau khi thành công
+     * @param weight Cân nặng để cập nhật UI
+     * @param height Chiều cao để tính BMI
+     */
     private void saveDailyLog(CreateDailyLogRequest request, Dialog dialog, String weight, String height) {
         apiService.createOrUpdateDailyLog(request).enqueue(new Callback<ApiResponse<DailyLogResponse>>() {
             @Override
@@ -469,6 +570,10 @@ private void setupClickListeners() {
         });
     }
 
+    /**
+     * Tạo dữ liệu mẫu nếu cần (cho demo/testing)
+     * Gọi API để server tự tạo dữ liệu mẫu
+     */
     private void generateSampleDataIfNeeded() {
         apiService.generateSampleData().enqueue(new Callback<ApiResponse<String>>() {
             @Override

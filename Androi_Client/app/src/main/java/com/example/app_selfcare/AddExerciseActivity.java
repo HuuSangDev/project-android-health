@@ -1,7 +1,6 @@
-// app/src/main/java/com/example/app_selfcare/Ui/Admin/AddExerciseActivity.java
 package com.example.app_selfcare;
 
-
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,8 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.Toast;
@@ -21,29 +22,54 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.app_selfcare.Data.Model.Exercise;
-import com.example.app_selfcare.Data.local.ExerciseStorage;
-import com.example.app_selfcare.R;
+import com.example.app_selfcare.Data.Model.Response.ApiResponse;
+import com.example.app_selfcare.Data.Model.Response.ExerciseCategoryResponse;
+import com.example.app_selfcare.Data.Model.Response.ExerciseResponse;
+import com.example.app_selfcare.Data.remote.ApiClient;
+import com.example.app_selfcare.Data.remote.ApiService;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * AddExerciseActivity - Màn hình thêm/sửa bài tập (Admin)
+ * 
+ * Chức năng chính:
+ * - Thêm bài tập mới với đầy đủ thông tin
+ * - Chỉnh sửa bài tập đã có (edit mode)
+ * - Upload hình ảnh và video hướng dẫn
+ * - Chọn danh mục, độ khó, mục tiêu sức khỏe
+ */
 public class AddExerciseActivity extends AppCompatActivity {
+
+    private static final String TAG = "AddExerciseActivity";
 
     // ===== Inputs =====
     private TextInputEditText etExerciseName;
     private TextInputEditText etCaloriesPerMinute;
     private TextInputEditText etDescription;
     private TextInputEditText etInstructions;
-    private TextInputEditText etEquipmentNeeded;
-    private TextInputEditText etMuscleGroups;
     private MaterialAutoCompleteTextView actvDifficultyLevel;
+    private MaterialAutoCompleteTextView actvCategory;
+    private MaterialAutoCompleteTextView actvGoal;
 
     private MaterialButton btnSaveExercise;
+    private ProgressBar progressBar;
 
     // ===== Image picker UI =====
     private MaterialButton btnSelectImage;
@@ -62,6 +88,15 @@ public class AddExerciseActivity extends AppCompatActivity {
     // ===== Selected Uris =====
     private Uri imageUri = null;
     private Uri videoUri = null;
+
+    // ===== Data =====
+    private List<ExerciseCategoryResponse> categoryList = new ArrayList<>();
+    private ExerciseCategoryResponse selectedCategory;
+    private ApiService apiService;
+
+    // ===== Edit mode =====
+    private boolean isEditMode = false;
+    private ExerciseResponse editingExercise;
 
     // ===== Pickers (Activity Result API) =====
     private final ActivityResultLauncher<String> pickImageLauncher =
@@ -83,22 +118,36 @@ public class AddExerciseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_exercise);
 
+        apiService = ApiClient.getClientWithToken(this).create(ApiService.class);
+
         initViews();
-        setupDropdown();
+        setupDropdowns();
         setupToolbar();
         setupClickListeners();
+        loadCategories();
+
+        // Check edit mode
+        if (getIntent().hasExtra("exercise")) {
+            isEditMode = true;
+            editingExercise = (ExerciseResponse) getIntent().getSerializableExtra("exercise");
+            populateEditData();
+        }
     }
 
+    /**
+     * Ánh xạ các view từ layout
+     */
     private void initViews() {
         etExerciseName = findViewById(R.id.etExerciseName);
         etCaloriesPerMinute = findViewById(R.id.etCaloriesPerMinute);
         etDescription = findViewById(R.id.etDescription);
         etInstructions = findViewById(R.id.etInstructions);
-        etEquipmentNeeded = findViewById(R.id.etEquipmentNeeded);
-        etMuscleGroups = findViewById(R.id.etMuscleGroups);
         actvDifficultyLevel = findViewById(R.id.actvDifficultyLevel);
+        actvCategory = findViewById(R.id.actvCategory);
+        actvGoal = findViewById(R.id.actvGoal);
 
         btnSaveExercise = findViewById(R.id.btnSaveExercise);
+        progressBar = findViewById(R.id.progressBar);
 
         // Image
         btnSelectImage = findViewById(R.id.btnSelectImage);
@@ -121,22 +170,36 @@ public class AddExerciseActivity extends AppCompatActivity {
         layoutVideoPreview.setVisibility(View.GONE);
     }
 
-    private void setupDropdown() {
-        // nếu bạn đã có array: R.array.exercise_difficulties thì giữ như cũ
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                getResources().getStringArray(R.array.exercise_difficulties)
-        );
-        actvDifficultyLevel.setAdapter(adapter);
+    /**
+     * Thiết lập các dropdown (Độ khó, Mục tiêu)
+     */
+    private void setupDropdowns() {
+        // Difficulty dropdown
+        String[] difficulties = {"BEGINNER", "INTERMEDIATE", "ADVANCED"};
+        ArrayAdapter<String> diffAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, difficulties);
+        actvDifficultyLevel.setAdapter(diffAdapter);
         actvDifficultyLevel.setOnClickListener(v -> actvDifficultyLevel.showDropDown());
+
+        // Goal dropdown
+        String[] goals = {"WEIGHT_LOSS", "MAINTAIN", "WEIGHT_GAIN"};
+        ArrayAdapter<String> goalAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, goals);
+        actvGoal.setAdapter(goalAdapter);
+        actvGoal.setOnClickListener(v -> actvGoal.showDropDown());
     }
 
+    /**
+     * Thiết lập toolbar với nút back
+     */
     private void setupToolbar() {
         View back = findViewById(R.id.backButton);
         if (back != null) back.setOnClickListener(v -> finish());
     }
 
+    /**
+     * Thiết lập các sự kiện click
+     */
     private void setupClickListeners() {
         // chọn ảnh/video
         btnSelectImage.setOnClickListener(v -> pickImageLauncher.launch("image/*"));
@@ -146,19 +209,129 @@ public class AddExerciseActivity extends AppCompatActivity {
         btnRemoveImage.setOnClickListener(v -> clearImage());
         btnRemoveVideo.setOnClickListener(v -> clearVideo());
 
+        // Thêm danh mục mới
+        findViewById(R.id.btnAddCategory).setOnClickListener(v -> showAddCategoryDialog());
+
         // lưu
         btnSaveExercise.setOnClickListener(v -> validateAndSave());
     }
 
+    /**
+     * Load danh sách danh mục bài tập từ API
+     */
+    private void loadCategories() {
+        Log.d(TAG, "Loading exercise categories...");
+        
+        apiService.getAllExerciseCategories().enqueue(new Callback<ApiResponse<List<ExerciseCategoryResponse>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<ExerciseCategoryResponse>>> call,
+                                   Response<ApiResponse<List<ExerciseCategoryResponse>>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getResult() != null) {
+                    categoryList.clear();
+                    categoryList.addAll(response.body().getResult());
+                    Log.d(TAG, "Loaded " + categoryList.size() + " categories");
+                    setupCategoryDropdown();
+                } else {
+                    Log.e(TAG, "Categories response failed: " + response.code());
+                    Toast.makeText(AddExerciseActivity.this, 
+                            "Lỗi tải danh mục: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<ExerciseCategoryResponse>>> call, Throwable t) {
+                Log.e(TAG, "Load categories failed", t);
+                Toast.makeText(AddExerciseActivity.this, 
+                        "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    /**
+     * Thiết lập dropdown danh mục với dữ liệu đã load
+     */
+    private void setupCategoryDropdown() {
+        List<String> categoryNames = new ArrayList<>();
+        for (ExerciseCategoryResponse cat : categoryList) {
+            categoryNames.add(cat.getCategoryName());
+        }
+        
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, categoryNames);
+        actvCategory.setAdapter(adapter);
+        actvCategory.setThreshold(0);
+        
+        actvCategory.setOnClickListener(v -> actvCategory.showDropDown());
+        
+        actvCategory.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && categoryList.size() > 0) {
+                actvCategory.showDropDown();
+            }
+        });
+
+        actvCategory.setOnItemClickListener((parent, view, position, id) -> {
+            selectedCategory = categoryList.get(position);
+            Log.d(TAG, "Selected category: " + selectedCategory.getCategoryName());
+        });
+
+        // Set selected category in edit mode
+        if (isEditMode && editingExercise != null && editingExercise.getCategory() != null) {
+            for (int i = 0; i < categoryList.size(); i++) {
+                if (categoryList.get(i).getCategoryId() == editingExercise.getCategory().getCategoryId()) {
+                    selectedCategory = categoryList.get(i);
+                    actvCategory.setText(selectedCategory.getCategoryName(), false);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Hiển thị dialog thêm danh mục mới
+     */
+    private void showAddCategoryDialog() {
+        AddExerciseCategoryDialog dialog = new AddExerciseCategoryDialog();
+        dialog.setListener(category -> {
+            categoryList.add(category);
+            setupCategoryDropdown();
+            selectedCategory = category;
+            actvCategory.setText(category.getCategoryName(), false);
+        });
+        dialog.show(getSupportFragmentManager(), "AddExerciseCategoryDialog");
+    }
+
+    /**
+     * Điền dữ liệu bài tập vào form khi ở chế độ sửa
+     */
+    private void populateEditData() {
+        if (editingExercise == null) return;
+
+        etExerciseName.setText(editingExercise.getExerciseName());
+        etCaloriesPerMinute.setText(String.valueOf(editingExercise.getCaloriesPerMinute()));
+        etDescription.setText(editingExercise.getDescription());
+        etInstructions.setText(editingExercise.getInstructions());
+
+        actvDifficultyLevel.setText(editingExercise.getDifficultyLevel(), false);
+        actvGoal.setText(editingExercise.getGoal(), false);
+
+        // Load image if exists
+        if (editingExercise.getImageUrl() != null) {
+            // TODO: Load image from URL
+        }
+    }
+
+    /**
+     * Validate và lưu bài tập
+     */
     private void validateAndSave() {
         String name = safeText(etExerciseName);
         String caloriesStr = safeText(etCaloriesPerMinute);
         String desc = safeText(etDescription);
         String instructions = safeText(etInstructions);
-        String equipment = safeText(etEquipmentNeeded);
-        String muscle = safeText(etMuscleGroups);
         String level = actvDifficultyLevel.getText() != null ? actvDifficultyLevel.getText().toString().trim() : "";
+        String goal = actvGoal.getText() != null ? actvGoal.getText().toString().trim() : "";
 
+        // Validate
         if (TextUtils.isEmpty(name)) {
             etExerciseName.setError("Vui lòng nhập tên bài tập");
             etExerciseName.requestFocus();
@@ -168,6 +341,17 @@ public class AddExerciseActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(level)) {
             actvDifficultyLevel.setError("Vui lòng chọn độ khó");
             actvDifficultyLevel.requestFocus();
+            return;
+        }
+
+        if (TextUtils.isEmpty(goal)) {
+            actvGoal.setError("Vui lòng chọn mục tiêu");
+            actvGoal.requestFocus();
+            return;
+        }
+
+        if (selectedCategory == null) {
+            Toast.makeText(this, "Vui lòng chọn danh mục", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -183,31 +367,112 @@ public class AddExerciseActivity extends AppCompatActivity {
             }
         }
 
-        // Duration for local storage
-        int durationMinutes = 30;
+        showLoading(true);
 
-        // Create Exercise object for local storage
-        Exercise newExercise = new Exercise();
-        newExercise.setName(name);
-        newExercise.setDescription(TextUtils.isEmpty(desc) ? "Bài tập tốt cho sức khỏe" : desc);
-        newExercise.setInstructions(instructions);
-        newExercise.setDurationMinutes(durationMinutes);
-        
-        int caloriesBurned = (int) Math.round(durationMinutes * caloriesPerMinute);
-        newExercise.setCaloriesBurned(caloriesBurned);
-        
-        newExercise.setDifficulty(level);
-        newExercise.setCategoryId("default");
-        newExercise.setImageResId(R.drawable.ic_active);
+        // Build request parts
+        RequestBody rbExerciseName = toRequestBody(name);
+        RequestBody rbCaloriesPerMinute = toRequestBody(String.valueOf(caloriesPerMinute));
+        RequestBody rbDescription = toRequestBody(desc);
+        RequestBody rbInstructions = toRequestBody(instructions);
+        RequestBody rbDifficultyLevel = toRequestBody(level);
+        RequestBody rbCategoryId = toRequestBody(String.valueOf(selectedCategory.getCategoryId()));
+        RequestBody rbGoal = toRequestBody(goal);
 
-        ExerciseStorage.addExercise(this, newExercise);
+        // Image part
+        MultipartBody.Part imagePart = null;
+        if (imageUri != null) {
+            try {
+                File imageFile = getFileFromUri(imageUri);
+                RequestBody imageBody = RequestBody.create(MediaType.parse("image/*"), imageFile);
+                imagePart = MultipartBody.Part.createFormData("image", imageFile.getName(), imageBody);
+            } catch (Exception e) {
+                Log.e(TAG, "Error processing image", e);
+            }
+        }
 
-        Toast.makeText(this, "Thêm bài tập thành công!", Toast.LENGTH_SHORT).show();
-        finish();
+        // Video part
+        MultipartBody.Part videoPart = null;
+        if (videoUri != null) {
+            try {
+                File videoFile = getFileFromUri(videoUri);
+                RequestBody videoBody = RequestBody.create(MediaType.parse("video/*"), videoFile);
+                videoPart = MultipartBody.Part.createFormData("video", videoFile.getName(), videoBody);
+            } catch (Exception e) {
+                Log.e(TAG, "Error processing video", e);
+            }
+        }
+
+        if (isEditMode && editingExercise != null) {
+            // Update
+            apiService.updateExercise(editingExercise.getExerciseId(),
+                    rbExerciseName, rbCaloriesPerMinute, rbDescription, rbInstructions,
+                    rbDifficultyLevel, rbCategoryId, rbGoal, imagePart, videoPart
+            ).enqueue(exerciseCallback("Cập nhật bài tập thành công"));
+        } else {
+            // Create
+            apiService.createExercise(
+                    rbExerciseName, rbCaloriesPerMinute, rbDescription, rbInstructions,
+                    rbDifficultyLevel, rbCategoryId, rbGoal, imagePart, videoPart
+            ).enqueue(exerciseCallback("Thêm bài tập thành công"));
+        }
+    }
+
+    /**
+     * Callback xử lý response khi lưu bài tập
+     */
+    private Callback<ApiResponse<ExerciseResponse>> exerciseCallback(String successMsg) {
+        return new Callback<ApiResponse<ExerciseResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<ExerciseResponse>> call,
+                                   Response<ApiResponse<ExerciseResponse>> response) {
+                showLoading(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(AddExerciseActivity.this, successMsg, Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    Toast.makeText(AddExerciseActivity.this, 
+                            "Lỗi: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<ExerciseResponse>> call, Throwable t) {
+                showLoading(false);
+                Log.e(TAG, "Save exercise failed", t);
+                Toast.makeText(AddExerciseActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+    /**
+     * Hiển thị/ẩn loading indicator
+     */
+    private void showLoading(boolean show) {
+        progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        btnSaveExercise.setEnabled(!show);
     }
 
     private String safeText(TextInputEditText et) {
         return et.getText() == null ? "" : et.getText().toString().trim();
+    }
+
+    private RequestBody toRequestBody(String value) {
+        return RequestBody.create(MediaType.parse("text/plain"), value != null ? value : "");
+    }
+
+    private File getFileFromUri(Uri uri) throws Exception {
+        InputStream inputStream = getContentResolver().openInputStream(uri);
+        File tempFile = File.createTempFile("exercise_file", ".tmp", getCacheDir());
+        FileOutputStream outputStream = new FileOutputStream(tempFile);
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+        }
+        outputStream.close();
+        inputStream.close();
+        return tempFile;
     }
 
     // ================= IMAGE =================
