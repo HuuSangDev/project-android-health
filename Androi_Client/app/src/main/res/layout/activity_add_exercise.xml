@@ -149,41 +149,69 @@
                     tools:ignore="LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Thiết bị cần dùng -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutEquipmentNeeded"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <!-- Danh mục -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Thiết bị cần dùng"
-                app:startIconTint="#607D8B"
-                app:helperText="VD: Tạ, Thảm yoga, Không cần thiết bị">
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etEquipmentNeeded"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutCategory"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_weight="1"
+                    android:hint="Danh mục"
+                    app:startIconTint="#4CAF50">
 
-            <!-- Nhóm cơ luyện tập -->
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/actvCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        tools:ignore="LabelFor" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="+"
+                    android:textSize="20sp"
+                    app:cornerRadius="12dp"
+                    android:backgroundTint="#4CAF50"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <!-- Mục tiêu -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutMuscleGroups"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/layoutGoal"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:hint="Nhóm cơ luyện tập"
-                app:startIconTint="#E91E63"
-                app:helperText="VD: Ngực, Vai, Lưng, Chân, Bụng">
+                android:hint="Mục tiêu"
+                app:startIconTint="#2196F3">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMuscleGroups"
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/actvGoal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords" />
+                    android:inputType="none"
+                    tools:ignore="LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- ProgressBar -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:visibility="gone" />
 
             <!-- ====== ẢNH: CHỌN TỪ THIẾT BỊ ====== -->
             <TextView

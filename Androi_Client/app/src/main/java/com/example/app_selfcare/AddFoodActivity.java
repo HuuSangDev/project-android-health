@@ -41,14 +41,28 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * AddFoodActivity - Màn hình thêm/sửa món ăn (Admin)
+ * 
+ * Chức năng chính:
+ * - Thêm món ăn mới với đầy đủ thông tin dinh dưỡng
+ * - Chỉnh sửa món ăn đã có (edit mode)
+ * - Upload hình ảnh món ăn
+ * - Chọn danh mục, loại bữa ăn, độ khó, mục tiêu sức khỏe
+ * - Thêm danh mục mới trực tiếp từ màn hình này
+ */
 public class AddFoodActivity extends AppCompatActivity {
 
     private static final String TAG = "AddFoodActivity";
 
-    // Views
+    // Views - Thông tin cơ bản
     private TextInputEditText etFoodName, etCalories, etProtein, etFat, etFiber, etSugar;
     private TextInputEditText etInstructions, etPrepTime, etCookTime, etServings;
+    
+    // Views - Dropdown selections
     private MaterialAutoCompleteTextView actvCategory, actvMealType, actvDifficulty, actvGoal;
+    
+    // Views - Hình ảnh và loading
     private ImageView ivFoodImage;
     private ProgressBar progressBar;
 
@@ -58,21 +72,31 @@ public class AddFoodActivity extends AppCompatActivity {
     private Uri selectedImageUri;
     private ApiService apiService;
 
-    // Edit mode
+    // Edit mode - true nếu đang sửa món ăn, false nếu thêm mới
     private boolean isEditMode = false;
     private FoodResponse editingFood;
 
-    // Image picker
+    /**
+     * Launcher để chọn ảnh từ gallery
+     * Sử dụng ActivityResultContracts thay cho startActivityForResult (deprecated)
+     */
     private final ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     selectedImageUri = result.getData().getData();
+                    // Hiển thị ảnh đã chọn
                     Glide.with(this).load(selectedImageUri).centerCrop().into(ivFoodImage);
                 }
             }
     );
 
+    /**
+     * Khởi tạo Activity
+     * - Thiết lập giao diện
+     * - Load danh sách categories
+     * - Kiểm tra edit mode
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +109,7 @@ public class AddFoodActivity extends AppCompatActivity {
         setupClickListeners();
         loadCategories();
 
-        // Check edit mode
+        // Kiểm tra nếu đang ở chế độ sửa món ăn
         if (getIntent().hasExtra("food")) {
             isEditMode = true;
             editingFood = (FoodResponse) getIntent().getSerializableExtra("food");
@@ -93,6 +117,9 @@ public class AddFoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Ánh xạ các view từ layout
+     */
     private void initViews() {
         etFoodName = findViewById(R.id.etFoodName);
         etCalories = findViewById(R.id.etCalories);
@@ -137,21 +164,39 @@ public class AddFoodActivity extends AppCompatActivity {
         actvGoal.setOnClickListener(v -> actvGoal.showDropDown());
     }
 
+    /**
+     * Thiết lập các sự kiện click
+     * - Nút back
+     * - Chọn ảnh
+     * - Thêm danh mục
+     * - Lưu món ăn
+     */
     private void setupClickListeners() {
+        // Nút quay lại
         findViewById(R.id.backButton).setOnClickListener(v -> finish());
 
+        // Click vào ảnh để chọn ảnh mới
         ivFoodImage.setOnClickListener(v -> openImagePicker());
 
+        // Nút thêm danh mục mới
         findViewById(R.id.btnAddCategory).setOnClickListener(v -> showAddCategoryDialog());
 
+        // Nút lưu món ăn
         findViewById(R.id.btnSaveFood).setOnClickListener(v -> saveFood());
     }
 
+    /**
+     * Mở gallery để chọn ảnh món ăn
+     */
     private void openImagePicker() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         imagePickerLauncher.launch(intent);
     }
 
+    /**
+     * Load danh sách danh mục món ăn từ API
+     * Hiển thị trong dropdown để user chọn
+     */
     private void loadCategories() {
         Log.d(TAG, "Loading categories...");
         Toast.makeText(this, "Đang tải danh mục...", Toast.LENGTH_SHORT).show();
@@ -201,6 +246,10 @@ public class AddFoodActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Thiết lập dropdown danh mục với dữ liệu đã load
+     * Cho phép click để hiển thị danh sách và chọn
+     */
     private void setupCategoryDropdown() {
         Log.d(TAG, "Setting up category dropdown with " + categoryList.size() + " items");
         
@@ -243,6 +292,10 @@ public class AddFoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Hiển thị dialog thêm danh mục mới
+     * Sau khi thêm thành công, cập nhật dropdown và chọn danh mục vừa tạo
+     */
     private void showAddCategoryDialog() {
         AddFoodCategoryDialog dialog = new AddFoodCategoryDialog();
         dialog.setListener(category -> {
@@ -254,6 +307,10 @@ public class AddFoodActivity extends AppCompatActivity {
         dialog.show(getSupportFragmentManager(), "AddFoodCategoryDialog");
     }
 
+    /**
+     * Điền dữ liệu món ăn vào form khi ở chế độ sửa
+     * Lấy dữ liệu từ editingFood và set vào các view
+     */
     private void populateEditData() {
         if (editingFood == null) return;
 
@@ -277,6 +334,12 @@ public class AddFoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Lưu món ăn (thêm mới hoặc cập nhật)
+     * - Validate các trường bắt buộc
+     * - Build request với multipart (có thể có ảnh)
+     * - Gọi API tương ứng (create hoặc update)
+     */
     private void saveFood() {
         // Validate
         String foodName = getText(etFoodName);
@@ -344,6 +407,11 @@ public class AddFoodActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Callback xử lý response khi lưu món ăn
+     * @param successMsg Thông báo hiển thị khi thành công
+     * @return Callback object
+     */
     private Callback<ApiResponse<FoodResponse>> foodCallback(String successMsg) {
         return new Callback<ApiResponse<FoodResponse>>() {
             @Override
@@ -369,28 +437,61 @@ public class AddFoodActivity extends AppCompatActivity {
         };
     }
 
+    /**
+     * Hiển thị/ẩn loading indicator
+     * @param show true để hiển thị, false để ẩn
+     */
     private void showLoading(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
+    /**
+     * Lấy text từ EditText, trả về chuỗi rỗng nếu null
+     * @param et TextInputEditText cần lấy giá trị
+     * @return Chuỗi text đã trim
+     */
     private String getText(TextInputEditText et) {
         return et.getText() != null ? et.getText().toString().trim() : "";
     }
 
+    /**
+     * Lấy text từ EditText, trả về "0" nếu rỗng
+     * Dùng cho các trường số
+     * @param et TextInputEditText cần lấy giá trị
+     * @return Chuỗi text hoặc "0"
+     */
     private String getTextOrZero(TextInputEditText et) {
         String text = getText(et);
         return TextUtils.isEmpty(text) ? "0" : text;
     }
 
+    /**
+     * Lấy text từ EditText, trả về giá trị mặc định nếu rỗng
+     * @param et TextInputEditText cần lấy giá trị
+     * @param defaultVal Giá trị mặc định
+     * @return Chuỗi text hoặc defaultVal
+     */
     private String getTextOrDefault(TextInputEditText et, String defaultVal) {
         String text = getText(et);
         return TextUtils.isEmpty(text) ? defaultVal : text;
     }
 
+    /**
+     * Chuyển đổi String thành RequestBody cho multipart request
+     * @param value Giá trị cần chuyển
+     * @return RequestBody object
+     */
     private RequestBody toRequestBody(String value) {
         return RequestBody.create(MediaType.parse("text/plain"), value != null ? value : "");
     }
 
+    /**
+     * Chuyển đổi Uri thành File để upload
+     * Copy nội dung từ Uri vào file tạm trong cache
+     * @param uri Uri của ảnh đã chọn
+     * @return File object
+     * @throws Exception Nếu có lỗi khi đọc/ghi file
+     */
     private File getFileFromUri(Uri uri) throws Exception {
         InputStream inputStream = getContentResolver().openInputStream(uri);
         File tempFile = File.createTempFile("food_image", ".jpg", getCacheDir());

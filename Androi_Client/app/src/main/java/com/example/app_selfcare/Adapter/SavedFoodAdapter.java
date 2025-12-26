@@ -13,11 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.app_selfcare.Data.Model.Response.SavedFoodResponse;
-import com.example.app_selfcare.FoodDetailActivity;
+import com.example.app_selfcare.RecipeDetailActivity;
 import com.example.app_selfcare.R;
 
 import java.util.List;
 
+/**
+ * SavedFoodAdapter - Adapter hiển thị danh sách món ăn đã lưu của user
+ * 
+ * Chức năng:
+ * - Hiển thị thông tin món ăn đã lưu (tên, ảnh, calories, thời gian)
+ * - Click vào món ăn để xem chi tiết (RecipeDetailActivity)
+ */
 public class SavedFoodAdapter extends RecyclerView.Adapter<SavedFoodAdapter.SavedFoodViewHolder> {
 
     private List<SavedFoodResponse> savedFoodList;
@@ -50,9 +57,9 @@ public class SavedFoodAdapter extends RecyclerView.Adapter<SavedFoodAdapter.Save
                 .error(R.drawable.ic_platter_background)
                 .into(holder.ivFoodImage);
 
-        // Click to view detail
+        // Click để xem chi tiết món ăn (màn hình user)
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, FoodDetailActivity.class);
+            Intent intent = new Intent(context, RecipeDetailActivity.class);
             intent.putExtra("foodId", savedFood.getFoodId().intValue());
             context.startActivity(intent);
         });
