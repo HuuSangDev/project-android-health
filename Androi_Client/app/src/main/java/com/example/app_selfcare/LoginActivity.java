@@ -1,7 +1,10 @@
 package com.example.app_selfcare;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.widget.Toast;
@@ -9,8 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -39,6 +45,16 @@ public class LoginActivity extends AppCompatActivity {
     private EditText edtEmail, edtPassword;
     private Button btnLogin;
 
+    // Launcher để request notification permission
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // Permission granted, FCM sẽ hoạt động bình thường
+                } else {
+                    Toast.makeText(this, "Bạn cần cấp quyền thông báo để nhận thông báo mới", Toast.LENGTH_LONG).show();
+                }
+            });
+
     @Override
     protected void attachBaseContext(Context newBase) {
         LocaleManager localeManager = new LocaleManager(newBase);
@@ -60,6 +76,9 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Request notification permission cho Android 13+
+        requestNotificationPermission();
 
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
@@ -214,5 +233,17 @@ public class LoginActivity extends AppCompatActivity {
     private void registerFcmToken() {
         FcmTokenManager fcmTokenManager = new FcmTokenManager(this);
         fcmTokenManager.registerToken();
+    }
+
+    /**
+     * Request notification permission cho Android 13 (API 33) trở lên
+     */
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
     }
 }
